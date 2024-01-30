@@ -1,5 +1,6 @@
 package com.example.demo.review.domain;
 
+import com.example.demo.global.domain.TimeStamp;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.Weather;
 import jakarta.persistence.*;
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
-public class Review {
+public class Review extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
