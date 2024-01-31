@@ -1,4 +1,4 @@
-package com.example.demo.domain.entity;
+package com.example.demo.user.domain.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

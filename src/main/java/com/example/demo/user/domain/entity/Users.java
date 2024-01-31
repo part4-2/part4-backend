@@ -1,7 +1,7 @@
-package com.example.demo.domain.entity;
+package com.example.demo.user.domain.entity;
 
-import com.example.demo.domain.enums.Gender;
-import com.example.demo.domain.enums.GenderConverter;
+import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.GenderConverter;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

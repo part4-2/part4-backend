@@ -1,7 +1,7 @@
 package com.example.demo.oauth;
 
-import com.example.demo.domain.entity.Users;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.user.domain.entity.Users;
+import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

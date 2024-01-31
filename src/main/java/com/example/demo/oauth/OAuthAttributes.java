@@ -1,7 +1,7 @@
 package com.example.demo.oauth;
 
-import com.example.demo.domain.entity.Provider;
-import com.example.demo.domain.entity.Users;
+import com.example.demo.user.domain.entity.Provider;
+import com.example.demo.user.domain.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

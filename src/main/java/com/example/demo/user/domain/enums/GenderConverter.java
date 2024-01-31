@@ -1,4 +1,4 @@
-package com.example.demo.domain.enums;
+package com.example.demo.user.domain.enums;
 
 import jakarta.persistence.AttributeConverter;
 
@@ -15,6 +15,6 @@ public class GenderConverter implements AttributeConverter<Gender, String> {
 
     @Override
     public Gender convertToEntityAttribute(String s) {
-        return Gender.getInstanceOf(s);
+        return Gender.getInstance(s);
     }
 }
