@@ -1,6 +1,6 @@
 package com.example.demo.review.domain;
 
-import com.example.demo.global.domain.TimeStamp;
+import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.spot.domain.Spot;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class Review extends TimeStamp {
+public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

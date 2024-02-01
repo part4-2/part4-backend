@@ -1,5 +1,6 @@
 package com.example.demo.review_like.domain;
 
+import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.review.domain.Review;
 import com.example.demo.user.domain.entity.Users;
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewLike {
+public class ReviewLike extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
