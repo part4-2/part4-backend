@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
 public class Users extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,29 +21,34 @@ public class Users extends BaseTimeEntity{
 
     private String nickName;
 
+    private String imageUrl;
+
     @Convert(converter = GenderConverter.class)
     private Gender gender;
 
     private int age;
 
+    private String oauthId;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private Provider provider;
-
     @Builder
-    public Users(String email, String nickName, Gender gender, int age, Provider provider) {
+    public Users(String email, String nickName, String imageUrl, Gender gender, int age, String oauthId, Role role) {
         this.email = email;
         this.nickName = nickName;
+        this.imageUrl = imageUrl;
         this.gender = gender;
         this.age = age;
-        this.provider = provider;
-        this.role = Role.USER;
+        this.oauthId = oauthId;
+        this.role = role;
     }
 
-    public Users update(String nickName) {
-        this.nickName = nickName;
+    public Users update(String name, String email, String imageUrl) {
+        this.nickName = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
         return this;
     }
+
 }
