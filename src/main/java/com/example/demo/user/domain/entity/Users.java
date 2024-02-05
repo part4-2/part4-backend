@@ -1,6 +1,7 @@
 package com.example.demo.user.domain.entity;
 
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.request.UserInfoUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,16 @@ public class Users extends BaseTimeEntity{
         this.nickName = name;
         this.email = email;
         this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public Users updateEssentials(UserInfoUpdateRequest userInfoUpdateRequest) {
+        this.nickName = userInfoUpdateRequest.getNickName();
+        this.imageUrl = userInfoUpdateRequest.getImageUrl();
+        this.gender = Gender.getInstance(userInfoUpdateRequest.getGender());
+        this.age = userInfoUpdateRequest.getAge();
+        this.role = Role.USER;
+
         return this;
     }
 

@@ -37,20 +37,12 @@ public class OAuth2Service {
 
         String accessToken = jwtTokenProvider.createToken(user.getEmail());
 
-
-        return LoginResponse.builder()
-                .id(user.getId())
-                .nickName(user.getNickName())
-                .email(user.getEmail())
-                .imageUrl(user.getImageUrl())
-                .role(user.getRole())
-                .tokenType("Bearer")
-                .accessToken(accessToken)
-                .build();
+        return new LoginResponse(user, "Bearer", accessToken);
     }
 
 
     private OAuthTokenResponse getToken(String code, OAuth2Provider provider) {
+
         return WebClient.create()
                 .post()
                 .uri(provider.getTokenUrl())

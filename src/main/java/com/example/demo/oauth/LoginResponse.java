@@ -1,30 +1,34 @@
 package com.example.demo.oauth;
 
-import com.example.demo.user.domain.entity.Role;
-import lombok.Builder;
+import com.example.demo.user.domain.entity.Users;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@Schema(name = "소셜로그인 회원가입 유저",description = "소셜로그인을 통해 회원가입한 유저의 정보")
 public class LoginResponse {
 
+    @Schema(description = "유저 Id")
     private Long id;
-    private String nickName;
+    @Schema(description = "이메일")
     private String email;
+    @Schema(description = "닉네임")
+    private String nickName;
+    @Schema(description = "프로필 사진")
     private String imageUrl;
-    private Role role;
+    private String role;
     private String tokenType;
     private String accessToken;
 
 
-    @Builder
-    public LoginResponse(Long id, String nickName, String email, String imageUrl, Role role, String tokenType, String accessToken) {
-        this.id = id;
-        this.nickName = nickName;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.role = role;
+    public LoginResponse(Users users,String tokenType, String accessToken) {
+        this.id = users.getId();
+        this.nickName = users.getNickName();
+        this.email = users.getEmail();
+        this.imageUrl = users.getImageUrl();
+        this.role = users.getRole().getName();
         this.tokenType = tokenType;
         this.accessToken = accessToken;
 
