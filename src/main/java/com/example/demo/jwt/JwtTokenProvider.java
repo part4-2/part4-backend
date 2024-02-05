@@ -4,74 +4,91 @@ package com.example.demo.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.Random;
 
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenProvider {
 
-    @Value("${jwt.access-token.expire-length:10000}")
-    private long accessTokenValidityInMilliseconds;
-    @Value("${jwt.refresh-token.expire-length:10000}")
-    private long refreshTokenValidityInMilliseconds;
     @Value("${jwt.secret}")
     private String secretKey;
-
     private Key key;
+    private final long exp = 1000L * 60 * 60;
+
+    private final CustomUserDetailsService customUserDetailsService;
 
     @PostConstruct
     protected void init() {
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createAccessToken(String payload) {
-        return createToken(payload, accessTokenValidityInMilliseconds);
-    }
+    public String createToken(String email) {
 
-    public String createRefreshToken() {
-        byte[] array = new byte[7];
-        new Random().nextBytes(array);
-        String generatedString = new String(array, StandardCharsets.UTF_8);
-        return createToken(generatedString, refreshTokenValidityInMilliseconds);
-    }
-
-    public String createToken(String payload, long expireLength) {
-        Claims claims = Jwts.claims().setSubject(payload);
+        Claims claims = Jwts.claims().setSubject(email);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + expireLength);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(now.getTime() + exp))
+                .signWith(key,SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String getPayload(String token) {
+    public Authentication getAuthentication(String token) {
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(this.getUsers(token));
+
+        return new UsernamePasswordAuthenticationToken(customUserDetails, "", customUserDetails.getAuthorities());
+    }
+
+    public String getUsers(String token) {
+
         try {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
         } catch (ExpiredJwtException e) {
+            e.printStackTrace();
             return e.getClaims().getSubject();
-        } catch (JwtException e) {
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // 오류 발생 시 null 반환
         }
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7).trim(); // "Bearer " 제거 및 공백 제거
+        }
+        return null;
+    }
+
+
+    public boolean validateToken(String token) {
+
+        try {
+            // 토큰 파싱 및 유효성 검증
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+
+            // 만료 날짜 확인
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
             return false;
         }
     }

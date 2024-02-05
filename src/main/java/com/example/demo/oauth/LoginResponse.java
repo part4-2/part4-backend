@@ -16,10 +16,10 @@ public class LoginResponse {
     private Role role;
     private String tokenType;
     private String accessToken;
-    private String refreshToken;
+
 
     @Builder
-    public LoginResponse(Long id, String nickName, String email, String imageUrl, Role role, String tokenType, String accessToken, String refreshToken) {
+    public LoginResponse(Long id, String nickName, String email, String imageUrl, Role role, String tokenType, String accessToken) {
         this.id = id;
         this.nickName = nickName;
         this.email = email;
@@ -27,6 +27,6 @@ public class LoginResponse {
         this.role = role;
         this.tokenType = tokenType;
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+
     }
 }

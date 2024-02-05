@@ -1,7 +1,6 @@
 package com.example.demo.user.domain.entity;
 
 import com.example.demo.user.domain.enums.Gender;
-import com.example.demo.user.domain.enums.GenderConverter;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class Users extends BaseTimeEntity{
 
     private String imageUrl;
 
-    @Convert(converter = GenderConverter.class)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private int age;

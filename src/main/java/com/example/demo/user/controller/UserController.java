@@ -1,10 +1,10 @@
 package com.example.demo.user.controller;
 
+import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.user.service.UserService;
-import com.example.demo.user.domain.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,8 +13,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/update/user")
-    public void updateUser(@RequestBody UpdateUserRequest userRequest) {
-        userService.updateUser(userRequest);
+    @GetMapping("/api/user/test")
+    public String test(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return "hello";
     }
 }

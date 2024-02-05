@@ -25,7 +25,7 @@ public class UserProfile {
                 .email(email)
                 .nickName(name)
                 .oauthId(oauthId)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
 
     }

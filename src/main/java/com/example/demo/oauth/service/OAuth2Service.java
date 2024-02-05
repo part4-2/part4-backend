@@ -6,7 +6,6 @@ import com.example.demo.oauth.repository.InMemoryProviderRepository;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OAuth2Service {
 
     private final InMemoryProviderRepository inMemoryProviderRepository;
@@ -37,8 +35,8 @@ public class OAuth2Service {
 
         Users user = saveOrUpdate(userProfile);
 
-        String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(user.getId()));
-        String refreshToken = jwtTokenProvider.createRefreshToken();
+        String accessToken = jwtTokenProvider.createToken(user.getEmail());
+
 
         return LoginResponse.builder()
                 .id(user.getId())
@@ -48,17 +46,11 @@ public class OAuth2Service {
                 .role(user.getRole())
                 .tokenType("Bearer")
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
     }
 
 
     private OAuthTokenResponse getToken(String code, OAuth2Provider provider) {
-
-        log.info(provider.getTokenUrl());
-        log.info(provider.getClientId());
-        log.info(provider.getClientSecret());
-
         return WebClient.create()
                 .post()
                 .uri(provider.getTokenUrl())
@@ -75,8 +67,6 @@ public class OAuth2Service {
     }
 
     private MultiValueMap<String, String> tokenRequest(String code, OAuth2Provider provider) {
-
-        log.info("tokenRequest");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
         formData.add("client_id", provider.getClientId());
@@ -88,14 +78,12 @@ public class OAuth2Service {
     }
 
     private UserProfile getUserProfile(String providerName, OAuthTokenResponse tokenResponse, OAuth2Provider provider) {
-
         Map<String, Object> userAttributes = getUserAttributes(provider, tokenResponse);
         return OAuthAttributes.extract(providerName, userAttributes);
     }
 
 
     private Map<String, Object> getUserAttributes(OAuth2Provider provider, OAuthTokenResponse tokenResponse) {
-
         return WebClient.create()
                 .get()
                 .uri(provider.getUserInfoUrl())
