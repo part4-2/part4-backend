@@ -1,7 +1,8 @@
 package com.example.demo.user.domain.entity;
 
 import com.example.demo.user.domain.enums.Gender;
-import com.example.demo.user.domain.request.UserInfoUpdateRequest;
+import com.example.demo.user.domain.request.RequiredUserInfoRequest;
+import com.example.demo.user.domain.request.UpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,21 +45,21 @@ public class Users extends BaseTimeEntity{
         this.role = role;
     }
 
-    public Users update(String name, String email, String imageUrl) {
-        this.nickName = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        return this;
+    public void updateUserInfo(UpdateUserRequest updateUserRequest) {
+        this.email = updateUserRequest.getEmail();
+        this.nickName = updateUserRequest.getNickName();
+        this.imageUrl = updateUserRequest.getImageUrl();
+        this.gender = Gender.getInstance(updateUserRequest.getGender());
+        this.age = updateUserRequest.getAge();
     }
 
-    public Users updateEssentials(UserInfoUpdateRequest userInfoUpdateRequest) {
-        this.nickName = userInfoUpdateRequest.getNickName();
-        this.imageUrl = userInfoUpdateRequest.getImageUrl();
-        this.gender = Gender.getInstance(userInfoUpdateRequest.getGender());
-        this.age = userInfoUpdateRequest.getAge();
+    public void updateEssentials(RequiredUserInfoRequest requiredUserInfoRequest) {
+        this.nickName = requiredUserInfoRequest.getNickName();
+        this.imageUrl = requiredUserInfoRequest.getImageUrl();
+        this.gender = Gender.getInstance(requiredUserInfoRequest.getGender());
+        this.age = requiredUserInfoRequest.getAge();
         this.role = Role.USER;
 
-        return this;
     }
 
 }
