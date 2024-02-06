@@ -17,7 +17,7 @@ public enum Gender {
         return Arrays.stream(values())
                 .filter(gender -> gender.name.equals(name))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("성별은 남자 / 여자 여야합니다."));
     }
 
 }
