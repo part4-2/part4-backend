@@ -1,38 +1,23 @@
 package com.example.demo.user.domain.enums;
 
-import com.example.demo.global.converter.AbstractCodedEnumConverter;
-import com.example.demo.global.converter.CodedEnum;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @Getter
-public enum Gender implements CodedEnum<String> {
+@RequiredArgsConstructor
+public enum Gender {
     MALE("남자"),
     FEMALE("여자");
 
     private final String name;
 
-    Gender(String name) {
-        this.name = name;
-    }
-
     public static Gender getInstance(String name) {
         return Arrays.stream(values())
-                .filter(gender -> gender.getName().equals(name))
+                .filter(gender -> gender.name.equals(name))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("성별은 남자 / 여자 여야합니다."));
     }
 
-    @Override
-    public String getCode() {
-        return name;
-    }
-
-    @jakarta.persistence.Converter(autoApply = true)
-    static class Converter extends AbstractCodedEnumConverter<Gender, String> {
-        public Converter(){
-            super(Gender.class);
-        }
-    }
 }
