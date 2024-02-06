@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Schema(name = "필수정보 입력 요청")
-public class UserInfoUpdateRequest {
+public class RequiredUserInfoRequest {
     @Schema(description = "나이")
     private int age;
     @Schema(description = "프로필 이미지")
