@@ -7,15 +7,13 @@ import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.user.domain.entity.Users;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @ToString
+@Getter
 public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +27,20 @@ public class Review extends BaseTimeEntity {
     private Users users;
     @ManyToOne(fetch = FetchType.LAZY)
     private Spot spot;
-
+    @Builder
     public Review(Title title, Content content, Weather weather, Users users, Spot spot) {
         this.title = title;
         this.content = content;
         this.weather = weather;
         this.users = users;
         this.spot = spot;
+    }
+
+    public void update(final Weather weather,
+                       final Title title,
+                       final Content content){
+        this.weather = weather;
+        this.title = title;
+        this.content = content;
     }
 }

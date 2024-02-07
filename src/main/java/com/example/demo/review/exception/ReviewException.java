@@ -23,4 +23,11 @@ public class ReviewException extends RuntimeException {
             super("내용을 입력 해 주세요.");
         }
     }
+
+    public static class ReviewNotFoundException extends ReviewException {
+
+        public ReviewNotFoundException(Long id) {
+            super(String.format("조회한 리뷰가 존재하지 않습니다. - request info { email : %s }", id));
+        }
+    }
 }
