@@ -7,6 +7,7 @@ import com.example.demo.user.exception.UserException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,7 +30,7 @@ public class CustomExceptionHandler {
             ReviewException.ReviewNotFoundException.class,
             SpotException.SpotNotFoundException.class,
             UsernameNotFoundException.class,
-            WeatherException.WeatherNotFoundException.class
+            WeatherException.WeatherNotFoundException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
         final String message = exception.getMessage();

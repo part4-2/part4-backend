@@ -1,6 +1,7 @@
 package com.example.demo.jwt;
 
 import com.example.demo.user.domain.entity.Users;
+import com.example.demo.user.exception.UserException;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String nickName) throws UsernameNotFoundException {
         Users users = userRepository.findByNickName(nickName)
-                .orElseThrow(() -> new UsernameNotFoundException(nickName + " 회원을 찾을수 없습니다."));
+                .orElseThrow(() -> new UserException.UserNotFoundException(nickName + " 회원을 찾을수 없습니다."));
 
         return new CustomUserDetails(users);
     }
