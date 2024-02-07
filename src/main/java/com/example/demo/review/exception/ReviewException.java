@@ -20,7 +20,7 @@ public class ReviewException extends RuntimeException {
     public static class ContentBlankException extends ReviewException {
 
         public ContentBlankException() {
-            super("리뷰 내용을 입력 해 주세요.");
+            super("내용을 입력 해 주세요.");
         }
     }
 }

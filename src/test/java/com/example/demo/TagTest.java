@@ -5,7 +5,7 @@ import org.junit.platform.commons.util.StringUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FooTest {
+class TagTest {
     @Test
     void foo() {
         String nullSafeString = StringUtils.nullSafeToString(null);
