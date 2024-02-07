@@ -4,7 +4,7 @@ import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
-import com.example.demo.user.service.UserService;
+import com.example.demo.user.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
