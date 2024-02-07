@@ -36,4 +36,14 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(message));
     }
+    @ExceptionHandler(value = {
+            SpotException.DuplicatedSpotExistsException.class
+    })
+    public ResponseEntity<ErrorResponse> handleCustomBadRequestException(final RuntimeException exception) {
+        final String message = exception.getMessage();
+        log.warn(message);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(message));
+    }
 }

@@ -14,4 +14,11 @@ public class SpotException extends RuntimeException{
             super(String.format("여행지 정보가 존재하지 않습니다. - request info { address : %s }", formattedAddress));
         }
     }
+
+    public static class DuplicatedSpotExistsException extends SpotException {
+
+        public DuplicatedSpotExistsException(String formattedAddress) {
+            super(String.format("중복된 주소입니다. - request info { formattedAddress : %s }", formattedAddress));
+        }
+    }
 }
