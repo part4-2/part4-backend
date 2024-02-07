@@ -12,8 +12,6 @@ public class RequiredUserInfoRequest {
     @Schema(description = "생일")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    @Schema(description = "프로필 이미지")
-    private String imageUrl;
     @Schema(description = "성별")
     private String gender;
     @Schema(description = "닉네임")
