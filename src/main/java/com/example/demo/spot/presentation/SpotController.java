@@ -23,7 +23,7 @@ public class SpotController {
     private final SpotService spotService;
 
     @PostMapping("/api/spots")
-    @Operation(summary = "여행지 저장(DB)" , description = "여행지를 입력합니다. (프론트 측에서 find api 호출 후 없을 시 분기 태워서 호출해주세요)")
+    @Operation(summary = "여행지 저장(DB)" , description = "여행지 정보 저장. (프론트 측에서 find api 호출 후 없을 시 분기 태워서 호출해주세요)")
     public ResponseEntity<Void> write(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody SpotRequest spotRequest){
