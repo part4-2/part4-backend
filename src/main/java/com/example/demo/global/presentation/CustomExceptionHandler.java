@@ -1,6 +1,7 @@
 package com.example.demo.global.presentation;
 
 import com.example.demo.review.exception.ReviewException;
+import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
 import lombok.extern.log4j.Log4j2;
@@ -27,7 +28,8 @@ public class CustomExceptionHandler {
             UserException.UserNotFoundException.class,
             ReviewException.ReviewNotFoundException.class,
             SpotException.SpotNotFoundException.class,
-            UsernameNotFoundException.class
+            UsernameNotFoundException.class,
+            WeatherException.WeatherNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
         final String message = exception.getMessage();
