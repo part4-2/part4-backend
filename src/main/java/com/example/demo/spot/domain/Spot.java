@@ -18,6 +18,7 @@ public class Spot extends BaseTimeEntity {
 
     private String displayName; // "소플러스 제주점~"
 
+    @Column(unique = true)
     private String formattedAddress;// "대한민국 ~도 ~시 ~로 111"
 
     @Embedded
