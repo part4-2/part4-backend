@@ -14,12 +14,13 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 @Getter
-public class Content {
-    private static final int REVIEW_CONTENT_LENGTH = 1000;
-    @Column(name = "content", nullable = false, length = REVIEW_CONTENT_LENGTH)
+public class Title {
+    private static final int REVIEW_TITLE_LENGTH = 25;
+
+    @Column(name = "title", nullable = false, length = REVIEW_TITLE_LENGTH)
     private String value;
 
-    public Content(final String value) {
+    public Title(final String value) {
         this.validateNull(value);
         this.validate(value);
         this.value = value;
@@ -27,13 +28,13 @@ public class Content {
 
     private void validateNull(final String value){
         if (Objects.isNull(value)){
-            throw new NullPointerException("내용이 없습니다");
+            throw new NullPointerException("제목이 없습니다");
         }
     }
 
     private void validate(final String value){
-        if (value.length() > REVIEW_CONTENT_LENGTH){
-            throw new ReviewException.ContentLengthException(REVIEW_CONTENT_LENGTH, value);
+        if (value.length() > REVIEW_TITLE_LENGTH){
+            throw new ReviewException.ContentLengthException(REVIEW_TITLE_LENGTH, value);
         }
         if (value.isBlank()){
             throw new ReviewException.ContentBlankException();

@@ -1,4 +1,4 @@
-package com.example.demo.review.domain.vo;
+package com.example.demo.review_tag.domain.vo;
 
 import com.example.demo.review.exception.ReviewException;
 import jakarta.persistence.Column;
@@ -14,12 +14,12 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 @Getter
-public class Content {
-    private static final int REVIEW_CONTENT_LENGTH = 1000;
-    @Column(name = "content", nullable = false, length = REVIEW_CONTENT_LENGTH)
+public class TagName {
+    private static final int TAG_NAME_LENGTH = 10;
+    @Column(name = "tag_name", nullable = false, length = TAG_NAME_LENGTH)
     private String value;
 
-    public Content(final String value) {
+    public TagName(final String value) {
         this.validateNull(value);
         this.validate(value);
         this.value = value;
@@ -27,13 +27,13 @@ public class Content {
 
     private void validateNull(final String value){
         if (Objects.isNull(value)){
-            throw new NullPointerException("내용이 없습니다");
+            throw new NullPointerException("태그 제목이 없습니다");
         }
     }
 
     private void validate(final String value){
-        if (value.length() > REVIEW_CONTENT_LENGTH){
-            throw new ReviewException.ContentLengthException(REVIEW_CONTENT_LENGTH, value);
+        if (value.length() > TAG_NAME_LENGTH){
+            throw new ReviewException.ContentLengthException(TAG_NAME_LENGTH, value);
         }
         if (value.isBlank()){
             throw new ReviewException.ContentBlankException();
