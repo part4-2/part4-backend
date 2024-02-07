@@ -33,13 +33,13 @@ public class ReviewService {
 
     @Transactional
     public Long write(final ReviewRequest reviewRequest,
-                      final String email,
+                      final String nickName,
                       final Long spotId,
                       final String weatherDescription){
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
         final Spot spot = spotService.findById(spotId);
-        final Users user = userService.findByEmail(email);
+        final Users user = userService.findByNickName(nickName);
         final Weather weather= Weather.getInstance(weatherDescription);
 
         final Review review = Review.builder()

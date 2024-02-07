@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Users findByEmail(String email){
-        return userRepository.findByEmail(email)
+    public Users findByNickName(String nickName){
+        return userRepository.findByNickName(nickName)
                 .orElseThrow(
-                        () -> new UserException.UserNotFoundException(email)
+                        () -> new UserException.UserNotFoundException(nickName)
                 );
     }
 
