@@ -59,11 +59,9 @@ public class Users extends BaseTimeEntity{
 
     public void updateEssentials(RequiredUserInfoRequest requiredUserInfoRequest) {
         this.nickName = requiredUserInfoRequest.getNickName();
-        this.imageUrl = requiredUserInfoRequest.getImageUrl();
         this.gender = Gender.getInstance(requiredUserInfoRequest.getGender());
         this.birthDate = requiredUserInfoRequest.getBirthDate();
         this.role = Role.USER;
-
     }
 
 }
