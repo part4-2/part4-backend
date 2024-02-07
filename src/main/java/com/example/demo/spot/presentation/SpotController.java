@@ -17,7 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "여행지 컨트롤러" , description = "여행지 컨트롤러")
+@Tag(name = "Spot Controller" , description = "여행지 컨트롤러")
 @SecurityRequirement(name = "Bearer Authentication")
 public class SpotController {
     private final SpotService spotService;
