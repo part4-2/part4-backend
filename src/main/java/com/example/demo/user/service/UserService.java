@@ -51,10 +51,12 @@ public class UserService {
         return userRepository.findByNickName(nickName).isEmpty();
     }
 
-    public String uploadUserProfile(FileDto fileDto) {
+    public String uploadUserProfile(CustomUserDetails customUserDetails,FileDto fileDto) {
         String url = s3Service.uploadFile(fileDto.getFile());
         fileDto.setUrl(url);
         fileService.save(fileDto);
+        customUserDetails.getUsers().updateProfileImage(url);
+
         return url;
     }
 }

@@ -45,7 +45,7 @@ public class UserController {
 
     @Operation(summary = "프로필 사진 업로드", description = "유저의 프로필 사진을 업로드 합니다.")
     @PostMapping("/api/user/profileImage")
-    public String uploadUserProfile(FileDto fileDto) {
-        return userService.uploadUserProfile(fileDto);
+    public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, FileDto fileDto) {
+        return userService.uploadUserProfile(customUserDetails,fileDto);
     }
 }
