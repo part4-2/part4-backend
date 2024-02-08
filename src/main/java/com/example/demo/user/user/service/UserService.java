@@ -1,4 +1,4 @@
-package com.example.demo.user.service;
+package com.example.demo.user.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.s3upload.FileDto;
@@ -8,6 +8,7 @@ import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
+import com.example.demo.user.exception.UserException;
 import com.example.demo.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileService fileService;
+
+    public Users findByNickName(String nickName){
+        return userRepository.findByNickName(nickName)
+                .orElseThrow(
+                        () -> new UserException.UserNotFoundException(nickName)
+                );
+    }
 
     @Transactional
     public UpdateUserResponse requiredUserInfo(CustomUserDetails customUserDetails, RequiredUserInfoRequest requiredUserInfoRequest) {

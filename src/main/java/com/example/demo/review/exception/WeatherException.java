@@ -5,9 +5,9 @@ public class WeatherException extends RuntimeException{
         super(message);
     }
 
-    public static class WeatherNotExists extends WeatherException {
+    public static class WeatherNotFoundException extends WeatherException {
 
-        public WeatherNotExists() {
+        public WeatherNotFoundException() {
             super("날씨를 찾을 수 없습니다");
         }
     }

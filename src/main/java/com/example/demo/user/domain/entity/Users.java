@@ -1,5 +1,6 @@
 package com.example.demo.user.domain.entity;
 
+import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.user.domain.enums.Gender;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @ToString
-public class Users extends BaseTimeEntity{
+public class Users extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
