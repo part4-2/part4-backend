@@ -11,7 +11,6 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public void save(FileDto fileDto) {
-
         fileRepository.save(fileDto.toEntity());
     }
 

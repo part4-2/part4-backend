@@ -1,17 +1,22 @@
 package com.example.demo.s3upload;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,30 +25,60 @@ public class S3Service {
     private String bucket;
     private final AmazonS3 amazonS3;
 
-    public String uploadFile(MultipartFile multipartFile) throws IOException {
-        String fileName = multipartFile.getOriginalFilename();
-        assert fileName != null;
-        String ext = fileName.split("\\.")[1];
-        String contentType = switch (ext) {
-            case "jpeg" -> "image/jpeg";
-            case "png" -> "image/png";
-            default -> "";
-        };
+    // 단일파일 업로드
+    public String uploadFile(MultipartFile multipartFile) {
+        String fileName = createFileName(multipartFile.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentType(multipartFile.getContentType());
 
-        try {
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(contentType);
-
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata)
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (AmazonServiceException e) {
-            e.printStackTrace();
-        } catch (SdkClientException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
         }
 
         return amazonS3.getUrl(bucket, fileName).toString();
+    }
+
+    // 다중파일 업로드
+    public List<String> uploadFiles(List<MultipartFile> multipartFiles) {
+        List<String> fileUrlList = new ArrayList<>();
+        multipartFiles.forEach(file -> {
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
+
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+            }
+            fileUrlList.add(amazonS3.getUrl(bucket,fileName).toString());
+
+        });
+
+        return fileUrlList;
+    }
+
+    public String createFileName(String fileName) {
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
+    private String getFileExtension(String fileName) {
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일" + fileName + ") 입니다.");
+        }
+    }
+
+
+    public void deleteFIle(String fileName) {
+
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }

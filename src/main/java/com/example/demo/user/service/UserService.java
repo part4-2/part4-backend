@@ -14,8 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -54,13 +52,9 @@ public class UserService {
     }
 
     public String uploadUserProfile(FileDto fileDto) {
-        try {
-            String url = s3Service.uploadFile(fileDto.getFile());
-            fileDto.setUrl(url);
-            fileService.save(fileDto);
-            return url;
-        } catch (IOException e) {
-            throw new IllegalStateException("사진 업로드에 실패했습니다.");
-        }
+        String url = s3Service.uploadFile(fileDto.getFile());
+        fileDto.setUrl(url);
+        fileService.save(fileDto);
+        return url;
     }
 }
