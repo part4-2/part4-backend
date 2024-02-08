@@ -1,4 +1,4 @@
-package com.example.demo.user.user.service;
+package com.example.demo.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.s3upload.FileDto;
