@@ -1,6 +1,7 @@
 package com.example.demo.user.controller;
 
 import com.example.demo.jwt.CustomUserDetails;
+import com.example.demo.s3upload.FileDto;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
@@ -11,7 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,8 +43,9 @@ public class UserController {
         return userService.checkNickName(nickName);
     }
 
-    @GetMapping("/api/user/test")
-    public String test() {
-        return "oauth 회원가입 , 로그인 , 필수정보 입력 성공";
+    @Operation(summary = "프로필 사진 업로드", description = "유저의 프로필 사진을 업로드 합니다.")
+    @PostMapping("/api/user/profileImage")
+    public String uploadUserProfile(FileDto fileDto) {
+        return userService.uploadUserProfile(fileDto);
     }
 }

@@ -1,6 +1,9 @@
 package com.example.demo.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
+import com.example.demo.s3upload.FileDto;
+import com.example.demo.s3upload.FileService;
+import com.example.demo.s3upload.S3Service;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
@@ -10,10 +13,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final S3Service s3Service;
+    private final FileService fileService;
 
     @Transactional
     public UpdateUserResponse requiredUserInfo(CustomUserDetails customUserDetails, RequiredUserInfoRequest requiredUserInfoRequest) {
@@ -36,5 +43,16 @@ public class UserService {
 
     public boolean checkNickName(String nickName) {
         return userRepository.findByNickName(nickName).isEmpty();
+    }
+
+    public String uploadUserProfile(FileDto fileDto) {
+        try {
+            String url = s3Service.uploadFile(fileDto.getFile());
+            fileDto.setUrl(url);
+            fileService.save(fileDto);
+            return url;
+        } catch (IOException e) {
+            throw new IllegalStateException("사진 업로드에 실패했습니다.");
+        }
     }
 }
