@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>S3 object</title>
@@ -15,12 +15,15 @@
             <th scope="col">Actions</th>
         </tr>
         </thead>
-        <tr th:each="file:${fileList}">
+        <tbody>
+        <tr th:each="file : ${fileList}">
             <td th:text="${file.id}"></td>
             <td>
-                <img id="image" th:src="${file.s3Url}">
+                <img id="image" th:src="${file.s3Url}" alt="S3 Image">
             </td>
+            <td><!-- Add your actions here if needed --></td>
         </tr>
+        </tbody>
     </table>
 </div>
 </body>
