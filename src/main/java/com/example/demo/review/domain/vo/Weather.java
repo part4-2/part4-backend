@@ -26,7 +26,7 @@ public enum Weather implements CodedEnum<String> {
         return Arrays.stream(values())
                 .filter(weather -> weather.description.equals(description))
                 .findAny()
-                .orElseThrow(WeatherException.WeatherNotExists::new);
+                .orElseThrow(WeatherException.WeatherNotFoundException::new);
     }
 
     @Override

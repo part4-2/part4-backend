@@ -33,6 +33,11 @@ public class SpotService {
     }
     @Transactional
     public Long save(SpotRequest spotRequest) {
+        spotRepository.findByFormattedAddress(spotRequest.formattedAddress())
+                .ifPresent(
+                        a -> {throw new SpotException.DuplicatedSpotExistsException(spotRequest.formattedAddress());}
+                );
+
         Spot spot = Spot.builder()
                 .location(spotRequest.location())
                 .formattedAddress(spotRequest.formattedAddress())

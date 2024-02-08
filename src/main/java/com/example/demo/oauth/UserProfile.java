@@ -26,6 +26,7 @@ public class UserProfile {
                 .nickName(name)
                 .oauthId(oauthId)
                 .role(Role.GUEST)
+                .imageUrl(imageUrl)
                 .build();
 
     }

@@ -1,6 +1,9 @@
-package com.example.demo.user.user.service;
+package com.example.demo.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
+import com.example.demo.s3upload.FileDto;
+import com.example.demo.s3upload.FileService;
+import com.example.demo.s3upload.S3Service;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
@@ -15,11 +18,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final S3Service s3Service;
+    private final FileService fileService;
 
-    public Users findByEmail(String email){
-        return userRepository.findByEmail(email)
+    public Users findByNickName(String nickName){
+        return userRepository.findByNickName(nickName)
                 .orElseThrow(
-                        () -> new UserException.UserNotFoundException(email)
+                        () -> new UserException.UserNotFoundException(nickName)
                 );
     }
 
@@ -44,5 +49,14 @@ public class UserService {
 
     public boolean checkNickName(String nickName) {
         return userRepository.findByNickName(nickName).isEmpty();
+    }
+
+    public String uploadUserProfile(CustomUserDetails customUserDetails,FileDto fileDto) {
+        String url = s3Service.uploadFile(fileDto.getFile());
+        fileDto.setUrl(url);
+        fileService.save(fileDto);
+        customUserDetails.getUsers().updateProfileImage(url);
+
+        return url;
     }
 }

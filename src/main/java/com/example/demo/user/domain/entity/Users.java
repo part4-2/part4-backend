@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -28,7 +31,8 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private int age;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
 
     private String oauthId;
 
@@ -36,12 +40,12 @@ public class Users extends BaseTimeEntity {
     private Role role;
 
     @Builder
-    public Users(String email, String nickName, String imageUrl, Gender gender, int age, String oauthId, Role role) {
+    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Role role) {
         this.email = email;
         this.nickName = nickName;
         this.imageUrl = imageUrl;
         this.gender = gender;
-        this.age = age;
+        this.birthDate = birthDate;
         this.oauthId = oauthId;
         this.role = role;
     }
@@ -51,16 +55,18 @@ public class Users extends BaseTimeEntity {
         this.nickName = updateUserRequest.getNickName();
         this.imageUrl = updateUserRequest.getImageUrl();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
-        this.age = updateUserRequest.getAge();
+        this.birthDate = updateUserRequest.getBirthDate();
     }
 
     public void updateEssentials(RequiredUserInfoRequest requiredUserInfoRequest) {
         this.nickName = requiredUserInfoRequest.getNickName();
-        this.imageUrl = requiredUserInfoRequest.getImageUrl();
         this.gender = Gender.getInstance(requiredUserInfoRequest.getGender());
-        this.age = requiredUserInfoRequest.getAge();
+        this.birthDate = requiredUserInfoRequest.getBirthDate();
         this.role = Role.USER;
+    }
 
+    public void updateProfileImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }

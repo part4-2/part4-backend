@@ -16,7 +16,7 @@ class WeatherTest {
     @ParameterizedTest
     @ValueSource(strings = {"FOO", "TEST", "", "날씨?"})
     void getInstanceFailByInvalidValue(String invalidValue) {
-        assertThrows(WeatherException.WeatherNotExists.class,() -> Weather.getInstance(invalidValue));
+        assertThrows(WeatherException.WeatherNotFoundException.class,() -> Weather.getInstance(invalidValue));
     }
 
     @Test
