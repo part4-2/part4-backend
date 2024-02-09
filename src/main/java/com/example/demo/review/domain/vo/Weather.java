@@ -13,7 +13,9 @@ public enum Weather implements CodedEnum<String> {
     RAINY("비가 옴"),
     CLOUDY("구름이 많음"),
     SNOWY("눈 내림"),
-    FOGGY("안개가 낌")
+    FOGGY("안개가 낌"),
+
+    NONE("모르겠음")
     ;
 
     private final String description;

@@ -4,13 +4,20 @@ import com.example.demo.spot.domain.Spot;
 import com.example.demo.spot.domain.vo.Location;
 
 public class SpotFixture {
-    public static final String TEST_DISPLAY_NAME = "TEST";
-    public static final String TEST = "TEST";
-    public static final String TEST_LATITUDE = "33.489793999999996";
-    public static final String TEST_LONGITUDE = "41.489182847399996";
+    private static final String TEST = "TEST";
+    private static final String FOO = "FOO";
+    private static final String TEST_LATITUDE = "33.489793999999996";
+    private static final String TEST_LONGITUDE = "41.489182847399996";
+
+    public static final Spot FOO_SPOT = new Spot(
+            FOO,
+            FOO,
+            new Location(TEST_LATITUDE,
+                    TEST_LONGITUDE)
+    );
 
     public static final Spot SPOT = new Spot(
-            TEST_DISPLAY_NAME,
+            TEST,
             TEST,
             new Location(TEST_LATITUDE,
                     TEST_LONGITUDE)

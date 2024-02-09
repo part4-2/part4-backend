@@ -7,6 +7,15 @@ import com.example.demo.user.domain.enums.Gender;
 import java.time.LocalDate;
 
 public class UserFixture {
+
+    public static final Users FOO = new Users("FOO",
+            "FOO",
+            "FOO",
+            Gender.MALE,
+            LocalDate.now(),
+            "FOO",
+            Role.USER
+    );
     public static final Users DK_USER = new Users("laancer4@gmail.com",
             "DK",
             "imageUrl",
