@@ -12,9 +12,7 @@ import com.example.demo.user.domain.entity.Role;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.entity.vo.UserId;
 import com.example.demo.user.domain.enums.Gender;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
