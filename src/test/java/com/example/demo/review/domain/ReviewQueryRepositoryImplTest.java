@@ -46,10 +46,28 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
             Role.USER
     );
 
+    private static final Users USERS2 = new Users("email",
+            "nickname",
+            "imageUrl",
+            Gender.MALE,
+            LocalDate.now(),
+            "authId",
+            Role.USER
+    );
+
+    private static final Review REVIEW = new Review(
+            new Title(TEST),
+            new Content(TEST),
+            Weather.SNOWY,
+            USERS,
+            SPOT
+    );
+
     @BeforeEach
     void setUp() {
         repositoryFactory.saveSpot(SPOT);
         repositoryFactory.saveUser(USERS);
+        repositoryFactory.saveUser(USERS2);
         saveHundredReviewEntities();
     }
 
@@ -58,13 +76,14 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
         List<Review> list = IntStream.range(0, 100)
                 .mapToObj(
                         value -> {
-                            return new Review(
+                            Review review = new Review(
                                     new Title(TEST + value),
                                     new Content(TEST),
                                     Weather.SNOWY,
                                     USERS,
                                     SPOT
                             );
+                            return review;
                         }
                 ).toList();
 
@@ -83,6 +102,23 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
     }
 
     @Test
+    @DisplayName("좋아요 순으로 정렬된다")
+    void find20ByLikes() {
+        // given
+        Review review = repositoryFactory.saveReview(REVIEW);
+        Review review2 = repositoryFactory.saveReview(REVIEW);
+        // when
+        repositoryFactory.saveReviewLike(new ReviewLike(review, USERS));
+        repositoryFactory.saveReviewLike(new ReviewLike(review, USERS2));
+        // 102 번째 엔티티도 저장 (생성 내림차순이 아님을 테스트 하기 위함)
+        repositoryFactory.saveReviewLike(new ReviewLike(review2, USERS));
+
+        // then
+        List<Review> byLikes = reviewQueryRepository.findByLikes();
+        assertThat(byLikes.get(0).getId()).isEqualTo(101);
+    }
+
+    @Test
     @DisplayName("좋아요 수가 동률이라면 최신순으로 정렬한다.")
     void find20ByLikes_ORDERS() {
         List<Review> byLikes = reviewQueryRepository.findByLikes();
@@ -93,7 +129,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
             LocalDateTime first = review.getCreatedDate();
             // 나중에 오는 녀석의 날짜보다
             LocalDateTime last = byLikes.get(i).getCreatedDate();
-            // 항상 앞선다 (나중이다_
+            // 항상 앞선다 (나중이다)
             assertThat(first.isAfter(last)).isTrue();
             // 처음에 올 녀석을 재할당한다
             review = byLikes.get(i);
