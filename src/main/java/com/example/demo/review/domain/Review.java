@@ -4,10 +4,13 @@ import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.domain.vo.Weather;
+import com.example.demo.review_like.domain.ReviewLike;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.user.domain.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.LinkedHashSet;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,6 +30,8 @@ public class Review extends BaseTimeEntity {
     private Users users;
     @ManyToOne(fetch = FetchType.LAZY)
     private Spot spot;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private LinkedHashSet<ReviewLike> reviewLikes;
     @Builder
     public Review(Title title, Content content, Weather weather, Users users, Spot spot) {
         this.title = title;
