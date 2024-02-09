@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Location {
-    private Double latitude; // 위도
-    private Double longitude; // 경도
+    private String latitude; // 위도
+    private String longitude; // 경도
+
+    public Location(String latitude, String longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
