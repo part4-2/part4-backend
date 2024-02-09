@@ -83,6 +83,12 @@ public class ReviewService {
 
         return ReviewResponseDTO.of(review);
     }
+    public List<ReviewResponseDTO> findByLikes(){
+        return reviewRepository.findByLikes()
+                .stream()
+                .map(ReviewResponseDTO::of)
+                .toList();
+    }
 
     public void deleteReview(Long id){
         // TODO: 2/7/24 삭제 부분 좋아요 등은 남길지? 그렇다면 FK를 사용할지? 혹은 소프트딜리트 할지?

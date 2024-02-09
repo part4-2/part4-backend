@@ -85,4 +85,17 @@ public class ReviewController {
         List<ReviewResponseDTO> result = reviewService.findByTagNames(tags, searchCondition);
         return ResponseEntity.ok(result);
     }
+
+    // TODO: 2/9/24 URI 어떻게 할 것인지 정해야 한다.
+    @GetMapping("/api/main/reviews")
+    @Operation(summary = "리뷰 조회(리스트)", description = "좋아요를 많이 받은 순으로 20개의 리뷰를 조회합니다.")
+    public ResponseEntity<List<ReviewResponseDTO>> get20ReviewsByLikes(){
+        List<ReviewResponseDTO> result = reviewService.findByLikes();
+
+        if (result == null || result.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(result);
+    }
 }
