@@ -15,7 +15,8 @@ import com.example.demo.spot.application.SpotService;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.user.domain.entity.Users;
 
-import com.example.demo.user.user.service.UserService;
+
+import com.example.demo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,11 @@ public class ReviewService {
     public Long write(final ReviewRequest reviewRequest,
                       final String nickName,
                       final Long spotId,
-                      final String weatherDescription){
+                      final Weather weather){
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
         final Spot spot = spotService.findById(spotId);
         final Users user = userService.findByNickName(nickName);
-        final Weather weather= Weather.getInstance(weatherDescription);
 
         final Review review = Review.builder()
                 .title(new Title(title))
@@ -55,12 +55,12 @@ public class ReviewService {
     }
     @Transactional
     public void updateReview(final Long reviewId,
-                             final ReviewWriteRequest reviewRequest){
+                             final ReviewWriteRequest reviewRequest,
+                             final Weather weather){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId)
                 );
-        Weather weather = Weather.getInstance(reviewRequest.weatherDescription());
         review.update(weather,
                 new Title(reviewRequest.title()),
                 new Content(reviewRequest.content())
@@ -82,6 +82,12 @@ public class ReviewService {
                 );
 
         return ReviewResponseDTO.of(review);
+    }
+    public List<ReviewResponseDTO> findByLikes(){
+        return reviewRepository.findByLikes()
+                .stream()
+                .map(ReviewResponseDTO::of)
+                .toList();
     }
 
     public void deleteReview(Long id){

@@ -13,8 +13,10 @@ public class ReviewTag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REVIEW_ID")
     private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TAG_ID")
     private Tag tag;
 }

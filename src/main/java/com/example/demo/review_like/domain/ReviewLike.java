@@ -1,8 +1,9 @@
 package com.example.demo.review_like.domain;
 
 import com.example.demo.global.domain.BaseTimeEntity;
-import com.example.demo.review.domain.Review;
-import com.example.demo.user.domain.entity.Users;
+import com.example.demo.review.domain.vo.ReviewId;
+import com.example.demo.review_like.domain.vo.ReviewLikeId;
+import com.example.demo.user.domain.entity.vo.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewLike extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Review review;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Users users;
+    @EmbeddedId
+    private ReviewLikeId reviewLikeId;
+    public ReviewLike(UserId userId, ReviewId reviewId) {
+        this.reviewLikeId = new ReviewLikeId(userId, reviewId);
+    }
 }
