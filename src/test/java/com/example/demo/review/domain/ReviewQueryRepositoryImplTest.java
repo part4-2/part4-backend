@@ -2,6 +2,7 @@ package com.example.demo.review.domain;
 
 import com.example.demo.common.RepositoryTest;
 import com.example.demo.review.domain.vo.Content;
+import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.review_like.domain.ReviewLike;
@@ -9,6 +10,7 @@ import com.example.demo.spot.domain.Spot;
 import com.example.demo.spot.domain.vo.Location;
 import com.example.demo.user.domain.entity.Role;
 import com.example.demo.user.domain.entity.Users;
+import com.example.demo.user.domain.entity.vo.UserId;
 import com.example.demo.user.domain.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -91,7 +93,8 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
 
         // 80 번 째 이후로 저장
         for (int i = 80; i < list.size(); i++) {
-            repositoryFactory.saveReviewLike(new ReviewLike(list.get(i), USERS));
+            ReviewLike reviewLike = new ReviewLike(new UserId(1L), new ReviewId((long) i));
+            repositoryFactory.saveReviewLike(reviewLike);
         }
     }
 
@@ -108,10 +111,10 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
         Review review = repositoryFactory.saveReview(REVIEW);
         Review review2 = repositoryFactory.saveReview(REVIEW);
         // when
-        repositoryFactory.saveReviewLike(new ReviewLike(review, USERS));
-        repositoryFactory.saveReviewLike(new ReviewLike(review, USERS2));
+        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L), new ReviewId(101L)));
+        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(2L), new ReviewId(101L)));
         // 102 번째 엔티티도 저장 (생성 내림차순이 아님을 테스트 하기 위함)
-        repositoryFactory.saveReviewLike(new ReviewLike(review2, USERS));
+        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L), new ReviewId(102L)));
 
         // then
         List<Review> byLikes = reviewQueryRepository.findByLikes();

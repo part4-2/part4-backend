@@ -30,7 +30,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .on(review.id.eq(reviewTag.review.id))
                 .where(searchByTagNamesIfPresent(taggedReviews))
                 .innerJoin(reviewLike)
-                .on(reviewLike.review.id.eq(review.id))
+                .on(reviewLike.reviewLikeId.reviewId.eq(review.id))
                 .groupBy(review)
                 .orderBy(this.getOrder(searchCondition))
                 .fetch();
@@ -39,7 +39,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     @Override
     public List<Review> findByLikes() {
         return queryFactory.selectFrom(review)
-                .leftJoin(review.reviewLikes, reviewLike)
+                .leftJoin(reviewLike)
+                .on(reviewLike.reviewLikeId.reviewId.eq(review.id))
                 .groupBy(review.id) // 리뷰의 id로 그룹화하여
                 .orderBy(reviewLike.count().desc(), review.createdDate.desc()) // reviewLike의 개수로 내림차순 정렬
                 .limit(20) // 상위 20개 리뷰만 선택
