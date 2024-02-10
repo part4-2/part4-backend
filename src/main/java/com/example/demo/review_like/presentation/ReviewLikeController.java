@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@Tag(name = "Review Controller", description = "리뷰 컨트롤러")
+@Tag(name = "ReviewLike Controller", description = "리뷰 좋아요 컨트롤러")
 @SecurityRequirement(name = "Bearer Authentication")
 public class ReviewLikeController {
     private final ReviewLikeService reviewLikeService;
 
-    @PostMapping("/api/reviews/like/{review-id}")
+    @PostMapping("/api/users/reviews/like/{review-id}")
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요를 등록합니다")
     public ResponseEntity<Void> likeReview(
             @PathVariable(value = "review-id") Long reviewIdValue,
@@ -38,7 +38,7 @@ public class ReviewLikeController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/api/reviews/like/{review-id}")
+    @DeleteMapping("/api/users/reviews/like/{review-id}")
     @Operation(summary = "리뷰 좋아요 삭제", description = "리뷰의 좋아요를 삭제합니다")
     public ResponseEntity<Void> unlikeReview(
             @PathVariable(value = "review-id") Long reviewIdValue,

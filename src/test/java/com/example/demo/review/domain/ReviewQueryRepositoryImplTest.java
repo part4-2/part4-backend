@@ -6,70 +6,34 @@ import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.review_like.domain.ReviewLike;
-import com.example.demo.spot.domain.Spot;
-import com.example.demo.spot.domain.vo.Location;
-import com.example.demo.user.domain.entity.Role;
-import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.entity.vo.UserId;
-import com.example.demo.user.domain.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.example.demo.common.test_instance.ReviewFixture.REVIEW_ON_SPOT_1_BY_DK;
+import static com.example.demo.common.test_instance.ReviewFixture.REVIEW_ON_SPOT_1_BY_DK_ADMIN;
+import static com.example.demo.common.test_instance.SpotFixture.SPOT;
+import static com.example.demo.common.test_instance.UserFixture.DK_ADMIN;
+import static com.example.demo.common.test_instance.UserFixture.DK_USER;
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 class ReviewQueryRepositoryImplTest extends RepositoryTest {
     @Autowired
     ReviewQueryRepositoryImpl reviewQueryRepository;
-    private static final String TEST_DISPLAY_NAME = "TEST";
+
     private static final String TEST = "TEST";
-    private static final String TEST_LATITUDE = "33.489793999999996";
-    private static final String TEST_LONGITUDE = "41.489182847399996";
-
-    private static final Spot SPOT = new Spot(
-            TEST_DISPLAY_NAME,
-            TEST,
-            new Location(TEST_LATITUDE,
-                    TEST_LONGITUDE)
-    );
-
-    private static final Users USERS = new Users("email",
-            "nickname",
-            "imageUrl",
-            Gender.MALE,
-            LocalDate.now(),
-            "authId",
-            Role.USER
-    );
-
-    private static final Users USERS2 = new Users("email",
-            "nickname",
-            "imageUrl",
-            Gender.MALE,
-            LocalDate.now(),
-            "authId",
-            Role.USER
-    );
-
-    private static final Review REVIEW = new Review(
-            new Title(TEST),
-            new Content(TEST),
-            Weather.SNOWY,
-            USERS,
-            SPOT
-    );
-
     @BeforeEach
     void setUp() {
         repositoryFactory.saveSpot(SPOT);
-        repositoryFactory.saveUser(USERS);
-        repositoryFactory.saveUser(USERS2);
+        repositoryFactory.saveUser(DK_USER);
+        repositoryFactory.saveUser(DK_ADMIN);
         saveHundredReviewEntities();
     }
 
@@ -82,7 +46,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
                                     new Title(TEST + value),
                                     new Content(TEST),
                                     Weather.SNOWY,
-                                    USERS,
+                                    DK_USER,
                                     SPOT
                             );
                             return review;
@@ -108,8 +72,12 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
     @DisplayName("좋아요 순으로 정렬된다")
     void find20ByLikes() {
         // given
-        Review review = repositoryFactory.saveReview(REVIEW);
-        Review review2 = repositoryFactory.saveReview(REVIEW);
+        Review review = repositoryFactory.saveReview(REVIEW_ON_SPOT_1_BY_DK);
+        Review review2 = repositoryFactory.saveReview(REVIEW_ON_SPOT_1_BY_DK_ADMIN);
+
+        assertThat(review.getId()).isEqualTo(101L);
+        assertThat(review2.getId()).isEqualTo(102L);
+
         // when
         repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L), new ReviewId(101L)));
         repositoryFactory.saveReviewLike(new ReviewLike(new UserId(2L), new ReviewId(101L)));
