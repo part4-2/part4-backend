@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @Operation(summary = "닉네임 중복 체크", description = "중복된 닉네임이 있는지 확인합니다.")
-    @PostMapping("/api/nickname")
+    @PostMapping("/api/nickname/check")
     public boolean nickNameIsDuplicated(@RequestParam String nickName) {
         return userService.checkNickName(nickName);
     }

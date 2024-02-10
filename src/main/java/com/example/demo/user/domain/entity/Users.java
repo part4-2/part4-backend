@@ -39,6 +39,9 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @Builder
     public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Role role) {
         this.email = email;
@@ -53,7 +56,6 @@ public class Users extends BaseTimeEntity {
     public void updateUserInfo(UpdateUserRequest updateUserRequest) {
         this.email = updateUserRequest.getEmail();
         this.nickName = updateUserRequest.getNickName();
-        this.imageUrl = updateUserRequest.getImageUrl();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
         this.birthDate = updateUserRequest.getBirthDate();
     }

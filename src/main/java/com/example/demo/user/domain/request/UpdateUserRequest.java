@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class UpdateUserRequest {
     private String email;
     private String nickName;
-    private String imageUrl;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private String gender;

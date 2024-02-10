@@ -1,5 +1,7 @@
 package com.example.demo.oauth;
 
+import com.example.demo.user.domain.entity.Provider;
+
 import java.util.Arrays;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ public enum OAuthAttributes {
                     .email((String) attributes.get("email"))
                     .name((String) attributes.get("name"))
                     .imageUrl((String) attributes.get("picture"))
+                    .provider(Provider.GOOGLE)
                     .build();
         }
     },
@@ -24,6 +27,7 @@ public enum OAuthAttributes {
                     .email((String) response.get("email"))
                     .name((String) response.get("name"))
                     .imageUrl((String) response.get("profile_image"))
+                    .provider(Provider.NAVER)
                     .build();
         }
     },
@@ -39,6 +43,7 @@ public enum OAuthAttributes {
                     .email((String) kakaoAccount.get("email"))
                     .name((String) properties.get("nickname"))
                     .imageUrl((String) properties.get("profile_image"))
+                    .provider(Provider.KAKAO)
                     .build();
         }
     };
