@@ -30,7 +30,7 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("/api/users/spots/{spotId}/reviews")
+    @PostMapping("/api/user/spots/{spotId}/reviews")
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -52,7 +52,7 @@ public class ReviewController {
     }
 
     // TODO: 2/7/24 spotId 빼도 될수도?
-    @GetMapping("/api/users/spots/{spot-id}/reviews/{review-id}")
+    @GetMapping("/api/user/spots/{spot-id}/reviews/{review-id}")
     @Operation(summary = "리뷰 조회", description = "리뷰 id에 해당하는 리뷰 정보를 불러옵니다.")
     public ResponseEntity<ReviewResponseDTO> getReview(@PathVariable("spot-id") Long spotId,
                                                        @PathVariable("review-id") Long reviewId) {
@@ -60,7 +60,7 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/api/users/spots/{spot-id}/reviews/{review-id}")
+    @PutMapping("/api/user/spots/{spot-id}/reviews/{review-id}")
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 필요합니다.")
     public ResponseEntity<Void> updateReview(@PathVariable("spot-id") Long spotId,
                                              @RequestBody @Valid ReviewWriteRequest reviewRequest,
@@ -70,7 +70,7 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/users/spots/{spot-id}/reviews")
+    @GetMapping("/api/user/spots/{spot-id}/reviews")
     @Operation(summary = "리뷰 조회(리스트)", description = "태그, 조회 조건(좋아요, 최신순)에 따라 리뷰들을 조회합니다.")
     public ResponseEntity<List<ReviewResponseDTO>> getReviews(
             @PathVariable("spot-id") Long spotId,
@@ -86,7 +86,7 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/api/users/main/reviews")
+    @GetMapping("/api/user/main/reviews")
     @Operation(summary = "리뷰 조회(리스트)", description = "좋아요를 많이 받은 순으로 20개의 리뷰를 조회합니다.")
     public ResponseEntity<List<ReviewResponseDTO>> get20ReviewsByLikes(){
         List<ReviewResponseDTO> result = reviewService.findByLikes();
