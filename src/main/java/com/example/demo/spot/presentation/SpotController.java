@@ -22,7 +22,7 @@ import java.net.URI;
 public class SpotController {
     private final SpotService spotService;
 
-    @PostMapping("/api/spots")
+    @PostMapping("/api/users/spots")
     @Operation(summary = "여행지 저장(DB)" , description = "여행지 정보 저장. (프론트 측에서 find api 호출 후 없을 시 분기 태워서 호출해주세요)")
     public ResponseEntity<Void> write(
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -34,14 +34,14 @@ public class SpotController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/api/spots/{spot-id}")
+    @GetMapping("/api/users/spots/{spot-id}")
     @Operation(summary = "여행지 정보 찾기" , description = "여행지 id로 여행지 정보를 찾아옵니다.")
     public ResponseEntity<SpotResponse> getById(@PathVariable("spot-id") Long spotId){
         Spot spot = spotService.findById(spotId);
         return ResponseEntity.ok(SpotResponse.of(spot));
     }
 
-    @GetMapping("/api/spots")
+    @GetMapping("/api/users/spots")
     @Operation(summary = "여행지 정보 찾기" , description = "여행지 주소이름으로(formattedAddress) 여행지 정보를 찾아옵니다. 이 API 이후 없으면 POST 요청 해주세요")
     public ResponseEntity<SpotResponse> getByAddress(@RequestParam String formattedAddress){
         return ResponseEntity.ok(spotService.findByAddress(formattedAddress));

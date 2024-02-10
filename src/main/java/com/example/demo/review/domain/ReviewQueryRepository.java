@@ -8,4 +8,6 @@ import java.util.List;
 public interface ReviewQueryRepository {
     // 한방쿼리
     List<Review> findByTagNames(List<TagName> tagNames, SearchCondition searchCondition);
+
+    List<Review> findByLikes();
 }
