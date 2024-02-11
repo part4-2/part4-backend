@@ -36,7 +36,7 @@ public class ReviewController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid ReviewWriteRequest reviewWriteRequest,
             @RequestParam Weather weather,
-            @PathVariable Long spotId
+            @PathVariable String spotId
     ) {
         final Long id = reviewService.write(
                 new ReviewRequest(reviewWriteRequest.title(),

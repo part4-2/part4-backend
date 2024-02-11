@@ -27,7 +27,7 @@ public class SpotController {
     public ResponseEntity<Void> write(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody SpotRequest spotRequest){
-        final Long savedId = spotService.save(spotRequest);
+        final String savedId = spotService.save(spotRequest);
 
         final URI location = URI.create("/api/spots/" + savedId);
 
@@ -36,7 +36,7 @@ public class SpotController {
 
     @GetMapping("/api/users/spots/{spot-id}")
     @Operation(summary = "여행지 정보 찾기" , description = "여행지 id로 여행지 정보를 찾아옵니다.")
-    public ResponseEntity<SpotResponse> getById(@PathVariable("spot-id") Long spotId){
+    public ResponseEntity<SpotResponse> getById(@PathVariable("spot-id") String spotId){
         Spot spot = spotService.findById(spotId);
         return ResponseEntity.ok(SpotResponse.of(spot));
     }
