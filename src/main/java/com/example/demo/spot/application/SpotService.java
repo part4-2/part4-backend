@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpotService {
     private final SpotRepository spotRepository;
 
-    public Spot findById(Long id) {
+    public Spot findById(String id) {
         return spotRepository.findById(id)
                 .orElseThrow(
                         () -> new SpotException.SpotNotFoundException(id)
@@ -32,7 +32,7 @@ public class SpotService {
         return SpotResponse.of(spot);
     }
     @Transactional
-    public Long save(SpotRequest spotRequest) {
+    public String save(SpotRequest spotRequest) {
         spotRepository.findByFormattedAddress(spotRequest.formattedAddress())
                 .ifPresent(
                         a -> {throw new SpotException.DuplicatedSpotExistsException(spotRequest.formattedAddress());}
@@ -45,6 +45,6 @@ public class SpotService {
                 .build();
 
         Spot savedSpot = spotRepository.save(spot);
-        return savedSpot.getId();
+        return savedSpot.getPlaceId();
     }
 }

@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class Spot extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true)
+    private String placeId;
 
     private String displayName; // "소플러스 제주점~"
 
@@ -26,7 +26,8 @@ public class Spot extends BaseTimeEntity {
     @Embedded
     private Location location;
     @Builder
-    public Spot(String displayName, String formattedAddress, Location location) {
+    public Spot(String placeId, String displayName, String formattedAddress, Location location) {
+        this.placeId = placeId;
         this.displayName = displayName;
         this.formattedAddress = formattedAddress;
         this.location = location;

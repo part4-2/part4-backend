@@ -35,7 +35,7 @@ public class ReviewService {
     @Transactional
     public Long write(final ReviewRequest reviewRequest,
                       final String nickName,
-                      final Long spotId,
+                      final String spotId,
                       final Weather weather){
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
