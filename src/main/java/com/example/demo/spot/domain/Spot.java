@@ -13,6 +13,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
+@Table(
+        indexes = {
+                @Index(name = "unique_composite_index", columnList = "displayName, formattedAddress", unique = true)
+        }
+)
 public class Spot extends BaseTimeEntity {
     @Id
     @Column(unique = true)
