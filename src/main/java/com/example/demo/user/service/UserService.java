@@ -51,6 +51,7 @@ public class UserService {
         return userRepository.findByNickName(nickName).isEmpty();
     }
 
+    @Transactional
     public String uploadUserProfile(CustomUserDetails customUserDetails,FileDto fileDto) {
         String url = s3Service.uploadFile(fileDto.getFile());
         fileDto.setUrl(url);
