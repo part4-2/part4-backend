@@ -1,6 +1,6 @@
 package com.example.demo.oauth;
 
-import com.example.demo.user.domain.entity.Provider;
+import com.example.demo.user.domain.enums.Provider;
 
 import java.util.Arrays;
 import java.util.Map;

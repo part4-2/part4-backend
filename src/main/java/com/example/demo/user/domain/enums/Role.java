@@ -1,4 +1,4 @@
-package com.example.demo.user.domain.entity;
+package com.example.demo.user.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

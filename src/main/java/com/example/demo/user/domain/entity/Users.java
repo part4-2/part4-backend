@@ -2,6 +2,8 @@ package com.example.demo.user.domain.entity;
 
 import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Provider;
+import com.example.demo.user.domain.enums.Role;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import jakarta.persistence.*;
