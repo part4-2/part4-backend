@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
     private Key key;
-    private final long exp = 1000L * 60 * 60;
+    private static final long exp = 1000L * 60 * 60;
 
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -34,9 +34,9 @@ public class JwtTokenProvider {
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String email) {
+    public String createToken(String oauthId) {
 
-        Claims claims = Jwts.claims().setSubject(email);
+        Claims claims = Jwts.claims().setSubject(oauthId);
         Date now = new Date();
 
         return Jwts.builder()
@@ -93,3 +93,4 @@ public class JwtTokenProvider {
         }
     }
 }
+

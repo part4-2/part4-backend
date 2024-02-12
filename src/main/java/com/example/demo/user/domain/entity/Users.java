@@ -2,6 +2,8 @@ package com.example.demo.user.domain.entity;
 
 import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Provider;
+import com.example.demo.user.domain.enums.Role;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import jakarta.persistence.*;
@@ -39,6 +41,9 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @Builder
     public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Role role) {
         this.email = email;
@@ -53,7 +58,6 @@ public class Users extends BaseTimeEntity {
     public void updateUserInfo(UpdateUserRequest updateUserRequest) {
         this.email = updateUserRequest.getEmail();
         this.nickName = updateUserRequest.getNickName();
-        this.imageUrl = updateUserRequest.getImageUrl();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
         this.birthDate = updateUserRequest.getBirthDate();
     }

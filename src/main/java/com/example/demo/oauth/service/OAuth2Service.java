@@ -35,7 +35,7 @@ public class OAuth2Service {
 
         Users user = saveOrUpdate(userProfile);
 
-        String accessToken = jwtTokenProvider.createToken(user.getEmail());
+        String accessToken = jwtTokenProvider.createToken(user.getOauthId());
 
         return new LoginResponse(user, "Bearer", accessToken);
     }
@@ -94,3 +94,4 @@ public class OAuth2Service {
     }
 
 }
+

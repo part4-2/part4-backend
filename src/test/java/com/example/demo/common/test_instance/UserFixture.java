@@ -1,8 +1,8 @@
 package com.example.demo.common.test_instance;
 
-import com.example.demo.user.domain.entity.Role;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Role;
 
 import java.time.LocalDate;
 
