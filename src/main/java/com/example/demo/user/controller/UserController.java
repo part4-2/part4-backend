@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @Secured("ROLE_GUEST")
     @Operation(summary = "필수정보 입력" , description = "서비스 이용을 위한 필수정보를 입력합니다.")
     @PostMapping("/api/guest/update")
     public UpdateUserResponse requiredUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails, @Valid @RequestBody RequiredUserInfoRequest requiredUserInfoRequest) {
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     @Operation(summary = "닉네임 중복 체크", description = "중복된 닉네임이 있는지 확인합니다.")
-    @PostMapping("/api/nickname/check")
+    @PostMapping("/api/nickname")
     public boolean nickNameIsDuplicated(@RequestParam String nickName) {
         return userService.checkNickName(nickName);
     }
@@ -49,3 +51,4 @@ public class UserController {
         return userService.uploadUserProfile(customUserDetails,fileDto);
     }
 }
+

@@ -31,10 +31,9 @@ public class SpringSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request -> request
-                        .requestMatchers(antMatcher("/api/guest/**")).hasRole("GUEST")
                         .requestMatchers(antMatcher("/api/user/**")).hasRole("USER")
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole("ADMIN")
-                        .requestMatchers("/**","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
+                        .requestMatchers("/","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
                         .anyRequest().authenticated()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider) , UsernamePasswordAuthenticationFilter.class);
 
@@ -42,3 +41,4 @@ public class SpringSecurityConfig {
 
     }
 }
+
