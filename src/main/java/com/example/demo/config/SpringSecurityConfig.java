@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -32,14 +31,9 @@ public class SpringSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request -> request
-                        .requestMatchers(new AntPathRequestMatcher("/test/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/swagger**")).permitAll()
-                        .requestMatchers(antMatcher("/h2-console")).permitAll()
-                        .requestMatchers(antMatcher("/api/guest/**")).hasRole("GUEST")
                         .requestMatchers(antMatcher("/api/user/**")).hasRole("USER")
                         .requestMatchers(antMatcher("/api/admin/**")).hasRole("ADMIN")
-                        .requestMatchers("/**","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
+                        .requestMatchers("/","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
                         .anyRequest().authenticated()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider) , UsernamePasswordAuthenticationFilter.class);
 
@@ -47,3 +41,4 @@ public class SpringSecurityConfig {
 
     }
 }
+
