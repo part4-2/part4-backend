@@ -12,7 +12,11 @@ import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.spot.application.SpotService;
+import com.example.demo.spot.application.SpotStarService;
 import com.example.demo.spot.domain.Spot;
+import com.example.demo.star.application.StarService;
+import com.example.demo.star.domain.Star;
+import com.example.demo.star.domain.vo.StarRank;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final SpotService spotService;
     private final UserService userService;
+    private final StarService service;
 
     public Review findById(ReviewId reviewId){
         return reviewRepository.findById(reviewId.value())
@@ -42,11 +47,13 @@ public class ReviewService {
                       final String nickName,
                       final String spotId,
                       final TagValues requestTag,
-                      final LocalDateTime visitingTime){
+                      final LocalDateTime visitingTime,
+                      Double starRank){
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
         final Spot spot = spotService.findById(spotId);
         final Users user = userService.findByNickName(nickName);
+
 
         final Tag tag = getTag(requestTag);
 
@@ -58,6 +65,14 @@ public class ReviewService {
                 .tag(tag)
                 .visitingTime(visitingTime)
                 .build();
+
+        service.save(
+                new Star(
+                        user,
+                        spot,
+                        StarRank.getInstance(starRank)
+                )
+        );
 
         Review savedReview = reviewRepository.save(review);
         return savedReview.getId();

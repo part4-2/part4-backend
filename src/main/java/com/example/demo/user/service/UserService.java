@@ -8,6 +8,7 @@ import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
+import com.example.demo.user.domain.response.UserInfoResponse;
 import com.example.demo.user.exception.UserException;
 import com.example.demo.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,15 @@ public class UserService {
                 .orElseThrow(
                         () -> new UserException.UserNotFoundException(nickName)
                 );
+    }
+
+    public UserInfoResponse getUserInfo(Long userId){
+        Users user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new UserException.UserNotFoundException(userId)
+                );
+
+        return UserInfoResponse.of(user);
     }
 
     @Transactional

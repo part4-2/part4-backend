@@ -48,7 +48,8 @@ public class ReviewController {
                 customUserDetails.getUserEmail(),
                 spotId,
                 reviewWriteRequest.tagValues(),
-                reviewWriteRequest.visitingTime());
+                reviewWriteRequest.visitingTime(),
+                reviewWriteRequest.starRank());
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
 
@@ -86,6 +87,4 @@ public class ReviewController {
 
         return ResponseEntity.ok(result);
     }
-
-
 }

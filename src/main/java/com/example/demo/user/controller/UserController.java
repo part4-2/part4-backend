@@ -5,6 +5,7 @@ import com.example.demo.s3upload.FileDto;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
+import com.example.demo.user.domain.response.UserInfoResponse;
 import com.example.demo.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +51,11 @@ public class UserController {
     @PostMapping("/api/user/profileImage")
     public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, FileDto fileDto) {
         return userService.uploadUserProfile(customUserDetails,fileDto);
+    }
+    @GetMapping("/api/users/info")
+    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                        @RequestParam Long userId){
+        return userService.getUserInfo(userId);
     }
 }
 

@@ -13,7 +13,8 @@ public record ReviewWithLike(Long reviewId,
                              String spotId,
                              LocalDateTime createdAt,
                              LocalDateTime modifiedAt,
-                             int likeCount) {
+                             int likeCount,
+                             LocalDateTime visitingTime) {
     public static ReviewWithLike of(final Review review, final int reviewCount) {
         return new ReviewWithLike(
                 review.getId(),
@@ -24,7 +25,8 @@ public record ReviewWithLike(Long reviewId,
                 review.getSpot().getPlaceId(),
                 review.getCreatedDate(),
                 review.getModifiedDate(),
-                reviewCount
+                reviewCount,
+                review.getVisitingTime()
         );
     }
 
