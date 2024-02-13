@@ -2,7 +2,7 @@ package com.example.demo.review.application;
 
 import com.example.demo.review.application.dto.ReviewRequest;
 import com.example.demo.review.application.dto.ReviewResponseDTO;
-import com.example.demo.review.application.dto.ReviewWriteRequest;
+import com.example.demo.review.application.dto.ReviewUpdateRequest;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
@@ -12,7 +12,6 @@ import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.spot.application.SpotService;
-import com.example.demo.spot.application.SpotStarService;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.star.application.StarService;
 import com.example.demo.star.domain.Star;
@@ -88,7 +87,7 @@ public class ReviewService {
 
     @Transactional
     public void updateReview(final Long reviewId,
-                             final ReviewWriteRequest reviewRequest,
+                             final ReviewUpdateRequest reviewRequest,
                              final TagValues tagValues,
                              final LocalDateTime visitingTime){
         Review review = reviewRepository.findById(reviewId)

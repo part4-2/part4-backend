@@ -3,6 +3,7 @@ package com.example.demo.review.presentation;
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.ReviewService;
 import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.ReviewUpdateRequest;
 import com.example.demo.review.application.dto.ReviewWithLike;
 import com.example.demo.review.application.dto.ReviewWriteRequest;
 import com.example.demo.review.domain.vo.ReviewId;
@@ -65,7 +66,7 @@ public class ReviewController {
 
     @PutMapping("/api/users/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 꼭 필요합니다.")
-    public ResponseEntity<Void> updateReview(@RequestBody @Valid ReviewWriteRequest reviewRequest,
+    public ResponseEntity<Void> updateReview(@RequestBody @Valid ReviewUpdateRequest reviewRequest,
                                              @PathVariable("review-id") Long reviewId) {
         reviewService.updateReview(
                 reviewId,
