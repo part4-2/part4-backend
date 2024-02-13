@@ -44,8 +44,10 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
+    private Integer age;
+
     @Builder
-    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Role role) {
+    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Role role, Integer age) {
         this.email = email;
         this.nickName = nickName;
         this.imageUrl = imageUrl;
@@ -53,6 +55,7 @@ public class Users extends BaseTimeEntity {
         this.birthDate = birthDate;
         this.oauthId = oauthId;
         this.role = role;
+        this.age = age;
     }
 
     public void updateUserInfo(UpdateUserRequest updateUserRequest) {
@@ -60,6 +63,7 @@ public class Users extends BaseTimeEntity {
         this.nickName = updateUserRequest.getNickName();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
         this.birthDate = updateUserRequest.getBirthDate();
+        this.age = updateUserRequest.getAge();
     }
 
     public void updateEssentials(RequiredUserInfoRequest requiredUserInfoRequest) {
@@ -72,5 +76,4 @@ public class Users extends BaseTimeEntity {
     public void updateProfileImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
 }
