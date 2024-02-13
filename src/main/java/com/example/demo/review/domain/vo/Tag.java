@@ -3,12 +3,14 @@ package com.example.demo.review.domain.vo;
 import com.example.demo.review.application.dto.TagValues;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode
 public class Tag {
     private Weather weather;
     private Companion companion;
