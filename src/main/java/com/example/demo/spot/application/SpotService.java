@@ -3,7 +3,6 @@ package com.example.demo.spot.application;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.spot.domain.SpotRepository;
 import com.example.demo.spot.dto.SpotRequest;
-import com.example.demo.spot.dto.SpotResponse;
 import com.example.demo.spot.exception.SpotException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,14 +22,6 @@ public class SpotService {
                 );
     }
 
-    public SpotResponse findByAddress(String formattedAddress) {
-        Spot spot = spotRepository.findByFormattedAddress(formattedAddress)
-                .orElseThrow(
-                        () -> new SpotException.SpotNotFoundException(formattedAddress)
-                );
-
-        return SpotResponse.of(spot);
-    }
     @Transactional
     public String save(SpotRequest spotRequest) {
         spotRepository.findByFormattedAddress(spotRequest.formattedAddress())
@@ -39,6 +30,7 @@ public class SpotService {
                 );
 
         Spot spot = Spot.builder()
+                .placeId(spotRequest.placeId())
                 .location(spotRequest.location())
                 .formattedAddress(spotRequest.formattedAddress())
                 .displayName(spotRequest.displayName())

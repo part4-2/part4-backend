@@ -5,6 +5,8 @@ import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.domain.vo.Weather;
 
+import java.time.LocalDateTime;
+
 public class ReviewFixture {
     private static final String TEST = "TEST";
     private static final String FOO = "FOO";
@@ -12,23 +14,26 @@ public class ReviewFixture {
     public static final Review REVIEW_OF_ALL_FIELD_VALUE_IS_FOO = new Review(
             new Title(FOO),
             new Content(FOO),
-            Weather.NONE,
+            TagFixture.TAG_OF_NONE,
             UserFixture.FOO,
-            SpotFixture.FOO_SPOT
+            SpotFixture.FOO_SPOT,
+            LocalDateTime.now()
     );
     public static final Review REVIEW_ON_SPOT_1_BY_DK = new Review(
             new Title(TEST),
             new Content(TEST),
-            Weather.SNOWY,
+            TagFixture.TAG_OF_NONE,
             UserFixture.DK_USER,
-            SpotFixture.SPOT
+            SpotFixture.SPOT,
+            LocalDateTime.now()
     );
 
     public static final Review REVIEW_ON_SPOT_1_BY_DK_ADMIN = new Review(
             new Title(TEST),
             new Content(TEST),
-            Weather.SNOWY,
+            TagFixture.TAG_OF_NONE,
             UserFixture.DK_ADMIN,
-            SpotFixture.SPOT
+            SpotFixture.SPOT,
+            LocalDateTime.now()
     );
 }

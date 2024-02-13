@@ -3,11 +3,11 @@ package com.example.demo.global.presentation;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
+import com.example.demo.star.exception.StarException;
 import com.example.demo.user.exception.UserException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +31,7 @@ public class CustomExceptionHandler {
             SpotException.SpotNotFoundException.class,
             UsernameNotFoundException.class,
             WeatherException.WeatherNotFoundException.class,
+            StarException.StarNotFoundException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
         final String message = exception.getMessage();
@@ -40,7 +41,9 @@ public class CustomExceptionHandler {
                 .body(new ErrorResponse(message));
     }
     @ExceptionHandler(value = {
-            SpotException.DuplicatedSpotExistsException.class
+            SpotException.DuplicatedSpotExistsException.class,
+            StarException.InvalidStarRankException.class,
+            StarException.StarRankAlreadyExistsException.class
     })
     public ResponseEntity<ErrorResponse> handleCustomBadRequestException(final RuntimeException exception) {
         final String message = exception.getMessage();
