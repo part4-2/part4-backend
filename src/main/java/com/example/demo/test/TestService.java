@@ -1,9 +1,6 @@
 package com.example.demo.test;
 
 import com.example.demo.jwt.JwtTokenProvider;
-import com.example.demo.review.domain.ReviewRepository;
-import com.example.demo.review_like.ReviewLikeRepository;
-import com.example.demo.spot.domain.SpotRepository;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.enums.Gender;
 import com.example.demo.user.domain.enums.Role;
@@ -28,7 +25,7 @@ public class TestService {
                 "",
                 Gender.MALE,
                 LocalDate.now(),
-                "foo",
+                email,
                 Role.ADMIN,
                 50));
 
