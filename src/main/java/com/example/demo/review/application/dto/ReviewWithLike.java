@@ -6,6 +6,7 @@ import com.example.demo.review.domain.Review;
 import java.time.LocalDateTime;
 
 public record ReviewWithLike(Long reviewId,
+                             String placeId,
                              String title,
                              String content,
                              TagValues tagValues,
@@ -18,6 +19,7 @@ public record ReviewWithLike(Long reviewId,
     public static ReviewWithLike of(final Review review, final int reviewCount) {
         return new ReviewWithLike(
                 review.getId(),
+                review.getSpot().getPlaceId(),
                 review.getTitle().getValue(),
                 review.getContent().getValue(),
                 TagValues.of(review.getTag()),
