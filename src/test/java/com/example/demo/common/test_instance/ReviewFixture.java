@@ -2,6 +2,7 @@ package com.example.demo.common.test_instance;
 
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.vo.Content;
+import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.domain.vo.Weather;
 
@@ -17,7 +18,8 @@ public class ReviewFixture {
             TagFixture.TAG_OF_NONE,
             UserFixture.FOO,
             SpotFixture.FOO_SPOT,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            StarRank.ZERO
     );
     public static final Review REVIEW_ON_SPOT_1_BY_DK = new Review(
             new Title(TEST),
@@ -25,7 +27,8 @@ public class ReviewFixture {
             TagFixture.TAG_OF_NONE,
             UserFixture.DK_USER,
             SpotFixture.SPOT,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            StarRank.ZERO
     );
 
     public static final Review REVIEW_ON_SPOT_1_BY_DK_ADMIN = new Review(
@@ -34,6 +37,7 @@ public class ReviewFixture {
             TagFixture.TAG_OF_NONE,
             UserFixture.DK_ADMIN,
             SpotFixture.SPOT,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            StarRank.ZERO
     );
 }

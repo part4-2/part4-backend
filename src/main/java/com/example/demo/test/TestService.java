@@ -3,6 +3,7 @@ package com.example.demo.test;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Provider;
 import com.example.demo.user.domain.enums.Role;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,14 @@ public class TestService {
 
     public String login(String email){
 
-        userRepository.save(new Users(email,
+        userRepository.save(new Users(
+                email,
                 email,
                 "",
                 Gender.MALE,
                 LocalDate.now(),
                 email,
+                Provider.GOOGLE,
                 Role.ADMIN,
                 50));
 

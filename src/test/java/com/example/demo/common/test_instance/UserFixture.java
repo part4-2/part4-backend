@@ -2,6 +2,7 @@ package com.example.demo.common.test_instance;
 
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Provider;
 import com.example.demo.user.domain.enums.Role;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "FOO",
+            Provider.GOOGLE,
             Role.USER,
             10
     );
@@ -23,6 +25,7 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "authId",
+            Provider.GOOGLE,
             Role.USER,
             10
     );
@@ -33,6 +36,7 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "authId",
+            Provider.GOOGLE,
             Role.USER,
             10
     );
