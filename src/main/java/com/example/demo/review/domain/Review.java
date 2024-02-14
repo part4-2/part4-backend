@@ -5,23 +5,15 @@ import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
+import com.example.demo.review_photo.domain.ReviewPhoto;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.user.domain.entity.Users;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,6 +36,9 @@ public class Review extends BaseTimeEntity {
     @Embedded
     private Tag tag;
     private StarRank starRank;
+    @OneToMany
+    @JoinColumn(name = "review_id")
+    private List<ReviewPhoto> reviewPhotos = new ArrayList<>();
 
     @Builder
     public Review(Title title, Content content, Tag tag, Users users, Spot spot, LocalDateTime visitingTime, StarRank starRank) {
