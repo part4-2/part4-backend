@@ -13,10 +13,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
+@Table(
+        indexes = {
+                @Index(name = "unique_composite_index", columnList = "displayName, formattedAddress", unique = true)
+        }
+)
 public class Spot extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true)
+    private String placeId;
 
     private String displayName; // "소플러스 제주점~"
 
@@ -26,7 +31,8 @@ public class Spot extends BaseTimeEntity {
     @Embedded
     private Location location;
     @Builder
-    public Spot(String displayName, String formattedAddress, Location location) {
+    public Spot(String placeId, String displayName, String formattedAddress, Location location) {
+        this.placeId = placeId;
         this.displayName = displayName;
         this.formattedAddress = formattedAddress;
         this.location = location;

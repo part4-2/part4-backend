@@ -5,25 +5,22 @@ import com.example.demo.global.converter.CodedEnum;
 import lombok.Getter;
 
 import java.util.Arrays;
-
 @Getter
-public enum Weather implements CodedEnum<String> {
-    SUNNY("맑음"),
-    RAINY("우천"),
-    CLOUDY("흐림"),
-    SNOWY("눈"),
-    NONE("모르겠음")
-    ;
-
+public enum Companion implements CodedEnum<String> {
+    FAMILY("가족"),
+    FRIEND("친구"),
+    LOVER("연인"),
+    ALONE("혼자"),
+    NONE("모르겠음");
     private final String description;
 
-    Weather(String description) {
+    Companion(String description) {
         this.description = description;
     }
 
-    public static Weather getInstance(String description){
+    public static Companion getInstance(String description){
         return Arrays.stream(values())
-                .filter(weather -> weather.description.equals(description))
+                .filter(companion -> companion.description.equals(description))
                 .findAny()
                 .orElse(NONE);
     }
@@ -32,10 +29,11 @@ public enum Weather implements CodedEnum<String> {
     public String getCode() {
         return description;
     }
+
     @jakarta.persistence.Converter(autoApply = true)
-    static class Converter extends AbstractCodedEnumConverter<Weather, String>{
+    static class Converter extends AbstractCodedEnumConverter<Companion, String> {
         public Converter() {
-            super(Weather.class);
+            super(Companion.class);
         }
     }
 }

@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
     private Key key;
-    private final long exp = 1000L * 60 * 60;
+    private static final long exp = 1000L * 60 * 60;
 
     private final CustomUserDetailsService customUserDetailsService;
 

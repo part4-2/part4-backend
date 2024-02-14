@@ -4,6 +4,7 @@ import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
+import com.example.demo.user.domain.response.UserInfoResponse;
 import com.example.demo.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -47,6 +48,11 @@ public class UserController {
     @PostMapping(value = "/api/user/profileImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,"multipart/form-data"})
     public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestPart MultipartFile profileImage) {
         return userService.uploadUserProfile(customUserDetails, profileImage);
+    }
+    @GetMapping("/api/users/info")
+    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                        @RequestParam Long userId){
+        return userService.getUserInfo(userId);
     }
 }
 
