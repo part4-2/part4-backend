@@ -30,4 +30,11 @@ public class ReviewException extends RuntimeException {
             super(String.format("조회한 리뷰가 존재하지 않습니다. - request info { email : %s }", id));
         }
     }
+
+    public static class NotValidUserToDelete extends ReviewException {
+
+        public NotValidUserToDelete(Long userId) {
+            super(String.format("내 리뷰가 아니면 삭제 불가합니다. - request info { userId : %s }", userId));
+        }
+    }
 }

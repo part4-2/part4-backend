@@ -1,8 +1,8 @@
-package com.example.demo.star.domain.vo;
+package com.example.demo.review.domain.vo;
 
 import com.example.demo.global.converter.AbstractCodedEnumConverter;
 import com.example.demo.global.converter.CodedEnum;
-import com.example.demo.star.exception.StarException;
+import com.example.demo.review.exception.StarException;
 import lombok.Getter;
 
 import java.util.Arrays;

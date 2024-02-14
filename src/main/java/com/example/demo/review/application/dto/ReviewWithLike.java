@@ -10,12 +10,13 @@ public record ReviewWithLike(Long reviewId,
                              String title,
                              String content,
                              TagValues tagValues,
-                             Long userId,
+                             String nickName,
                              String spotId,
                              LocalDateTime createdAt,
                              LocalDateTime modifiedAt,
                              int likeCount,
-                             LocalDateTime visitingTime) {
+                             LocalDateTime visitingTime,
+                             Double stars) {
     public static ReviewWithLike of(final Review review, final int reviewCount) {
         return new ReviewWithLike(
                 review.getId(),
@@ -23,12 +24,13 @@ public record ReviewWithLike(Long reviewId,
                 review.getTitle().getValue(),
                 review.getContent().getValue(),
                 TagValues.of(review.getTag()),
-                review.getUsers().getId(),
+                review.getUsers().getNickName(), // TODO : 여기 처리해야 함 (페치조인하게)
                 review.getSpot().getPlaceId(),
                 review.getCreatedDate(),
                 review.getModifiedDate(),
                 reviewCount,
-                review.getVisitingTime()
+                review.getVisitingTime(),
+                review.getStarRank().getValue()
         );
     }
 

@@ -23,12 +23,7 @@ public class SpotService {
     }
 
     @Transactional
-    public String save(SpotRequest spotRequest) {
-        spotRepository.findByFormattedAddress(spotRequest.formattedAddress())
-                .ifPresent(
-                        a -> {throw new SpotException.DuplicatedSpotExistsException(spotRequest.formattedAddress());}
-                );
-
+    public Spot save(SpotRequest spotRequest) {
         Spot spot = Spot.builder()
                 .placeId(spotRequest.placeId())
                 .location(spotRequest.location())
@@ -36,7 +31,10 @@ public class SpotService {
                 .displayName(spotRequest.displayName())
                 .build();
 
-        Spot savedSpot = spotRepository.save(spot);
-        return savedSpot.getPlaceId();
+        return spotRepository.save(spot);
+    }
+
+    public boolean existsByPlaceId(String placeId){
+        return spotRepository.existsSpotByPlaceId(placeId);
     }
 }

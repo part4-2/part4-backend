@@ -35,6 +35,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/test/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/swagger**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/main/**")).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .requestMatchers(antMatcher("/h2-console")).permitAll()
                         .requestMatchers(antMatcher("/api/guest/**")).hasRole("GUEST")

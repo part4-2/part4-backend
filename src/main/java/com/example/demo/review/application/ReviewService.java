@@ -6,16 +6,10 @@ import com.example.demo.review.application.dto.ReviewUpdateRequest;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
-import com.example.demo.review.domain.vo.Content;
-import com.example.demo.review.domain.vo.ReviewId;
-import com.example.demo.review.domain.vo.Tag;
-import com.example.demo.review.domain.vo.Title;
+import com.example.demo.review.domain.vo.*;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.spot.application.SpotService;
 import com.example.demo.spot.domain.Spot;
-import com.example.demo.star.application.StarService;
-import com.example.demo.star.domain.Star;
-import com.example.demo.star.domain.vo.StarRank;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +27,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final SpotService spotService;
     private final UserService userService;
-    private final StarService service;
 
     public Review findById(ReviewId reviewId){
         return reviewRepository.findById(reviewId.value())
@@ -53,7 +46,6 @@ public class ReviewService {
         final Spot spot = spotService.findById(spotId);
         final Users user = userService.findByNickName(nickName);
 
-
         final Tag tag = getTag(requestTag);
 
         final Review review = Review.builder()
@@ -63,15 +55,8 @@ public class ReviewService {
                 .spot(spot)
                 .tag(tag)
                 .visitingTime(visitingTime)
+                .starRank(StarRank.getInstance(starRank))
                 .build();
-
-        service.save(
-                new Star(
-                        user,
-                        spot,
-                        StarRank.getInstance(starRank)
-                )
-        );
 
         Review savedReview = reviewRepository.save(review);
         return savedReview.getId();
@@ -114,13 +99,30 @@ public class ReviewService {
         return ReviewResponseDTO.of(review);
     }
 
+    public Double getAverageStarRank(String placeID){
+        return reviewRepository.getAverageStarByPlaceId(placeID);
+    }
+
 
     public List<Review> findByLikes(){
         return reviewRepository.findByLikes();
     }
 
+    public void deleteReview(Long id, Long userId){
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(
+                        () -> new ReviewException.ReviewNotFoundException(id)
+                );
 
-    public void deleteReview(Long id){
-        // TODO: 2/7/24 삭제 부분 좋아요 등은 남길지? 그렇다면 FK를 사용할지? 혹은 소프트딜리트 할지?
+        if (!review.getId().equals(userId)){
+            throw new ReviewException.NotValidUserToDelete(userId);
+        }
+
+        reviewRepository.deleteById(id);
+    }
+
+
+    public void deleteReviewTest(Long id){
+        reviewRepository.deleteById(id);
     }
 }

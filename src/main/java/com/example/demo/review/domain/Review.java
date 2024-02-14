@@ -2,6 +2,7 @@ package com.example.demo.review.domain;
 
 import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.review.domain.vo.Content;
+import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.spot.domain.Spot;
@@ -42,15 +43,17 @@ public class Review extends BaseTimeEntity {
     private Spot spot;
     @Embedded
     private Tag tag;
+    private StarRank starRank;
 
     @Builder
-    public Review(Title title, Content content, Tag tag, Users users, Spot spot, LocalDateTime visitingTime) {
+    public Review(Title title, Content content, Tag tag, Users users, Spot spot, LocalDateTime visitingTime, StarRank starRank) {
         this.title = title;
         this.content = content;
         this.tag = tag;
         this.users = users;
         this.spot = spot;
         this.visitingTime = visitingTime;
+        this.starRank = starRank;
     }
 
     public void update(final Tag tag,
