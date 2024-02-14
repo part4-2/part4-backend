@@ -1,7 +1,6 @@
 package com.example.demo.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
-import com.example.demo.s3upload.FileDto;
 import com.example.demo.s3upload.FileService;
 import com.example.demo.s3upload.S3Service;
 import com.example.demo.user.domain.entity.Users;
@@ -14,6 +13,7 @@ import com.example.demo.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -62,12 +62,13 @@ public class UserService {
     }
 
     @Transactional
-    public String uploadUserProfile(CustomUserDetails customUserDetails,FileDto fileDto) {
-        String url = s3Service.uploadFile(fileDto.getFile());
-        fileDto.setUrl(url);
-        fileService.save(fileDto);
-        customUserDetails.getUsers().updateProfileImage(url);
+    public String uploadUserProfile(CustomUserDetails customUserDetails, MultipartFile profileImage) {
+        String url = s3Service.uploadFile(profileImage);
+        Users users = customUserDetails.getUsers().updateProfileImage(url);
+
+        userRepository.save(users);
 
         return url;
     }
 }
+

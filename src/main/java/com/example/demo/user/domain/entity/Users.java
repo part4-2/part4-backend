@@ -73,7 +73,8 @@ public class Users extends BaseTimeEntity {
         this.role = Role.USER;
     }
 
-    public void updateProfileImage(String imageUrl) {
+    public Users updateProfileImage(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 }
