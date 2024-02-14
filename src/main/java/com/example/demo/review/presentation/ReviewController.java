@@ -19,6 +19,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -38,18 +40,29 @@ public class ReviewController {
             @RequestBody @Valid ReviewWriteRequest reviewWriteRequest,
             @PathVariable String spotId
     ) {
+
+        LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
+
         final Long id = reviewService.write(
                 new ReviewRequest(reviewWriteRequest.title(),
                         reviewWriteRequest.content()),
                 customUserDetails.getUserEmail(),
                 spotId,
                 reviewWriteRequest.tagValues(),
-                reviewWriteRequest.visitingTime(),
+                localDate,
                 reviewWriteRequest.starRank());
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
 
         return ResponseEntity.created(location).build();
+    }
+
+    private static LocalDateTime getLocalDate(String visitingTime) {
+        if (visitingTime == null || visitingTime.isEmpty()){
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        return LocalDateTime.parse(visitingTime, formatter);
     }
 
     @GetMapping("/api/main/spots/reviews/{review-id}")
@@ -93,7 +106,7 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/api/users/reviews/{review-id}")
+    @DeleteMapping("/api/main/test/reviews/{review-id}")
     @Operation(summary = "리뷰 삭제(리스트)", description = "아무나 삭제 가능합니다(테스트용)")
     public ResponseEntity<Void> deleteReviewForTest(@PathVariable("review-id") Long reviewId) {
         reviewService.deleteReviewTest(reviewId);
