@@ -10,7 +10,7 @@ public record ReviewWriteRequest(
         @NotBlank(message = "내용은 빈 값일 수 없습니다.")
         String content,
         TagValues tagValues,
-        LocalDateTime visitingTime,
+        String visitingTime,
         Double starRank
 ) {
 

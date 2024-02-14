@@ -16,14 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -43,13 +40,16 @@ public class ReviewController {
             @RequestBody @Valid ReviewWriteRequest reviewWriteRequest,
             @PathVariable String spotId
     ) {
+
+        LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
+
         final Long id = reviewService.write(
                 new ReviewRequest(reviewWriteRequest.title(),
                         reviewWriteRequest.content()),
                 customUserDetails.getUserEmail(),
                 spotId,
                 reviewWriteRequest.tagValues(),
-                reviewWriteRequest.visitingTime(),
+                localDate,
                 reviewWriteRequest.starRank());
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
@@ -57,7 +57,15 @@ public class ReviewController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/api/users/spots/reviews/{review-id}")
+    private static LocalDateTime getLocalDate(String visitingTime) {
+        if (visitingTime == null || visitingTime.isEmpty()){
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        return LocalDateTime.parse(visitingTime, formatter);
+    }
+
+    @GetMapping("/api/main/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 조회", description = "리뷰 id에 해당하는 리뷰 정보를 불러옵니다.")
     public ResponseEntity<ReviewWithLike> getReview(@PathVariable("review-id") Long reviewId) {
         ReviewWithLike reviewWithLike = likeService.getOneWithLikes(new ReviewId(reviewId));
@@ -77,15 +85,32 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/users/main/reviews")
+    @GetMapping("/api/main/reviews")
     @Operation(summary = "리뷰 조회(리스트)", description = "좋아요를 많이 받은 순으로 20개의 리뷰를 조회합니다.")
-    public ResponseEntity<List<ReviewWithLike>> get20ReviewsByLikes(){
+    public ResponseEntity<List<ReviewWithLike>> get20ReviewsByLikes() {
         List<ReviewWithLike> result = likeService.getPopularLists();
 
-        if (result == null || result.isEmpty()){
+        if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/api/users/reviews/{review-id}")
+    @Operation(summary = "리뷰 삭제(리스트)", description = "작성자만 삭제 가능합니다")
+    public ResponseEntity<Void> deleteReview(@PathVariable("review-id") Long reviewId,
+                                             @AuthenticationPrincipal CustomUserDetails userDetails) {
+        reviewService.deleteReview(reviewId, userDetails.getUsers().getId());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/main/test/reviews/{review-id}")
+    @Operation(summary = "리뷰 삭제(리스트)", description = "아무나 삭제 가능합니다(테스트용)")
+    public ResponseEntity<Void> deleteReviewForTest(@PathVariable("review-id") Long reviewId) {
+        reviewService.deleteReviewTest(reviewId);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -28,18 +28,18 @@ public class SpotController {
     private final SpotStarService service;
 
     @PostMapping("/api/users/spots")
-    @Operation(summary = "여행지 저장(DB)", description = "여행지 정보 저장. (프론트 측에서 find api 호출 후 없을 시 분기 태워서 호출해주세요)")
-    public ResponseEntity<Void> write(
+    @Operation(summary = "여행지 저장(DB)", description = "여행지 정보 저장.")
+    public ResponseEntity<SpotResponse> write(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody SpotRequest spotRequest) {
-        final String savedId = spotService.save(spotRequest);
+        final SpotResponse response = service.saveOrGet(spotRequest);
 
-        final URI location = URI.create("/api/spots/" + savedId);
+//        final URI location = URI.create("/api/users/spots/" + savedId);
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/users/spots/{spot-id}")
+    @GetMapping("/api/main/spots/{spot-id}")
     @Operation(summary = "여행지 정보 찾기", description = "여행지 id로 여행지 정보를 찾아옵니다.")
     public ResponseEntity<SpotResponse> getById(@PathVariable("spot-id") String spotId) {
         SpotResponse response = service.getInfoByPlaceId(spotId);

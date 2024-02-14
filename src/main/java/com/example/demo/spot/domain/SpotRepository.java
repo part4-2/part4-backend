@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface SpotRepository extends JpaRepository<Spot, String> {
     Optional<Spot> findByFormattedAddress(String formattedAddress);
+    boolean existsSpotByPlaceId(String placeId);
 }
