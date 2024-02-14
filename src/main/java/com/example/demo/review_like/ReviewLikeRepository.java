@@ -5,5 +5,5 @@ import com.example.demo.review_like.domain.vo.ReviewLikeId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewLikeRepository extends JpaRepository<ReviewLike, ReviewLikeId>, ReviewLikeQueryRepository {
-
+    int countReviewLikeByReviewId(Long reviewId);
 }

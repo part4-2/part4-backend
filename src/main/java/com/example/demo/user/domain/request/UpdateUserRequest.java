@@ -12,4 +12,5 @@ public class UpdateUserRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private String gender;
+    private Integer age;
 }

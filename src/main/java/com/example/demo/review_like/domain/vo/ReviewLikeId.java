@@ -1,6 +1,5 @@
 package com.example.demo.review_like.domain.vo;
 
-import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.user.domain.entity.vo.UserId;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -16,8 +15,8 @@ public class ReviewLikeId implements Serializable {
     private Long userId;
     private Long reviewId;
 
-    public ReviewLikeId(UserId userId, ReviewId reviewId) {
+    public ReviewLikeId(UserId userId, Long reviewId) {
         this.userId = userId.value();
-        this.reviewId = reviewId.value();
+        this.reviewId = reviewId;
     }
 }

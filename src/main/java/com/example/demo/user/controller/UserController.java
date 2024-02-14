@@ -48,6 +48,11 @@ public class UserController {
     public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestPart MultipartFile profileImage) {
         return userService.uploadUserProfile(customUserDetails, profileImage);
     }
+    @GetMapping("/api/users/info")
+    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                        @RequestParam Long userId){
+        return userService.getUserInfo(userId);
+    }
 }
 
 

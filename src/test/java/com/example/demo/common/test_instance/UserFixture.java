@@ -14,7 +14,8 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "FOO",
-            Role.USER
+            Role.USER,
+            10
     );
     public static final Users DK_USER = new Users("laancer4@gmail.com",
             "DK",
@@ -22,7 +23,8 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "authId",
-            Role.USER
+            Role.USER,
+            10
     );
 
     public static final Users DK_ADMIN = new Users("laancer4@gmail.com",
@@ -31,6 +33,7 @@ public class UserFixture {
             Gender.MALE,
             LocalDate.now(),
             "authId",
-            Role.USER
+            Role.USER,
+            10
     );
 }
