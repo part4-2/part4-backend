@@ -2,10 +2,7 @@ package com.example.demo.review.domain;
 
 import com.example.demo.common.RepositoryTest;
 import com.example.demo.common.test_instance.TagFixture;
-import com.example.demo.review.domain.vo.Content;
-import com.example.demo.review.domain.vo.ReviewId;
-import com.example.demo.review.domain.vo.Title;
-import com.example.demo.review.domain.vo.Weather;
+import com.example.demo.review.domain.vo.*;
 import com.example.demo.review_like.domain.ReviewLike;
 import com.example.demo.user.domain.entity.vo.UserId;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +46,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
                                 .users(DK_USER)
                                 .spot(SPOT)
                                 .visitingTime(LocalDateTime.now())
+                                .starRank(StarRank.ZERO)
                                 .build()
                 ).toList();
 
