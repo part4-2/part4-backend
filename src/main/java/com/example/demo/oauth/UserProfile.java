@@ -30,6 +30,7 @@ public class UserProfile {
                 .oauthId(oauthId)
                 .role(Role.GUEST)
                 .imageUrl(imageUrl)
+                .provider(provider)
                 .build();
 
     }
