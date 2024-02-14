@@ -1,7 +1,6 @@
 package com.example.demo.user.controller;
 
 import com.example.demo.jwt.CustomUserDetails;
-import com.example.demo.s3upload.FileDto;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
 import com.example.demo.user.domain.request.UpdateUserRequest;
 import com.example.demo.user.domain.response.UpdateUserResponse;
@@ -11,12 +10,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,9 +44,10 @@ public class UserController {
     }
 
     @Operation(summary = "프로필 사진 업로드", description = "유저의 프로필 사진을 업로드 합니다.")
-    @PostMapping("/api/user/profileImage")
-    public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, FileDto fileDto) {
-        return userService.uploadUserProfile(customUserDetails,fileDto);
+    @PostMapping(value = "/api/user/profileImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,"multipart/form-data"})
+    public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestPart MultipartFile profileImage) {
+        return userService.uploadUserProfile(customUserDetails, profileImage);
     }
 }
+
 
