@@ -10,10 +10,10 @@ public record TagValues(
         String placeType
 ) {
     public static TagValues of(Tag tag) {
-       return new TagValues(
-               tag.getWeather().getDescription().equals("모르겠음") ? null : tag.getWeather().getDescription(),
-               tag.getCompanion().getDescription().equals("모르겠음") ? null : tag.getCompanion().getDescription(),
-               tag.getPlaceType().getDescription().equals("모르겠음") ? null : tag.getPlaceType().getDescription()
-       );
+        return new TagValues(
+                tag.getWeather().getDescription().equals("모르겠음") ? null : tag.getWeather().getDescription(),
+                tag.getCompanion().getDescription().equals("모르겠음") ? null : tag.getCompanion().getDescription(),
+                tag.getPlaceType().getDescription().equals("모르겠음") ? null : tag.getPlaceType().getDescription()
+        );
     }
 }

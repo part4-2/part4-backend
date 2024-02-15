@@ -2,11 +2,11 @@ package com.example.demo.review.presentation;
 
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.ReviewService;
-import com.example.demo.review.application.dto.ReviewRequest;
-import com.example.demo.review.application.dto.ReviewUpdateRequest;
-import com.example.demo.review.application.dto.ReviewWithLike;
-import com.example.demo.review.application.dto.ReviewWriteRequest;
+import com.example.demo.review.application.dto.*;
+import com.example.demo.review.domain.vo.Companion;
+import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.ReviewId;
+import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.review_like.application.ReviewLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -35,13 +35,13 @@ public class ReviewController {
     private final ReviewLikeService likeService;
 
     // 방문 날짜 (리뷰에)
-    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data"})
+
+    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data", MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestPart @Valid ReviewWriteRequest reviewWriteRequest,
-            @PathVariable String spotId,
-            @RequestPart List<MultipartFile> images
+            @ModelAttribute ReviewWriteRequest reviewWriteRequest,
+            @PathVariable String spotId
     ) {
 
         LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
@@ -51,11 +51,11 @@ public class ReviewController {
                         reviewWriteRequest.content()),
                 customUserDetails.getUsers().getNickName(),
                 spotId,
-                reviewWriteRequest.tagValues(),
+                TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(reviewWriteRequest.weather()), Companion.getInstance(reviewWriteRequest.companion()), PlaceType.getInstance(reviewWriteRequest.placeType()))),
                 localDate,
                 reviewWriteRequest.starRank(),
-                images
-                );
+                reviewWriteRequest.images()
+        );
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
 
