@@ -53,7 +53,7 @@ public class ReviewController {
                 spotId,
                 TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(reviewWriteRequest.weather()), Companion.getInstance(reviewWriteRequest.companion()), PlaceType.getInstance(reviewWriteRequest.placeType()))),
                 localDate,
-                reviewWriteRequest.starRank(),
+                reviewWriteRequest.stars(),
                 reviewWriteRequest.images()
         );
 
