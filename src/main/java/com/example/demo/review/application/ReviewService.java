@@ -8,6 +8,9 @@ import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
 import com.example.demo.review.domain.vo.*;
 import com.example.demo.review.exception.ReviewException;
+import com.example.demo.review_photo.domain.ReviewPhoto;
+import com.example.demo.review_photo.repository.ReviewPhotoRepository;
+import com.example.demo.s3upload.S3Service;
 import com.example.demo.spot.application.SpotService;
 import com.example.demo.spot.domain.Spot;
 import com.example.demo.user.domain.entity.Users;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +31,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final SpotService spotService;
     private final UserService userService;
+    private final S3Service s3Service;
+    private final ReviewPhotoRepository reviewPhotoRepository;
+
 
     public Review findById(ReviewId reviewId){
         return reviewRepository.findById(reviewId.value())
@@ -40,11 +47,22 @@ public class ReviewService {
                       final String spotId,
                       final TagValues requestTag,
                       final LocalDateTime visitingTime,
-                      Double starRank){
+                      Double starRank,
+                      List<MultipartFile> images
+                      ){
+
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
         final Spot spot = spotService.findById(spotId);
         final Users user = userService.findByNickName(nickName);
+
+        List<String> urls = s3Service.uploadFiles(images);
+        List<ReviewPhoto> reviewPhotos = urls.stream()
+                .map(ReviewPhoto::new)
+                .toList();
+
+        reviewPhotoRepository.saveAll(reviewPhotos);
+
 
         final Tag tag = getTag(requestTag);
 
@@ -57,6 +75,8 @@ public class ReviewService {
                 .visitingTime(visitingTime)
                 .starRank(StarRank.getInstance(starRank))
                 .build();
+
+        review.getReviewPhotos().addAll(reviewPhotos);
 
         Review savedReview = reviewRepository.save(review);
         return savedReview.getId();
@@ -125,4 +145,5 @@ public class ReviewService {
     public void deleteReviewTest(Long id){
         reviewRepository.deleteById(id);
     }
+
 }

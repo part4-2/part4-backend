@@ -2,8 +2,10 @@ package com.example.demo.review.application.dto;
 
 
 import com.example.demo.review.domain.Review;
+import com.example.demo.review_photo.domain.ReviewPhoto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ReviewWithLike(Long reviewId,
                              String placeId,
@@ -16,7 +18,9 @@ public record ReviewWithLike(Long reviewId,
                              LocalDateTime modifiedAt,
                              int likeCount,
                              LocalDateTime visitingTime,
-                             Double stars) {
+                             Double stars,
+                             List<String> images
+                             ) {
     public static ReviewWithLike of(final Review review, final int reviewCount) {
         return new ReviewWithLike(
                 review.getId(),
@@ -30,7 +34,8 @@ public record ReviewWithLike(Long reviewId,
                 review.getModifiedDate(),
                 reviewCount,
                 review.getVisitingTime(),
-                review.getStarRank().getValue()
+                review.getStarRank().getValue(),
+                review.getReviewPhotos().stream().map(ReviewPhoto::getUrl).toList()
         );
     }
 

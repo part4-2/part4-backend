@@ -14,9 +14,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -33,12 +35,13 @@ public class ReviewController {
     private final ReviewLikeService likeService;
 
     // 방문 날짜 (리뷰에)
-    @PostMapping("/api/users/spots/{spotId}/reviews")
+    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data"})
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestBody @Valid ReviewWriteRequest reviewWriteRequest,
-            @PathVariable String spotId
+            @RequestPart @Valid ReviewWriteRequest reviewWriteRequest,
+            @PathVariable String spotId,
+            @RequestPart List<MultipartFile> images
     ) {
 
         LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
@@ -46,11 +49,13 @@ public class ReviewController {
         final Long id = reviewService.write(
                 new ReviewRequest(reviewWriteRequest.title(),
                         reviewWriteRequest.content()),
-                customUserDetails.getUserEmail(),
+                customUserDetails.getUsers().getNickName(),
                 spotId,
                 reviewWriteRequest.tagValues(),
                 localDate,
-                reviewWriteRequest.starRank());
+                reviewWriteRequest.starRank(),
+                images
+                );
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
 
@@ -58,7 +63,7 @@ public class ReviewController {
     }
 
     private static LocalDateTime getLocalDate(String visitingTime) {
-        if (visitingTime == null || visitingTime.isEmpty()){
+        if (visitingTime == null || visitingTime.isEmpty()) {
             return null;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
@@ -112,5 +117,12 @@ public class ReviewController {
         reviewService.deleteReviewTest(reviewId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/image/test", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data"})
+    public void imageTest(@RequestPart List<MultipartFile> images) {
+        for (MultipartFile image : images) {
+            log.info(image.getOriginalFilename());
+        }
     }
 }
