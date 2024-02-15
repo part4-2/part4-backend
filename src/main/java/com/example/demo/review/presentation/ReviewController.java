@@ -39,9 +39,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestPart @Valid ReviewWriteRequest reviewWriteRequest,
-            @PathVariable String spotId,
-            @RequestPart List<MultipartFile> images
+            @ModelAttribute @Valid ReviewWriteRequest reviewWriteRequest,
+            @PathVariable String spotId
     ) {
 
         LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
@@ -54,7 +53,7 @@ public class ReviewController {
                 reviewWriteRequest.tagValues(),
                 localDate,
                 reviewWriteRequest.starRank(),
-                images
+                reviewWriteRequest.images()
                 );
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
