@@ -14,7 +14,7 @@ public record ReviewWriteRequest(
         String weather,
         String companion,
         String placeType,
-        Double starRank,
+        Double stars,
         List<MultipartFile> images
 ) {
 
