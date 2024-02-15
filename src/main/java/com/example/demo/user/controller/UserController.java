@@ -49,10 +49,11 @@ public class UserController {
     public String uploadUserProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestPart MultipartFile profileImage) {
         return userService.uploadUserProfile(customUserDetails, profileImage);
     }
+
+    @Operation(summary = "로그인한 회원 정보", description = "로그인한 회원의 정보를 가져옵니다.")
     @GetMapping("/api/users/info")
-    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                        @RequestParam Long userId){
-        return userService.getUserInfo(userId);
+    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        return userService.getUserInfo(customUserDetails);
     }
 }
 

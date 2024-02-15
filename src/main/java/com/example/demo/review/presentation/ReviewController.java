@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -119,10 +118,4 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/image/test", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data"})
-    public void imageTest(@RequestPart List<MultipartFile> images) {
-        for (MultipartFile image : images) {
-            log.info(image.getOriginalFilename());
-        }
-    }
 }

@@ -1,7 +1,6 @@
 package com.example.demo.user.service;
 
 import com.example.demo.jwt.CustomUserDetails;
-import com.example.demo.s3upload.FileService;
 import com.example.demo.s3upload.S3Service;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.request.RequiredUserInfoRequest;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
-    private final FileService fileService;
 
     public Users findByNickName(String nickName){
         return userRepository.findByNickName(nickName)
@@ -29,11 +27,8 @@ public class UserService {
                 );
     }
 
-    public UserInfoResponse getUserInfo(Long userId){
-        Users user = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new UserException.UserNotFoundException(userId)
-                );
+    public UserInfoResponse getUserInfo(CustomUserDetails customUserDetails){
+        Users user = customUserDetails.getUsers();
 
         return UserInfoResponse.of(user);
     }
