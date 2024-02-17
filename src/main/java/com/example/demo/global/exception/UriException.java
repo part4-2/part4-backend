@@ -8,7 +8,7 @@ public class UriException extends RuntimeException{
     public static class UriNotFoundException extends UriException {
 
         public UriNotFoundException(String requestUri) {
-            super(String.format("여행지 정보가 존재하지 않습니다. - request info { requestUri : %s }", requestUri));
+            super(String.format("url 정보가 존재하지 않습니다. - request info { requestUri : %s }", requestUri));
         }
     }
 }

@@ -37,4 +37,11 @@ public class ReviewException extends RuntimeException {
             super(String.format("내 리뷰가 아니면 삭제 불가합니다. - request info { userId : %s }", userId));
         }
     }
+
+    public static class SortConditionNotFoundException extends ReviewException {
+
+        public SortConditionNotFoundException(String value) {
+            super(String.format("정의되지 않은 정렬 조건입니다 - request info { value : %s }", value));
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.review.presentation;
 
+import com.example.demo.global.utils.DateUtils;
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.ReviewService;
 import com.example.demo.review.application.dto.*;
@@ -22,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -41,34 +41,30 @@ public class ReviewController {
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable String spotId,
-            @RequestPart (value = "reviewWriteRequest") ReviewWriteRequest reviewWriteRequest,
-            @RequestPart(value = "images",required = false) List<MultipartFile> images
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam String visitingTime,
+            @RequestParam(required = false) String weather,
+            @RequestParam(required = false) String companion,
+            @RequestParam(required = false) String placeType,
+            @RequestParam Double stars,
+            @RequestParam List<MultipartFile> images
     ) {
-
-        LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
+        LocalDateTime localDate = DateUtils.parseVisitingTime(visitingTime);
 
         final Long id = reviewService.write(
-                new ReviewRequest(reviewWriteRequest.title(),
-                        reviewWriteRequest.content()),
+                new ReviewRequest(title, content),
                 customUserDetails.getUsers().getNickName(),
                 spotId,
-                TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(reviewWriteRequest.weather()), Companion.getInstance(reviewWriteRequest.companion()), PlaceType.getInstance(reviewWriteRequest.placeType()))),
+                TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(weather), Companion.getInstance(companion), PlaceType.getInstance(placeType))),
                 localDate,
-                reviewWriteRequest.stars().orElse(null),
+                stars,
                 images
         );
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
 
         return ResponseEntity.created(location).build();
-    }
-
-    private static LocalDateTime getLocalDate(String visitingTime) {
-        if (visitingTime == null || visitingTime.isEmpty()) {
-            return null;
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-        return LocalDateTime.parse(visitingTime, formatter);
     }
 
     @GetMapping("/api/main/spots/reviews/{review-id}")
@@ -99,6 +95,24 @@ public class ReviewController {
         if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/api/main/reviews/specifics")
+    @Operation(summary = "리뷰 검색해서 조회", description = "검색 조건등에 따라 검색")
+    public ResponseEntity<List<ReviewListDTO>> getListWithSearchCondition(
+                    @RequestParam String searchValue,
+                    @RequestParam(required = false) String weather,
+                    @RequestParam(required = false) String companion,
+                    @RequestParam(required = false) String placeType,
+                    @RequestParam String order){
+
+        List<ReviewListDTO> result = reviewService.getListWithSearchCondition(
+                searchValue,
+                TagValues.ofSearchConditions(weather, companion, placeType),
+                SortCondition.getInstance(order)
+        );
 
         return ResponseEntity.ok(result);
     }

@@ -24,12 +24,15 @@ public enum UriInfo {
         return Arrays.stream(values())
                 .filter(uriInfo -> matchesUriTemplate(uriInfo.uri, requestUri) && uriInfo.httpMethod.equals(httpMethod))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("알 수 없는 주소"));
+                .orElse(
+                        UNDEFINED
+                );
     }
 
     private static boolean matchesUriTemplate(String uriPattern, String requestUri) {
         if (uriPattern == null || requestUri == null) {
-            throw new UriException.UriNotFoundException(requestUri);
+            return false;
+//            throw new UriException.UriNotFoundException(requestUri);
         }
 
         UriTemplate uriTemplate = new UriTemplate(uriPattern);

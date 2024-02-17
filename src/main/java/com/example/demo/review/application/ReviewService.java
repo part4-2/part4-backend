@@ -1,12 +1,17 @@
 package com.example.demo.review.application;
 
+import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewRequest;
-import com.example.demo.review.application.dto.ReviewResponseDTO;
 import com.example.demo.review.application.dto.ReviewUpdateRequest;
+import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
-import com.example.demo.review.domain.vo.*;
+import com.example.demo.review.domain.vo.Content;
+import com.example.demo.review.domain.vo.ReviewId;
+import com.example.demo.review.domain.vo.StarRank;
+import com.example.demo.review.domain.vo.Tag;
+import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.review_photo.domain.ReviewPhoto;
 import com.example.demo.review_photo.repository.ReviewPhotoRepository;
@@ -87,6 +92,10 @@ public class ReviewService {
         return savedReview.getId();
     }
 
+    public void foo(String SortCondition){
+
+    }
+
     private static Tag getTag(TagValues requestTag) {
         if (requestTag == null){
             return Tag.ofNone();
@@ -114,14 +123,16 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-
-    public ReviewResponseDTO getOneById(final Long reviewId){
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(
-                        () -> new ReviewException.ReviewNotFoundException(reviewId)
-                );
-
-        return ReviewResponseDTO.of(review);
+    public List<ReviewListDTO> getListWithSearchCondition(
+            String searchValue,
+            TagValues tagValues,
+            SortCondition sortCondition
+    ){
+        return reviewRepository.getListWithSearchCondition(
+                searchValue,
+                Tag.of(tagValues),
+                sortCondition
+        );
     }
 
     public Double getAverageStarRank(String placeID){

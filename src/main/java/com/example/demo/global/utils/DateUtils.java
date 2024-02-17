@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
+    private DateUtils() {
+        throw new UnsupportedOperationException("util class");
+    }
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
     public static LocalDateTime parseVisitingTime(String visitingTimeString) {
