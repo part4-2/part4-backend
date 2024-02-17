@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -49,20 +51,23 @@ public class ReviewService {
                       final LocalDateTime visitingTime,
                       Double starRank,
                       List<MultipartFile> images
-                      ){
+    ){
 
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
         final Spot spot = spotService.findById(spotId);
         final Users user = userService.findByNickName(nickName);
 
-        List<String> urls = s3Service.uploadFiles(images);
-        List<ReviewPhoto> reviewPhotos = urls.stream()
-                .map(ReviewPhoto::new)
-                .toList();
+        List<ReviewPhoto> reviewPhotos = Optional.ofNullable(images)
+                .map(imgList -> {
+                    List<String> urls = s3Service.uploadFiles(imgList);
+                    return urls.stream()
+                            .map(ReviewPhoto::new)
+                            .toList();
+                })
+                .orElse(Collections.emptyList());
 
         reviewPhotoRepository.saveAll(reviewPhotos);
-
 
         final Tag tag = getTag(requestTag);
 
@@ -84,7 +89,7 @@ public class ReviewService {
 
     private static Tag getTag(TagValues requestTag) {
         if (requestTag == null){
-             return Tag.ofNone();
+            return Tag.ofNone();
         }
 
         return Tag.of(requestTag);
