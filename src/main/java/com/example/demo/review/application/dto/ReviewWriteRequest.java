@@ -1,9 +1,8 @@
 package com.example.demo.review.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Optional;
 
 public record ReviewWriteRequest(
         @NotBlank(message = "제목은 빈 값일 수 없습니다.")
@@ -14,8 +13,7 @@ public record ReviewWriteRequest(
         String weather,
         String companion,
         String placeType,
-        Double stars,
-        List<MultipartFile> images
+        Optional<Double> stars
 ) {
 
 

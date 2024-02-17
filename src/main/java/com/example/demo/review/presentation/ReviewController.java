@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -35,12 +36,13 @@ public class ReviewController {
 
     // 방문 날짜 (리뷰에)
 
-    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data", MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @ModelAttribute ReviewWriteRequest reviewWriteRequest,
-            @PathVariable String spotId
+            @PathVariable String spotId,
+            @RequestPart (value = "reviewWriteRequest") ReviewWriteRequest reviewWriteRequest,
+            @RequestPart(value = "images",required = false) List<MultipartFile> images
     ) {
 
         LocalDateTime localDate = getLocalDate(reviewWriteRequest.visitingTime());
@@ -52,8 +54,8 @@ public class ReviewController {
                 spotId,
                 TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(reviewWriteRequest.weather()), Companion.getInstance(reviewWriteRequest.companion()), PlaceType.getInstance(reviewWriteRequest.placeType()))),
                 localDate,
-                reviewWriteRequest.stars(),
-                reviewWriteRequest.images()
+                reviewWriteRequest.stars().orElse(null),
+                images
         );
 
         final URI location = URI.create("/api/spot/" + spotId + "/reviews" + id);
