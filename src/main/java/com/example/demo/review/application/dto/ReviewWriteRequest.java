@@ -1,7 +1,9 @@
 package com.example.demo.review.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 public record ReviewWriteRequest(
@@ -13,7 +15,8 @@ public record ReviewWriteRequest(
         String weather,
         String companion,
         String placeType,
-        Optional<Double> stars
+        Optional<Double> stars,
+        List<MultipartFile> images
 ) {
 
 

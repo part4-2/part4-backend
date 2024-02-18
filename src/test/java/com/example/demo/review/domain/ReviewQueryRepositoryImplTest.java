@@ -2,6 +2,8 @@ package com.example.demo.review.domain;
 
 import com.example.demo.common.RepositoryTest;
 import com.example.demo.common.test_instance.TagFixture;
+import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.*;
 import com.example.demo.review_like.domain.ReviewLike;
 import com.example.demo.user.domain.entity.vo.UserId;
@@ -18,6 +20,7 @@ import java.util.stream.IntStream;
 import static com.example.demo.common.test_instance.ReviewFixture.REVIEW_ON_SPOT_1_BY_DK;
 import static com.example.demo.common.test_instance.ReviewFixture.REVIEW_ON_SPOT_1_BY_DK_ADMIN;
 import static com.example.demo.common.test_instance.SpotFixture.SPOT;
+import static com.example.demo.common.test_instance.TagFixture.TAG_OF_NONE;
 import static com.example.demo.common.test_instance.UserFixture.DK_ADMIN;
 import static com.example.demo.common.test_instance.UserFixture.DK_USER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +45,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
                         value -> Review.builder()
                                 .title( new Title(TEST + value))
                                 .content(new Content(TEST))
-                                .tag(TagFixture.TAG_OF_NONE)
+                                .tag(TAG_OF_NONE)
                                 .users(DK_USER)
                                 .spot(SPOT)
                                 .visitingTime(LocalDateTime.now())
@@ -61,7 +64,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
 
     @Test
     void find20ByLikes_SIZE_IS_20() {
-        final List<Review> byLikes = reviewQueryRepository.findByLikes();
+        final List<Review> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes).hasSize(20);
     }
 
@@ -82,14 +85,14 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
         repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L),102L));
 
         // then
-        List<Review> byLikes = reviewQueryRepository.findByLikes();
+        List<Review> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes.get(0).getId()).isEqualTo(101);
     }
 
     @Test
     @DisplayName("좋아요 수가 동률이라면 최신순으로 정렬한다.")
     void find20ByLikes_ORDERS() {
-        List<Review> byLikes = reviewQueryRepository.findByLikes();
+        List<Review> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
 
         Review firstReview = byLikes.get(0); // 맨 첫번째 유닛, 계속 재할당된다
         for (int i = 1; i < byLikes.size(); i++) {

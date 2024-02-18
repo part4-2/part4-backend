@@ -30,7 +30,7 @@ public class Tag {
         );
     }
 
-    public static Tag of(TagValues tagValues){
+    public static Tag of(TagValues tagValues) {
         Weather weather = Weather.getInstance(tagValues.weather());
         Companion companion = Companion.getInstance(tagValues.companion());
         PlaceType placeType = PlaceType.getInstance(tagValues.placeType());

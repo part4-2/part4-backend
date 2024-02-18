@@ -28,6 +28,9 @@ public enum StarRank implements CodedEnum<Double> {
     }
 
     public static StarRank getInstance(Double value){
+        if (value == null){
+            return StarRank.ZERO;
+        }
         return Arrays.stream(values())
                 .filter(star -> star.value == value)
                 .findAny()
