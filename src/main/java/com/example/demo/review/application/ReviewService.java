@@ -92,10 +92,6 @@ public class ReviewService {
         return savedReview.getId();
     }
 
-    public void foo(String SortCondition){
-
-    }
-
     private static Tag getTag(TagValues requestTag) {
         if (requestTag == null){
             return Tag.ofNone();
@@ -140,8 +136,8 @@ public class ReviewService {
     }
 
 
-    public List<Review> findByLikes(){
-        return reviewRepository.findByLikes();
+    public List<Review> findByLikes(SortCondition order){
+        return reviewRepository.findByLikes(order);
     }
 
     public void deleteReview(Long id, Long userId){

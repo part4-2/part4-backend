@@ -89,9 +89,11 @@ public class ReviewController {
     }
 
     @GetMapping("/api/main/reviews")
-    @Operation(summary = "리뷰 조회(리스트)", description = "좋아요를 많이 받은 순으로 20개의 리뷰를 조회합니다.")
-    public ResponseEntity<List<ReviewWithLike>> get20ReviewsByLikes() {
-        List<ReviewWithLike> result = likeService.getPopularLists();
+    @Operation(summary = "20개 리뷰 조회 (좋아요순, 최신순)", description = "20개의 리뷰를 조회합니다.")
+    public ResponseEntity<List<ReviewWithLike>> get20ReviewsByLikes(
+            @RequestParam SortCondition order
+    ) {
+        List<ReviewWithLike> result = likeService.getMainReviewList(order);
 
         if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -129,7 +131,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/api/main/test/reviews/{review-id}")
-    @Operation(summary = "리뷰 삭제(리스트)", description = "아무나 삭제 가능합니다(테스트용)")
+    @Operation(summary = "테스트용 삭제", description = "아무나 삭제 가능합니다(테스트용)")
     public ResponseEntity<Void> deleteReviewForTest(@PathVariable("review-id") Long reviewId) {
         reviewService.deleteReviewTest(reviewId);
 
