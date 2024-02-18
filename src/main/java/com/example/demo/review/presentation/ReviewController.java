@@ -49,7 +49,7 @@ public class ReviewController {
             @RequestParam(required = false) String companion,
             @RequestParam(required = false) String placeType,
             @RequestParam Double stars,
-            @RequestParam List<MultipartFile> images
+            @RequestParam(required = false) List<MultipartFile> images
     ) {
         LocalDateTime localDate = DateUtils.parseVisitingTime(visitingTime);
 
