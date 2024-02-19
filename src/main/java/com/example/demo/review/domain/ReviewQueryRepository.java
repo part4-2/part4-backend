@@ -10,5 +10,10 @@ public interface ReviewQueryRepository {
 
     List<Review> findByLikes(SortCondition order);
 
-    List<ReviewListDTO> getListWithSearchCondition(String searchValue, Tag tag, SortCondition sortCondition);
+
+    List<ReviewListDTO> getListWithSearchCondition(String searchValue,
+                                                   Tag tag,
+                                                   SortCondition sortCondition,
+                                                   Integer month,
+                                                   Integer hour);
 }
