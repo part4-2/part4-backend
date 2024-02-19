@@ -28,7 +28,7 @@ public class SpotService {
                 .placeId(spotRequest.placeId())
                 .location(spotRequest.location())
                 .formattedAddress(spotRequest.formattedAddress())
-                .displayName(spotRequest.displayName())
+                .displayName(spotRequest.name())
                 .build();
 
         return spotRepository.save(spot);
