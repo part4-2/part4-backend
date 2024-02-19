@@ -2,6 +2,7 @@ package com.example.demo.global.aop;
 
 import com.amazonaws.HttpMethod;
 import com.example.demo.jwt.CustomUserDetails;
+import com.example.demo.user.domain.response.UserInfoResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,13 +46,30 @@ public class ServiceAspect {
         Object[] args = joinPoint.getArgs();
 
         Map<String, Object> requestParameters = IntStream.range(0, args.length)
-                .filter(i -> args[i] != null && !args[i].getClass().equals(CustomUserDetails.class))
+                .filter(i -> args[i] != null)
                 .boxed()
-                .collect(Collectors.toMap(i -> parameterNames[i], i -> args[i]));
+                .collect(Collectors.toMap(i -> getParameterName(i, args, parameterNames), i -> getArgumentValue(i, args)));
 
         String requestParametersJson = objectMapper.writeValueAsString(requestParameters);
-        log.info("요청 정보 : {}, URI = {} \n <Request info JSON> \n{} \n </Request info JSON>", () -> description, uriinfo::getUri, () -> requestParametersJson);
+        log.info("요청 정보 : {}, URI = {} \n <Request info JSON> \n{} \n </Request info JSON>",
+                () -> description,
+                uriinfo::getUri, () -> requestParametersJson);
     }
+
+    private static Object getArgumentValue(Integer i, Object[] args) {
+        if (args[i] instanceof CustomUserDetails userDetails) {
+            return UserInfoResponse.of(userDetails.getUsers());
+        }
+        return args[i];
+    }
+
+    private static String getParameterName(Integer i, Object[] objects, String[] args) {
+        if (objects[i] instanceof CustomUserDetails) {
+            return "Request User Info";
+        }
+        return args[i];
+    }
+
 
     private UriInfo getUriInfo() {
         String uri = servletRequest.getRequestURI();

@@ -13,6 +13,7 @@ public enum UriInfo {
     SPOT_VIEW("/api/main/spots/{spot-id}", "여행지 조회", HttpMethod.GET),
     VALUE_VIEW("/api/main/spots/{spot-id}/any/value", "테스트용", HttpMethod.GET),
     TEST_LOGIN("/test/tokens", "테스트 로그인", HttpMethod.POST),
+    WRITE_REVIEW("/api/users/spots/{spotId}/reviews", "리뷰 쓰기", HttpMethod.POST),
     UNDEFINED(null, null, null);
     ;
 
