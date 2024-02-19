@@ -10,7 +10,6 @@ import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review.domain.vo.Weather;
 import com.example.demo.review_like.application.ReviewLikeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -109,13 +108,16 @@ public class ReviewController {
                     @RequestParam(required = false) String weather,
                     @RequestParam(required = false) String companion,
                     @RequestParam(required = false) String placeType,
-                    @Parameter()
-                    @RequestParam SortCondition order){
+                    @RequestParam SortCondition order,
+                    @RequestParam(required = false) Integer month,
+                    @RequestParam(required = false) Integer hour){
 
         List<ReviewListDTO> result = reviewService.getListWithSearchCondition(
                 searchValue,
                 TagValues.ofSearchConditions(weather, companion, placeType),
-                order
+                order,
+                month,
+                hour
         );
 
         return ResponseEntity.ok(result);

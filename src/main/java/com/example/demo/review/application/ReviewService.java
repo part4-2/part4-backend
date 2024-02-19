@@ -122,12 +122,16 @@ public class ReviewService {
     public List<ReviewListDTO> getListWithSearchCondition(
             String searchValue,
             TagValues tagValues,
-            SortCondition sortCondition
+            SortCondition sortCondition,
+            Integer month,
+            Integer hour
     ){
         return reviewRepository.getListWithSearchCondition(
                 searchValue,
                 Tag.of(tagValues),
-                sortCondition
+                sortCondition,
+                month,
+                hour
         );
     }
 

@@ -51,6 +51,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return placeType == PlaceType.NONE ? null : review.tag.placeType.eq(placeType);
     }
 
+    private BooleanExpression findByMonth(Integer month){
+        return month == null ? null : review.visitingTime.month().eq(month);
+    }
+
+    private BooleanExpression findByHour(Integer hour){
+        return hour == null ? null : review.visitingTime.hour().eq(hour);
+    }
+
     private BooleanExpression findByTag(Weather weather, Companion companion, PlaceType placeType) {
 
         BooleanExpression weatherExpr = findByWeather(weather);
@@ -72,7 +80,11 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return finalExpr;
     }
     @Override
-    public List<ReviewListDTO> getListWithSearchCondition(String searchValue, Tag tag, SortCondition sortCondition) {
+    public List<ReviewListDTO> getListWithSearchCondition(String searchValue,
+                                                          Tag tag,
+                                                          SortCondition sortCondition,
+                                                          Integer month,
+                                                          Integer hour) {
         return queryFactory.select(Projections.constructor(ReviewListDTO.class,
                         review.id,
                         review.title,
@@ -89,7 +101,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .on(reviewPhoto.review.id.eq(review.id))
                 .groupBy(review.id)
                 .where(findBySearchWord(searchValue),
-                        findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()))
+                        findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()),
+                        findByHour(hour),
+                        findByMonth(month))
                 .orderBy(sortCondition.getSpecifier())
                 .fetch();
 
