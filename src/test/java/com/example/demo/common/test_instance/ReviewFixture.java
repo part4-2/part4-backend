@@ -18,7 +18,7 @@ public class ReviewFixture {
             UserFixture.FOO,
             SpotFixture.FOO_SPOT,
             LocalDateTime.now(),
-            StarRank.ONE
+            StarRank.ZERO
     );
     public static final Review REVIEW_ON_SPOT_1_BY_DK = new Review(
             new Title(TEST),
@@ -27,7 +27,7 @@ public class ReviewFixture {
             UserFixture.DK_USER,
             SpotFixture.SPOT,
             LocalDateTime.now(),
-            StarRank.ONE
+            StarRank.ZERO
     );
 
     public static final Review REVIEW_ON_SPOT_1_BY_DK_ADMIN = new Review(
@@ -37,6 +37,6 @@ public class ReviewFixture {
             UserFixture.DK_ADMIN,
             SpotFixture.SPOT,
             LocalDateTime.now(),
-            StarRank.ONE
+            StarRank.ZERO
     );
 }
