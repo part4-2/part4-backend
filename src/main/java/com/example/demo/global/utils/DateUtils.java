@@ -10,7 +10,7 @@ public class DateUtils {
         throw new UnsupportedOperationException("util class");
     }
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
 
     public static LocalDateTime parseVisitingTime(String visitingTimeString) {
         if (StringUtils.isNullOrEmpty(visitingTimeString)) {

@@ -3,7 +3,11 @@ package com.example.demo.review.presentation;
 import com.example.demo.global.utils.DateUtils;
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.ReviewService;
-import com.example.demo.review.application.dto.*;
+import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.ReviewWithLike;
+import com.example.demo.review.application.dto.SortCondition;
+import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.ReviewId;
@@ -12,13 +16,18 @@ import com.example.demo.review_like.application.ReviewLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
@@ -76,13 +85,25 @@ public class ReviewController {
 
     @PutMapping("/api/users/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 꼭 필요합니다.")
-    public ResponseEntity<Void> updateReview(@RequestBody @Valid ReviewUpdateRequest reviewRequest,
+    public ResponseEntity<Void> updateReview(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+//                                             @RequestParam(required = false) List<MultipartFile> images,
+                                             @RequestParam String title,
+                                             @RequestParam String content,
+                                             @RequestParam String visitingTime,
+                                             @RequestParam(required = false) String spotId,
+                                             @RequestParam(required = false) String weather,
+                                             @RequestParam(required = false) String companion,
+                                             @RequestParam(required = false) String placeType,
+                                             @RequestParam Double stars,
                                              @PathVariable("review-id") Long reviewId) {
         reviewService.updateReview(
+                spotId,
                 reviewId,
-                reviewRequest,
-                reviewRequest.tagValues(),
-                reviewRequest.visitingTime()
+                title,
+                content,
+                TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(weather), Companion.getInstance(companion), PlaceType.getInstance(placeType))),
+                DateUtils.parseVisitingTime(visitingTime),
+                stars
         );
         return ResponseEntity.ok().build();
     }

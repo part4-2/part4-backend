@@ -3,6 +3,7 @@ package com.example.demo.review.domain;
 import com.example.demo.common.test_instance.SpotFixture;
 import com.example.demo.common.test_instance.UserFixture;
 import com.example.demo.review.domain.vo.Content;
+import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.spot.domain.Spot;
@@ -48,17 +49,19 @@ class ReviewTest {
                 REVIEW.getVisitingTime(),
                 REVIEW.getStarRank()
         );
-        review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now());
+
+        Spot newSpot = SpotFixture.FOO_SPOT;
+
+        review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now(), StarRank.ZERO, newSpot);
 
         assertEquals(review.getTitle(), newTitle);
         assertEquals(review.getContent(), newContent);
         assertEquals(review.getTag(), Tag.ofNone());
+        assertEquals(review.getSpot().getPlaceId(), newSpot.getPlaceId());
     }
 
     @Test
     void hashCodeTest() {
-        Review review1 = REVIEW;
-        Review review2 = REVIEW;
-        assertEquals(review1.hashCode(), review2.hashCode());
+        assertEquals(REVIEW.hashCode(), REVIEW.hashCode());
     }
 }

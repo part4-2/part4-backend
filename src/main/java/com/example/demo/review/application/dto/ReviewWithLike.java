@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReviewWithLike(Long reviewId,
-                             String placeId,
-                             String title,
-                             String content,
+                             String placeId, //
+                             String title, //
+                             String content, //
                              TagValues tagValues,
                              String nickName,
                              String spotName,
