@@ -45,7 +45,8 @@ class ReviewTest {
                 REVIEW.getTag(),
                 REVIEW.getUsers(),
                 REVIEW.getSpot(),
-                REVIEW.getVisitingTime()
+                REVIEW.getVisitingTime(),
+                REVIEW.getStarRank()
         );
         review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now());
 

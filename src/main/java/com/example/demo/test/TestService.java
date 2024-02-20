@@ -3,6 +3,7 @@ package com.example.demo.test;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.user.domain.entity.Users;
 import com.example.demo.user.domain.enums.Gender;
+import com.example.demo.user.domain.enums.Provider;
 import com.example.demo.user.domain.enums.Role;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,9 @@ public class TestService {
                 Gender.MALE,
                 LocalDate.now(),
                 email,
-                Role.ADMIN,
-                50));
+                Provider.GOOGLE,
+                Role.ADMIN
+                ));
 
         return jwtTokenProvider.createToken(email);
     }

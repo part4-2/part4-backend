@@ -11,9 +11,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Getter
@@ -33,9 +33,6 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
-
     private String oauthId;
 
     @Enumerated(EnumType.STRING)
@@ -47,30 +44,29 @@ public class Users extends BaseTimeEntity {
     private Integer age;
 
     @Builder
-    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Provider provider, Role role, Integer age) {
+    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Provider provider, Role role) {
         this.email = email;
         this.nickName = nickName;
         this.imageUrl = imageUrl;
         this.gender = gender;
-        this.birthDate = birthDate;
+        this.age = calculateAge(birthDate);
         this.oauthId = oauthId;
         this.provider = provider;
         this.role = role;
-        this.age = age;
     }
 
     public void updateUserInfo(UpdateUserRequest updateUserRequest) {
         this.email = updateUserRequest.getEmail();
         this.nickName = updateUserRequest.getNickName();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
-        this.birthDate = updateUserRequest.getBirthDate();
-        this.age = updateUserRequest.getAge();
+        this.age = calculateAge(updateUserRequest.getBirthDate());
+
     }
 
     public void updateEssentials(RequiredUserInfoRequest requiredUserInfoRequest) {
         this.nickName = requiredUserInfoRequest.getNickName();
         this.gender = Gender.getInstance(requiredUserInfoRequest.getGender());
-        this.birthDate = requiredUserInfoRequest.getBirthDate();
+        this.age = calculateAge(requiredUserInfoRequest.getBirthDate());
         this.role = Role.USER;
     }
 
@@ -78,4 +74,12 @@ public class Users extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         return this;
     }
+
+    public int calculateAge(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(birthDate, currentDate);
+        return period.getYears();
+    }
+
+
 }
