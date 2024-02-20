@@ -24,8 +24,6 @@ public class Users extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-
     private String nickName;
 
     private String imageUrl;
@@ -44,8 +42,7 @@ public class Users extends BaseTimeEntity {
     private Integer age;
 
     @Builder
-    public Users(String email, String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Provider provider, Role role) {
-        this.email = email;
+    public Users(String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Provider provider, Role role) {
         this.nickName = nickName;
         this.imageUrl = imageUrl;
         this.gender = gender;
@@ -56,7 +53,6 @@ public class Users extends BaseTimeEntity {
     }
 
     public void updateUserInfo(UpdateUserRequest updateUserRequest) {
-        this.email = updateUserRequest.getEmail();
         this.nickName = updateUserRequest.getNickName();
         this.gender = Gender.getInstance(updateUserRequest.getGender());
         this.age = calculateAge(updateUserRequest.getBirthDate());
@@ -75,7 +71,12 @@ public class Users extends BaseTimeEntity {
         return this;
     }
 
-    public int calculateAge(LocalDate birthDate) {
+    public Integer calculateAge(LocalDate birthDate) {
+
+        if (birthDate == null) {
+            return null;
+        }
+
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(birthDate, currentDate);
         return period.getYears();
@@ -83,3 +84,4 @@ public class Users extends BaseTimeEntity {
 
 
 }
+

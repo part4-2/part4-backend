@@ -21,7 +21,7 @@ public class TestService {
 
     public String login(String email){
 
-        userRepository.save(new Users(email,
+        userRepository.save(new Users(
                 email,
                 "",
                 Gender.MALE,

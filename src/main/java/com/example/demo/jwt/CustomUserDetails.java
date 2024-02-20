@@ -21,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getUserEmail(){
-        return users.getEmail();
+        return null;
     }
 
     @Override
