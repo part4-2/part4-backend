@@ -54,10 +54,14 @@ public class Review extends BaseTimeEntity {
     public void update(final Tag tag,
                        final Title title,
                        final Content content,
-                       final LocalDateTime visitingTime){
+                       final LocalDateTime visitingTime,
+                       final StarRank starRank,
+                       final Spot spot){
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.visitingTime = visitingTime;
+        this.starRank = starRank;
+        this.spot = spot;
     }
 }

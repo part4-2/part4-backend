@@ -2,7 +2,6 @@ package com.example.demo.review.application;
 
 import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewRequest;
-import com.example.demo.review.application.dto.ReviewUpdateRequest;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
@@ -101,19 +100,26 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReview(final Long reviewId,
-                             final ReviewUpdateRequest reviewRequest,
+    public void updateReview(final String spotId,
+                             final Long reviewId,
+                             final String title,
+                             final String content,
                              final TagValues tagValues,
-                             final LocalDateTime visitingTime){
+                             final LocalDateTime visitingTime,
+                             final Double stars){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId)
                 );
 
+        Spot spot = spotService.findById(spotId);
+
         review.update(getTag(tagValues),
-                new Title(reviewRequest.title()),
-                new Content(reviewRequest.content()),
-                visitingTime
+                new Title(title),
+                new Content(content),
+                visitingTime,
+                StarRank.getInstance(stars),
+                spot
         );
 
         reviewRepository.save(review);
