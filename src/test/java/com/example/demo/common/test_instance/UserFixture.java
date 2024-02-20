@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class UserFixture {
 
-    public static final Users FOO = new Users("FOO",
+    public static final Users FOO = new Users(
             "FOO",
             "FOO",
             Gender.MALE,
@@ -18,7 +18,7 @@ public class UserFixture {
             Provider.GOOGLE,
             Role.USER
     );
-    public static final Users DK_USER = new Users("laancer4@gmail.com",
+    public static final Users DK_USER = new Users(
             "DK",
             "imageUrl",
             Gender.MALE,
@@ -28,7 +28,7 @@ public class UserFixture {
             Role.USER
     );
 
-    public static final Users DK_ADMIN = new Users("laancer4@gmail.com",
+    public static final Users DK_ADMIN = new Users(
             "DK_ADMIN",
             "imageUrl",
             Gender.MALE,

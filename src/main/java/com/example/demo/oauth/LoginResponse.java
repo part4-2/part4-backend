@@ -12,8 +12,6 @@ public class LoginResponse {
 
     @Schema(description = "유저 Id")
     private Long id;
-    @Schema(description = "이메일")
-    private String email;
     @Schema(description = "프로필 사진")
     private String imageUrl;
     private String role;
@@ -23,7 +21,6 @@ public class LoginResponse {
 
     public LoginResponse(Users users,String tokenType, String accessToken) {
         this.id = users.getId();
-        this.email = users.getEmail();
         this.imageUrl = users.getImageUrl();
         this.role = users.getRole().getName();
         this.tokenType = tokenType;

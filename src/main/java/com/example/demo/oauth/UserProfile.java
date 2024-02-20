@@ -23,7 +23,6 @@ public class UserProfile {
 
     public Users toEntity() {
         return Users.builder()
-                .email(email)
                 .oauthId(oauthId)
                 .role(Role.GUEST)
                 .imageUrl(imageUrl)

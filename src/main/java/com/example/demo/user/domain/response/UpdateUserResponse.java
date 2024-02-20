@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 @Schema(name = "필수정보 입력된 회원 정보")
 public class UpdateUserResponse {
-    @Schema(description = "이메일")
-    private String email;
     @Schema(description = "닉네임")
     private String nickName;
     @Schema(description = "프로필 사진")
@@ -21,7 +19,6 @@ public class UpdateUserResponse {
     private String role;
 
     public UpdateUserResponse(Users users) {
-        this.email = users.getEmail();
         this.nickName = users.getNickName();
         this.imageUrl = users.getImageUrl();
         this.gender = users.getGender().getName();
