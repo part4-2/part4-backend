@@ -16,8 +16,7 @@ public class UserFixture {
             LocalDate.now(),
             "FOO",
             Provider.GOOGLE,
-            Role.USER,
-            10
+            Role.USER
     );
     public static final Users DK_USER = new Users("laancer4@gmail.com",
             "DK",
@@ -26,8 +25,7 @@ public class UserFixture {
             LocalDate.now(),
             "authId",
             Provider.GOOGLE,
-            Role.USER,
-            10
+            Role.USER
     );
 
     public static final Users DK_ADMIN = new Users("laancer4@gmail.com",
@@ -37,7 +35,6 @@ public class UserFixture {
             LocalDate.now(),
             "authId",
             Provider.GOOGLE,
-            Role.USER,
-            10
+            Role.USER
     );
 }

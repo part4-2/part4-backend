@@ -12,7 +12,6 @@ public enum OAuthAttributes {
             return UserProfile.builder()
                     .oauthId(String.valueOf(attributes.get("sub")))
                     .email((String) attributes.get("email"))
-                    .name((String) attributes.get("name"))
                     .imageUrl((String) attributes.get("picture"))
                     .provider(Provider.GOOGLE)
                     .build();
@@ -25,7 +24,6 @@ public enum OAuthAttributes {
             return UserProfile.builder()
                     .oauthId((String) response.get("id"))
                     .email((String) response.get("email"))
-                    .name((String) response.get("name"))
                     .imageUrl((String) response.get("profile_image"))
                     .provider(Provider.NAVER)
                     .build();
@@ -41,7 +39,6 @@ public enum OAuthAttributes {
             return UserProfile.builder()
                     .oauthId(String.valueOf(attributes.get("id")))
                     .email((String) kakaoAccount.get("email"))
-                    .name((String) properties.get("nickname"))
                     .imageUrl((String) properties.get("profile_image"))
                     .provider(Provider.KAKAO)
                     .build();
@@ -65,3 +62,4 @@ public enum OAuthAttributes {
     public abstract UserProfile of(Map<String, Object> attributes);
 
 }
+

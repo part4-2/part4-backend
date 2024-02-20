@@ -3,7 +3,6 @@ package com.example.demo.review.domain;
 import com.example.demo.common.test_instance.SpotFixture;
 import com.example.demo.common.test_instance.UserFixture;
 import com.example.demo.review.domain.vo.Content;
-import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.spot.domain.Spot;
@@ -47,7 +46,7 @@ class ReviewTest {
                 REVIEW.getUsers(),
                 REVIEW.getSpot(),
                 REVIEW.getVisitingTime(),
-                StarRank.ZERO
+                REVIEW.getStarRank()
         );
         review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now());
 

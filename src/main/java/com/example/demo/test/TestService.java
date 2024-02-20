@@ -21,16 +21,15 @@ public class TestService {
 
     public String login(String email){
 
-        userRepository.save(new Users(
-                email,
+        userRepository.save(new Users(email,
                 email,
                 "",
                 Gender.MALE,
                 LocalDate.now(),
                 email,
                 Provider.GOOGLE,
-                Role.ADMIN,
-                50));
+                Role.ADMIN
+                ));
 
         return jwtTokenProvider.createToken(email);
     }

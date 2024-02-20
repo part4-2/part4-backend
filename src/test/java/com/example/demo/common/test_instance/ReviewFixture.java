@@ -4,7 +4,6 @@ import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.StarRank;
 import com.example.demo.review.domain.vo.Title;
-import com.example.demo.review.domain.vo.Weather;
 
 import java.time.LocalDateTime;
 

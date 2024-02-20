@@ -3,9 +3,6 @@ package com.example.demo.user.domain.response;
 import com.example.demo.user.domain.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 
 @Data
 @Schema(name = "필수정보 입력된 회원 정보")
@@ -19,8 +16,7 @@ public class UpdateUserResponse {
     @Schema(description = "성별")
     private String gender;
     @Schema(description = "나이")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
+    private int age;
     @Schema(description = "권한")
     private String role;
 
@@ -29,7 +25,7 @@ public class UpdateUserResponse {
         this.nickName = users.getNickName();
         this.imageUrl = users.getImageUrl();
         this.gender = users.getGender().getName();
-        this.birthDate = users.getBirthDate();
+        this.age = users.getAge();
         this.role = users.getRole().getName();
     }
 }
