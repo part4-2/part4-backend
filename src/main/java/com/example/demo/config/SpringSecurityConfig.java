@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Collections;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -26,7 +29,14 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
+                    config.setAllowedMethods(Collections.singletonList("*"));
+                    config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -48,4 +58,5 @@ public class SpringSecurityConfig {
         return httpSecurity.build();
 
     }
+
 }

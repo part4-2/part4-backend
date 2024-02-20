@@ -27,7 +27,7 @@ public class ReviewException extends RuntimeException {
     public static class ReviewNotFoundException extends ReviewException {
 
         public ReviewNotFoundException(Long id) {
-            super(String.format("조회한 리뷰가 존재하지 않습니다. - request info { email : %s }", id));
+            super(String.format("조회한 리뷰가 존재하지 않습니다. - request info { id : %s }", id));
         }
     }
 
@@ -35,6 +35,13 @@ public class ReviewException extends RuntimeException {
 
         public NotValidUserToDelete(Long userId) {
             super(String.format("내 리뷰가 아니면 삭제 불가합니다. - request info { userId : %s }", userId));
+        }
+    }
+
+    public static class SortConditionNotFoundException extends ReviewException {
+
+        public SortConditionNotFoundException(String value) {
+            super(String.format("정의되지 않은 정렬 조건입니다 - request info { value : %s }", value));
         }
     }
 }

@@ -1,17 +1,22 @@
 package com.example.demo.review.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 public record ReviewWriteRequest(
         @NotBlank(message = "제목은 빈 값일 수 없습니다.")
         String title,
         @NotBlank(message = "내용은 빈 값일 수 없습니다.")
         String content,
-        TagValues tagValues,
         String visitingTime,
-        Double starRank
+        String weather,
+        String companion,
+        String placeType,
+        Optional<Double> stars,
+        List<MultipartFile> images
 ) {
 
 

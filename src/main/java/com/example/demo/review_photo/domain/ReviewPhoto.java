@@ -2,18 +2,26 @@ package com.example.demo.review_photo.domain;
 
 import com.example.demo.global.domain.BaseTimeEntity;
 import com.example.demo.review.domain.Review;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class ReviewPhoto extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Review review;
-    // TODO: 1/31/24 url 스펙 정해지면 객체로 바꿀 것
     private String url;
+    @ManyToOne
+    private Review review;
+    public ReviewPhoto(String url) {
+        this.url = url;
+    }
 }

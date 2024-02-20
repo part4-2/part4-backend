@@ -2,6 +2,7 @@ package com.example.demo.review_like.application;
 
 import com.example.demo.review.application.ReviewService;
 import com.example.demo.review.application.dto.ReviewWithLike;
+import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review_like.ReviewLikeRepository;
@@ -20,8 +21,6 @@ public class ReviewLikeService {
     private final ReviewLikeRepository reviewLikeRepository;
     private final ReviewService reviewService;
 
-    // TODO: 2/9/24 이 두 매서드에서 throw를 할지 말지 고민해보자 (무조건 200으로 줄지?)
-    //  더불어서 동시성문제를 생각할지?
     public void like(UserId userId, ReviewId reviewId) {
         Optional<ReviewLike> reviewLike = reviewLikeRepository.findById(new ReviewLikeId(userId, reviewId.value()));
 
@@ -51,9 +50,9 @@ public class ReviewLikeService {
         return ReviewWithLike.of(review, count);
     }
 
-    public List<ReviewWithLike> getPopularLists(){
+    public List<ReviewWithLike> getMainReviewList(SortCondition order){
 
-        return reviewService.findByLikes()
+        return reviewService.findByLikes(order)
                 .stream()
                 .map(
                         review -> ReviewWithLike.of(review, getCount(new ReviewId(review.getId())))
