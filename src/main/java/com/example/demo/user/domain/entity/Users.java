@@ -75,7 +75,12 @@ public class Users extends BaseTimeEntity {
         return this;
     }
 
-    public int calculateAge(LocalDate birthDate) {
+    public Integer calculateAge(LocalDate birthDate) {
+
+        if (birthDate == null) {
+            return null;
+        }
+
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(birthDate, currentDate);
         return period.getYears();
@@ -83,3 +88,4 @@ public class Users extends BaseTimeEntity {
 
 
 }
+
