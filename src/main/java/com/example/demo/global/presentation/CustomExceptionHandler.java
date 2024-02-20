@@ -32,6 +32,7 @@ public class CustomExceptionHandler {
             UsernameNotFoundException.class,
             WeatherException.WeatherNotFoundException.class,
             StarException.StarNotFoundException.class,
+            ReviewException.SortConditionNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
         final String message = exception.getMessage();
@@ -50,6 +51,18 @@ public class CustomExceptionHandler {
         log.warn(message);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(value = {
+            RuntimeException.class
+    })
+    public ResponseEntity<ErrorResponse> handleException(final Exception exception) {
+        final String message = exception.getMessage();
+        log.error("Unexpected error occurred: " + message, exception);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(message));
     }
 }
