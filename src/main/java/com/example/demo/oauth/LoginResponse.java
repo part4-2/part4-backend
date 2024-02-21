@@ -12,8 +12,11 @@ public class LoginResponse {
 
     @Schema(description = "유저 Id")
     private Long id;
+    @Schema(description = "유저 닉네임")
+    private String nickName;
     @Schema(description = "프로필 사진")
     private String imageUrl;
+    @Schema(description = "유저 Role")
     private String role;
     private String tokenType;
     private String accessToken;
@@ -21,6 +24,7 @@ public class LoginResponse {
 
     public LoginResponse(Users users,String tokenType, String accessToken) {
         this.id = users.getId();
+        this.nickName = users.getNickName();
         this.imageUrl = users.getImageUrl();
         this.role = users.getRole().getName();
         this.tokenType = tokenType;
