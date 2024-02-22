@@ -8,10 +8,9 @@ import java.time.LocalDateTime;
 
 public record ReviewListDTO(Long reviewId,
                             Title title,
-                            Tag tag,
+                            Tag tagValues,
                             String nickName,
                             LocalDateTime visitingTime,
                             StarRank stars,
                             String image) {
-
 }
