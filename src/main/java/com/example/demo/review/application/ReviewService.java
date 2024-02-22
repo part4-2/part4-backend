@@ -146,7 +146,7 @@ public class ReviewService {
     }
 
 
-    public List<Review> findByLikes(SortCondition order){
+    public List<ReviewListDTO> findByLikes(SortCondition order){
         return reviewRepository.findByLikes(order);
     }
 

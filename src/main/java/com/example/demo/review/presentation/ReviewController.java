@@ -110,10 +110,10 @@ public class ReviewController {
 
     @GetMapping("/api/main/reviews")
     @Operation(summary = "20개 리뷰 조회 (좋아요순, 최신순)", description = "20개의 리뷰를 조회합니다.")
-    public ResponseEntity<List<ReviewWithLike>> get20ReviewsByLikes(
+    public ResponseEntity<List<ReviewListDTO>> get20ReviewsByLikes(
             @RequestParam SortCondition order
     ) {
-        List<ReviewWithLike> result = likeService.getMainReviewList(order);
+        List<ReviewListDTO> result = likeService.getMainReviewList(order);
 
         if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();

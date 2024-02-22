@@ -25,12 +25,23 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Review> findByLikes(SortCondition order) {
-        return queryFactory.selectFrom(review)
+    public List<ReviewListDTO> findByLikes(SortCondition order) {
+        return queryFactory.select(Projections.constructor(ReviewListDTO.class,
+                        review.id,
+                        review.title,
+                        review.tag,
+                        review.users.nickName,
+                        review.visitingTime,
+                        review.starRank,
+                        reviewPhoto.url
+                ))
+                .from(review)
                 .leftJoin(reviewLike)
-                .on(reviewLike.reviewId.eq(review.id))
-                .groupBy(review.id) // 리뷰의 id로 그룹화하여
-                .orderBy(order.getSpecifier()) // reviewLike의 개수로 내림차순 정렬
+                .on(review.id.eq(reviewLike.reviewId))
+                .leftJoin(reviewPhoto)
+                .on(reviewPhoto.review.id.eq(review.id))
+                .groupBy(review.id)
+                .orderBy(order.getSpecifier())
                 .limit(20) // 상위 20개 리뷰만 선택
                 .fetch();
     }
@@ -91,8 +102,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.tag,
                         review.users.nickName,
                         review.visitingTime,
-                        reviewPhoto.url,
-                        review.starRank
+                        review.starRank,
+                        reviewPhoto.url
                 ))
                 .from(review)
                 .leftJoin(reviewLike)
@@ -108,6 +119,4 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .fetch();
 
     }
-
-
 }

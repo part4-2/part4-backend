@@ -6,12 +6,12 @@ import com.example.demo.review.domain.vo.Title;
 
 import java.time.LocalDateTime;
 
-public record ReviewListDTO(Long id,
+public record ReviewListDTO(Long reviewId,
                             Title title,
                             Tag tag,
                             String nickName,
                             LocalDateTime visitingTime,
-                            String url,
-                            StarRank stars) {
+                            StarRank stars,
+                            String image) {
 
 }
