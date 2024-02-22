@@ -1,9 +1,7 @@
 package com.example.demo.review.application;
 
-import com.example.demo.review.application.dto.ReviewListDTO;
-import com.example.demo.review.application.dto.ReviewRequest;
-import com.example.demo.review.application.dto.SortCondition;
-import com.example.demo.review.application.dto.TagValues;
+import com.example.demo.global.utils.DateUtils;
+import com.example.demo.review.application.dto.*;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
 import com.example.demo.review.domain.vo.Content;
@@ -132,13 +130,27 @@ public class ReviewService {
             Integer month,
             Integer hour
     ){
-        return reviewRepository.getListWithSearchCondition(
+
+        List<ReviewListData> dataFromRepository = reviewRepository.getListWithSearchCondition(
                 searchValue,
                 Tag.of(tagValues),
                 sortCondition,
                 month,
                 hour
         );
+
+        return dataFromRepository.stream()
+                .map(
+                        data -> new ReviewListDTO(
+                                data.reviewId(),
+                                data.title().getValue(),
+                                TagValues.of(data.tagValues()),
+                                data.nickName(),
+                                DateUtils.parseTimeToString(data.visitingTime()),
+                                data.stars().getValue(),
+                                data.image())
+                )
+                .toList();
     }
 
     public Double getAverageStarRank(String placeID){
@@ -146,7 +158,7 @@ public class ReviewService {
     }
 
 
-    public List<ReviewListDTO> findByLikes(SortCondition order){
+    public List<ReviewListData> findByLikes(SortCondition order){
         return reviewRepository.findByLikes(order);
     }
 

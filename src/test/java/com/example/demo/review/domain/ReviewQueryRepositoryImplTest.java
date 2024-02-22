@@ -1,7 +1,7 @@
 package com.example.demo.review.domain;
 
 import com.example.demo.common.repository.RepositoryTest;
-import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.StarRank;
@@ -64,7 +64,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
 
     @Test
     void find20ByLikes_SIZE_IS_20() {
-        final List<ReviewListDTO> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
+        final List<ReviewListData> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes).hasSize(20);
     }
 
@@ -85,7 +85,7 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
         entityProvider.saveReviewLike(new ReviewLike(new UserId(1L),102L));
 
         // then
-        List<ReviewListDTO> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
+        List<ReviewListData> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes.get(0).reviewId()).isEqualTo(101);
     }
 

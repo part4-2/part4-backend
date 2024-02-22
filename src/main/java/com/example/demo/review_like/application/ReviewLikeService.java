@@ -1,9 +1,8 @@
 package com.example.demo.review_like.application;
 
+import com.example.demo.global.utils.DateUtils;
 import com.example.demo.review.application.ReviewService;
-import com.example.demo.review.application.dto.ReviewListDTO;
-import com.example.demo.review.application.dto.ReviewWithLike;
-import com.example.demo.review.application.dto.SortCondition;
+import com.example.demo.review.application.dto.*;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review_like.ReviewLikeRepository;
@@ -53,7 +52,19 @@ public class ReviewLikeService {
 
     public List<ReviewListDTO> getMainReviewList(SortCondition order){
 
-        return reviewService.findByLikes(order);
+        List<ReviewListData> dataFromRepository = reviewService.findByLikes(order);
 
+        return dataFromRepository.stream()
+                .map(
+                        data -> new ReviewListDTO(
+                                data.reviewId(),
+                                data.title().getValue(),
+                                TagValues.of(data.tagValues()),
+                                data.nickName(),
+                                DateUtils.parseTimeToString(data.visitingTime()),
+                                data.stars().getValue(),
+                                data.image())
+                )
+                .toList();
     }
 }
