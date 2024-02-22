@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewLikeController {
     private final ReviewLikeService reviewLikeService;
 
-    @PostMapping("/api/users/reviews/like/{review-id}")
+    @PostMapping("/api/user/reviews/like/{review-id}")
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요를 등록합니다")
     public ResponseEntity<Void> likeReview(
             @PathVariable(value = "review-id") Long reviewIdValue,
@@ -38,7 +38,7 @@ public class ReviewLikeController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/api/users/reviews/like/{review-id}")
+    @DeleteMapping("/api/user/reviews/like/{review-id}")
     @Operation(summary = "리뷰 좋아요 삭제", description = "리뷰의 좋아요를 삭제합니다")
     public ResponseEntity<Void> unlikeReview(
             @PathVariable(value = "review-id") Long reviewIdValue,
