@@ -1,6 +1,7 @@
 package com.example.demo.review_like.application;
 
 import com.example.demo.review.application.ReviewService;
+import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewWithLike;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.Review;
@@ -50,13 +51,9 @@ public class ReviewLikeService {
         return ReviewWithLike.of(review, count);
     }
 
-    public List<ReviewWithLike> getMainReviewList(SortCondition order){
+    public List<ReviewListDTO> getMainReviewList(SortCondition order){
 
-        return reviewService.findByLikes(order)
-                .stream()
-                .map(
-                        review -> ReviewWithLike.of(review, getCount(new ReviewId(review.getId())))
-                )
-                .toList();
+        return reviewService.findByLikes(order);
+
     }
 }

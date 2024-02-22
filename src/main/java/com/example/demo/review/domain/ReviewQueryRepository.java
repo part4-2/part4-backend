@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReviewQueryRepository {
 
-    List<Review> findByLikes(SortCondition order);
+    List<ReviewListDTO> findByLikes(SortCondition order);
 
 
     List<ReviewListDTO> getListWithSearchCondition(String searchValue,

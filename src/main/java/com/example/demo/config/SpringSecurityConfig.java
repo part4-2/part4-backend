@@ -48,9 +48,9 @@ public class SpringSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/main/**")).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .requestMatchers(antMatcher("/h2-console")).permitAll()
-                        .requestMatchers(antMatcher("/api/guest/**")).hasRole("GUEST")
-                        .requestMatchers(antMatcher("/api/user/**")).hasRole("USER")
-                        .requestMatchers(antMatcher("/api/admin/**")).hasRole("ADMIN")
+//                        .requestMatchers(antMatcher("/api/guest/**")).hasRole("GUEST")
+//                        .requestMatchers(antMatcher("/api/user/**")).hasRole("USER")
+//                        .requestMatchers(antMatcher("/api/admin/**")).hasRole("ADMIN")
                         .requestMatchers("/**","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
                         .anyRequest().authenticated()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider) , UsernamePasswordAuthenticationFilter.class);
