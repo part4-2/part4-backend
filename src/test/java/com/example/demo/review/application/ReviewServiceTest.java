@@ -1,6 +1,6 @@
 package com.example.demo.review.application;
 
-import com.example.demo.common.RepositoryTest;
+import com.example.demo.common.repository.RepositoryTest;
 import com.example.demo.common.test_instance.TagFixture;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
@@ -35,9 +35,9 @@ class ReviewServiceTest extends RepositoryTest {
 
     @BeforeEach
     void setUp() {
-        repositoryFactory.saveSpot(SPOT);
-        repositoryFactory.saveUser(DK_USER);
-        repositoryFactory.saveUser(DK_ADMIN);
+        entityProvider.saveSpot(SPOT);
+        entityProvider.saveUser(DK_USER);
+        entityProvider.saveUser(DK_ADMIN);
         saveHundredReviewEntities();
     }
 
@@ -56,12 +56,12 @@ class ReviewServiceTest extends RepositoryTest {
                                 .build()
                 ).toList();
 
-        repositoryFactory.saveAllReviewAndFlush(list);
+        entityProvider.saveAllReviewAndFlush(list);
 
         // 80 번 째 이후로 저장
         for (int i = 80; i < list.size(); i++) {
             ReviewLike reviewLike = new ReviewLike(new UserId(1L), (long) i);
-            repositoryFactory.saveReviewLike(reviewLike);
+            entityProvider.saveReviewLike(reviewLike);
         }
     }
 
@@ -69,7 +69,7 @@ class ReviewServiceTest extends RepositoryTest {
     @Rollback(value = false)
     @Transactional
     void foo() {
-        Spot spot = repositoryFactory.saveSpot(new Spot(
+        Spot spot = entityProvider.saveSpot(new Spot(
                 "foo",
                 "disa",
                 "for,",

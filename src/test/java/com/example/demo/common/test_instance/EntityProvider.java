@@ -1,5 +1,6 @@
-package com.example.demo.common;
+package com.example.demo.common.test_instance;
 
+import com.example.demo.common.repository.Repositories;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review_like.domain.ReviewLike;
 import com.example.demo.spot.domain.Spot;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RepositoryFactory {
+public class EntityProvider {
     @Autowired
     private Repositories repositories;
 

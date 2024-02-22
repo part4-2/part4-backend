@@ -22,7 +22,6 @@ public class SpotService {
                 );
     }
 
-    @Transactional
     public Spot save(SpotRequest spotRequest) {
         Spot spot = Spot.builder()
                 .placeId(spotRequest.placeId())
