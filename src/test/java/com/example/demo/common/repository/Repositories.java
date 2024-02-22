@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.demo.common.repository;
 
 import com.example.demo.review.domain.ReviewRepository;
 import com.example.demo.review_like.ReviewLikeRepository;

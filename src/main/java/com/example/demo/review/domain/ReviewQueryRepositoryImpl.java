@@ -1,6 +1,6 @@
 package com.example.demo.review.domain;
 
-import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
@@ -25,8 +25,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ReviewListDTO> findByLikes(SortCondition order) {
-        return queryFactory.select(Projections.constructor(ReviewListDTO.class,
+    public List<ReviewListData> findByLikes(SortCondition order) {
+        return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
                         review.tag,
@@ -91,12 +91,12 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return finalExpr;
     }
     @Override
-    public List<ReviewListDTO> getListWithSearchCondition(String searchValue,
-                                                          Tag tag,
-                                                          SortCondition sortCondition,
-                                                          Integer month,
-                                                          Integer hour) {
-        return queryFactory.select(Projections.constructor(ReviewListDTO.class,
+    public List<ReviewListData> getListWithSearchCondition(String searchValue,
+                                                           Tag tag,
+                                                           SortCondition sortCondition,
+                                                           Integer month,
+                                                           Integer hour) {
+        return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
                         review.tag,

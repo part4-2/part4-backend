@@ -1,11 +1,10 @@
 package com.example.demo.review.domain;
 
-import com.example.demo.common.RepositoryTest;
-import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.common.repository.RepositoryTest;
+import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.Content;
 import com.example.demo.review.domain.vo.StarRank;
-import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Title;
 import com.example.demo.review_like.domain.ReviewLike;
 import com.example.demo.user.domain.entity.vo.UserId;
@@ -33,9 +32,9 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
     private static final String TEST = "TEST";
     @BeforeEach
     void setUp() {
-        repositoryFactory.saveSpot(SPOT);
-        repositoryFactory.saveUser(DK_USER);
-        repositoryFactory.saveUser(DK_ADMIN);
+        entityProvider.saveSpot(SPOT);
+        entityProvider.saveUser(DK_USER);
+        entityProvider.saveUser(DK_ADMIN);
         saveHundredReviewEntities();
     }
 
@@ -54,18 +53,18 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
                                 .build()
                 ).toList();
 
-        repositoryFactory.saveAllReviewAndFlush(list);
+        entityProvider.saveAllReviewAndFlush(list);
 
         // 80 번 째 이후로 저장
         for (int i = 80; i < list.size(); i++) {
             ReviewLike reviewLike = new ReviewLike(new UserId(1L), (long) i);
-            repositoryFactory.saveReviewLike(reviewLike);
+            entityProvider.saveReviewLike(reviewLike);
         }
     }
 
     @Test
     void find20ByLikes_SIZE_IS_20() {
-        final List<ReviewListDTO> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
+        final List<ReviewListData> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes).hasSize(20);
     }
 
@@ -73,20 +72,20 @@ class ReviewQueryRepositoryImplTest extends RepositoryTest {
     @DisplayName("좋아요 순으로 정렬된다")
     void find20ByLikes() {
         // given
-        Review review = repositoryFactory.saveReview(REVIEW_ON_SPOT_1_BY_DK);
-        Review review2 = repositoryFactory.saveReview(REVIEW_ON_SPOT_1_BY_DK_ADMIN);
+        Review review = entityProvider.saveReview(REVIEW_ON_SPOT_1_BY_DK);
+        Review review2 = entityProvider.saveReview(REVIEW_ON_SPOT_1_BY_DK_ADMIN);
 
         assertThat(review.getId()).isEqualTo(101L);
         assertThat(review2.getId()).isEqualTo(102L);
 
         // when
-        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L),101L));
-        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(2L),101L));
+        entityProvider.saveReviewLike(new ReviewLike(new UserId(1L),101L));
+        entityProvider.saveReviewLike(new ReviewLike(new UserId(2L),101L));
         // 102 번째 엔티티도 저장 (생성 내림차순이 아님을 테스트 하기 위함)
-        repositoryFactory.saveReviewLike(new ReviewLike(new UserId(1L),102L));
+        entityProvider.saveReviewLike(new ReviewLike(new UserId(1L),102L));
 
         // then
-        List<ReviewListDTO> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
+        List<ReviewListData> byLikes = reviewQueryRepository.findByLikes(SortCondition.POPULAR);
         assertThat(byLikes.get(0).reviewId()).isEqualTo(101);
     }
 

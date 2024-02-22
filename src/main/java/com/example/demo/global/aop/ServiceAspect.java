@@ -12,6 +12,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,11 +23,9 @@ import java.util.stream.IntStream;
 @Component
 @Log4j2
 public class ServiceAspect {
-    private final HttpServletRequest servletRequest;
     private final ObjectMapper objectMapper;
 
-    public ServiceAspect(HttpServletRequest servletRequest, ObjectMapper objectMapper) {
-        this.servletRequest = servletRequest;
+    public ServiceAspect(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
@@ -72,6 +72,7 @@ public class ServiceAspect {
 
 
     private UriInfo getUriInfo() {
+        final HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();;
         String uri = servletRequest.getRequestURI();
         String method = servletRequest.getMethod();
         HttpMethod httpMethod = HttpMethod.valueOf(method);

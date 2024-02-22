@@ -2,10 +2,7 @@ package com.example.demo.spot.domain.vo;
 
 import com.example.demo.spot.exception.SpotException;
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 
@@ -13,6 +10,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Location {
     private static final int MAX_LENGTH = 18; // 제한 길이
 

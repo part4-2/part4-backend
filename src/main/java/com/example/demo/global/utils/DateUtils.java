@@ -25,4 +25,8 @@ public class DateUtils {
             throw new DateTimeCustomException.InvalidFormatOfDateCustomException(REGEX, visitingTimeString);
         }
     }
+
+    public static String parseTimeToString(LocalDateTime dateTime){
+        return dateTime.format(formatter);
+    }
 }
