@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +19,7 @@ public class OAuth2Controller {
     private final OAuth2Service oAuth2Service;
 
     @Operation(summary = "소셜로그인",description = "소셜 로그인을 통한 회원가입")
-    @PostMapping("/login/oauth/{provider}")
+    @GetMapping("/login/oauth/{provider}")
     public ResponseEntity<LoginResponse> login(@PathVariable String provider, @RequestParam("code") String code) {
 
         if (provider.equals("google")) {
