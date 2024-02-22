@@ -45,7 +45,7 @@ public class ReviewController {
 
     // 방문 날짜 (리뷰에)
 
-    @PostMapping(value = "/api/users/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/user/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -83,7 +83,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewWithLike);
     }
 
-    @PutMapping("/api/users/spots/reviews/{review-id}")
+    @PutMapping("/api/user/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 꼭 필요합니다.")
     public ResponseEntity<Void> updateReview(@AuthenticationPrincipal CustomUserDetails customUserDetails,
 //                                             @RequestParam(required = false) List<MultipartFile> images,
@@ -144,7 +144,7 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/api/users/reviews/{review-id}")
+    @DeleteMapping("/api/user/reviews/{review-id}")
     @Operation(summary = "리뷰 삭제(리스트)", description = "작성자만 삭제 가능합니다")
     public ResponseEntity<Void> deleteReview(@PathVariable("review-id") Long reviewId,
                                              @AuthenticationPrincipal CustomUserDetails userDetails) {

@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @Operation(summary = "로그인한 회원 정보", description = "로그인한 회원의 정보를 가져옵니다.")
-    @GetMapping("/api/users/info")
+    @GetMapping("/api/user/info")
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         return userService.getUserInfo(customUserDetails);
     }
