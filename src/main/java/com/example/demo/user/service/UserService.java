@@ -44,15 +44,22 @@ public class UserService {
     }
 
     public UpdateUserResponse updateUser(CustomUserDetails customUserDetails, UpdateUserRequest updateUserRequest) {
-        Users users = customUserDetails.getUsers();
-        users.updateUserInfo(updateUserRequest);
+        if (checkNickName(updateUserRequest.getNickName())) {
+            Users users = customUserDetails.getUsers();
+            users.updateUserInfo(updateUserRequest);
 
-        userRepository.save(users);
+            userRepository.save(users);
+            return new UpdateUserResponse(users);
+        } else {
+            throw new IllegalArgumentException("중복된 닉네임은 사용할수 없습니다.");
+        }
 
-        return new UpdateUserResponse(users);
     }
 
     public boolean checkNickName(String nickName) {
+        if (nickName == null) {
+            return true;
+        }
         return userRepository.findByNickName(nickName).isEmpty();
     }
 
