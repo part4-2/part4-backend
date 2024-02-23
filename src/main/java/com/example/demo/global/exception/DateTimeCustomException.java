@@ -16,5 +16,28 @@ public class DateTimeCustomException extends RuntimeException {
                     )
             );
         }
+
+    }
+
+    public static class InvalidFormatOfMonthException extends DateTimeCustomException {
+
+        public InvalidFormatOfMonthException(Integer month) {
+            super(String.format(
+                            "달 입력이 잘못되었습니다 - {input : %s}",
+                            month
+                    )
+            );
+        }
+    }
+
+    public static class InvalidFormatOfHourException extends DateTimeCustomException {
+
+        public InvalidFormatOfHourException(Integer hour) {
+            super(String.format(
+                            "시간 입력이 잘못되었습니다 - {input : %s}",
+                            hour
+                    )
+            );
+        }
     }
 }

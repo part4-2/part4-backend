@@ -1,11 +1,14 @@
 package com.example.demo.review.domain;
 
+import com.example.demo.global.exception.DateTimeCustomException;
+import com.example.demo.global.exception.SortException;
 import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Weather;
+import com.example.demo.review.exception.ReviewException;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -65,11 +68,27 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     private BooleanExpression findByMonth(Integer month){
-        return month == null ? null : review.visitingTime.month().eq(month);
+        if (month == null){
+            return null;
+        }
+
+        if (month < 1 || month > 12){
+            throw new DateTimeCustomException.InvalidFormatOfMonthException(month);
+        }
+
+        return review.visitingTime.month().eq(month);
     }
 
     private BooleanExpression findByHour(Integer hour){
-        return hour == null ? null : review.visitingTime.hour().eq(hour);
+        if (hour == null){
+            return null;
+        }
+
+        if (hour < 1 || hour >= 24){
+            throw new DateTimeCustomException.InvalidFormatOfHourException(hour);
+        }
+
+        return review.visitingTime.hour().eq(hour);
     }
 
     private BooleanExpression findByTag(Weather weather, Companion companion, PlaceType placeType) {
@@ -99,6 +118,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                                                            Integer month,
                                                            Integer hour,
                                                            int page) {
+        if (sortCondition == null){
+            throw new SortException.SortConditionNotFoundException();
+        }
+
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
