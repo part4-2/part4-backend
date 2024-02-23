@@ -22,6 +22,8 @@ import static com.example.demo.review_photo.domain.QReviewPhoto.reviewPhoto;
 @Repository
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
+    private static final int PAGE_SIZE = 24;
+
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -95,7 +97,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                                                            Tag tag,
                                                            SortCondition sortCondition,
                                                            Integer month,
-                                                           Integer hour) {
+                                                           Integer hour,
+                                                           int page) {
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
@@ -116,7 +119,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         findByHour(hour),
                         findByMonth(month))
                 .orderBy(sortCondition.getSpecifier())
+                .offset((long) (page - 1) * PAGE_SIZE)
+                .limit(PAGE_SIZE)
                 .fetch();
-
     }
 }

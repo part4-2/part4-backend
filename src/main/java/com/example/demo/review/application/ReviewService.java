@@ -128,7 +128,8 @@ public class ReviewService {
             TagValues tagValues,
             SortCondition sortCondition,
             Integer month,
-            Integer hour
+            Integer hour,
+            int page
     ){
 
         List<ReviewListData> dataFromRepository = reviewRepository.getListWithSearchCondition(
@@ -136,7 +137,8 @@ public class ReviewService {
                 Tag.of(tagValues),
                 sortCondition,
                 month,
-                hour
+                hour,
+                page
         );
 
         return dataFromRepository.stream()

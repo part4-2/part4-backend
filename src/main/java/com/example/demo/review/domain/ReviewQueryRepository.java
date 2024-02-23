@@ -15,5 +15,6 @@ public interface ReviewQueryRepository {
                                                     Tag tag,
                                                     SortCondition sortCondition,
                                                     Integer month,
-                                                    Integer hour);
+                                                    Integer hour,
+                                                    int page);
 }

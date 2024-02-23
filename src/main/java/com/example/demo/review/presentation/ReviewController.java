@@ -127,14 +127,16 @@ public class ReviewController {
                     @RequestParam(required = false) String placeType,
                     @RequestParam SortCondition order,
                     @RequestParam(required = false) Integer month,
-                    @RequestParam(required = false) Integer hour){
+                    @RequestParam(required = false) Integer hour,
+                    @RequestParam int page){
 
         List<ReviewListDTO> result = reviewService.getListWithSearchCondition(
                 searchValue,
                 TagValues.ofSearchConditions(weather, companion, placeType),
                 order,
                 month,
-                hour
+                hour,
+                page
         );
 
         return ResponseEntity.ok(result);
