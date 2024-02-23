@@ -35,12 +35,17 @@ public class UserService {
 
     @Transactional
     public UpdateUserResponse requiredUserInfo(CustomUserDetails customUserDetails, RequiredUserInfoRequest requiredUserInfoRequest) {
-        Users users = customUserDetails.getUsers();
-        users.updateEssentials(requiredUserInfoRequest);
+        if (checkNickName(requiredUserInfoRequest.getNickName())) {
+            Users users = customUserDetails.getUsers();
+            users.updateEssentials(requiredUserInfoRequest);
 
-        userRepository.save(users);
+            userRepository.save(users);
 
-        return new UpdateUserResponse(users);
+            return new UpdateUserResponse(users);
+        } else {
+            throw new IllegalArgumentException("중복된 닉네임은 사용할수 없습니다.");
+        }
+
     }
 
     public UpdateUserResponse updateUser(CustomUserDetails customUserDetails, UpdateUserRequest updateUserRequest) {
