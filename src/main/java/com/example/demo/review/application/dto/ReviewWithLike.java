@@ -1,6 +1,7 @@
 package com.example.demo.review.application.dto;
 
 
+import com.example.demo.global.utils.DateUtils;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review_photo.domain.ReviewPhoto;
 
@@ -17,7 +18,7 @@ public record ReviewWithLike(Long reviewId,
                              LocalDateTime createdAt,
                              LocalDateTime modifiedAt,
                              int likeCount,
-                             LocalDateTime visitingTime,
+                             String visitingTime,
                              Double stars,
                              List<String> images
                              ) {
@@ -33,7 +34,7 @@ public record ReviewWithLike(Long reviewId,
                 review.getCreatedDate(),
                 review.getModifiedDate(),
                 reviewCount,
-                review.getVisitingTime(),
+                DateUtils.parseTimeToString(review.getVisitingTime()),
                 review.getStarRank().getValue(),
                 review.getReviewPhotos().stream().map(ReviewPhoto::getUrl).toList()
         );
