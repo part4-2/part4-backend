@@ -3,8 +3,10 @@ package com.example.demo.review.domain;
 import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.domain.vo.Tag;
+import com.example.demo.user.domain.entity.Users;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ReviewQueryRepository {
 
@@ -15,5 +17,14 @@ public interface ReviewQueryRepository {
                                                     Tag tag,
                                                     SortCondition sortCondition,
                                                     Integer month,
-                                                    Integer hour);
+                                                    Integer hour,
+                                                    int page);
+
+    List<ReviewListData> getMyReviews(Users users,
+                                      int page,
+                                      Tag tag,
+                                      Integer month,
+                                      Integer hour);
+
+    Set<String> getMyPlacedIds(Users users);
 }

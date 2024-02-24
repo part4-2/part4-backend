@@ -6,6 +6,7 @@ import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,6 +61,17 @@ public class CustomExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(final Exception exception) {
         final String message = exception.getMessage();
         log.error("Unexpected error occurred: " + message, exception);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(value = {
+            DataIntegrityViolationException.class
+    })
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(final Exception exception){
+        final String message = "데이터 무결성 위반 오류입니다. 에러 상세 내용 \n" + exception.getMessage();
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

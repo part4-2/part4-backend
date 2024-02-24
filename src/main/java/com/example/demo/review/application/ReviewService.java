@@ -21,12 +21,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -131,13 +133,47 @@ public class ReviewService {
             TagValues tagValues,
             SortCondition sortCondition,
             Integer month,
-            Integer hour
+            Integer hour,
+            int page
     ){
 
         List<ReviewListData> dataFromRepository = reviewRepository.getListWithSearchCondition(
                 searchValue,
                 Tag.of(tagValues),
                 sortCondition,
+                month,
+                hour,
+                page
+        );
+
+        return dataFromRepository.stream()
+                .map(
+                        data -> new ReviewListDTO(
+                                data.reviewId(),
+                                data.title().getValue(),
+                                TagValues.of(data.tagValues()),
+                                data.nickName(),
+                                DateUtils.parseTimeToString(data.visitingTime()),
+                                data.stars().getValue(),
+                                data.image())
+                )
+                .toList();
+    }
+
+    public Set<String> getMyPlacesIds(Users users){
+        return reviewRepository.getMyPlacedIds(users);
+    }
+
+    public List<ReviewListDTO> getMyReviews(Users users,
+                                            int page,
+                                            TagValues tagValues,
+                                            Integer month,
+                                            Integer hour){
+
+        List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(
+                users,
+                page,
+                Tag.of(tagValues),
                 month,
                 hour
         );
@@ -182,5 +218,4 @@ public class ReviewService {
     public void deleteReviewTest(Long id){
         reviewRepository.deleteById(id);
     }
-
 }
