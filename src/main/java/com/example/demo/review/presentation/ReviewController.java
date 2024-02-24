@@ -91,7 +91,10 @@ public class ReviewController {
                                              @RequestParam(required = false) String companion,
                                              @RequestParam(required = false) String placeType,
                                              @RequestParam Double stars,
-                                             @PathVariable("review-id") Long reviewId) {
+                                             @PathVariable("review-id") Long reviewId,
+                                             @RequestParam("images") List<String> images,
+                                             @RequestParam("newImages") List<MultipartFile> newImages
+    ) {
         reviewService.updateReview(
                 spotId,
                 reviewId,
@@ -99,7 +102,8 @@ public class ReviewController {
                 content,
                 TagValues.of(new com.example.demo.review.domain.vo.Tag(Weather.getInstance(weather), Companion.getInstance(companion), PlaceType.getInstance(placeType))),
                 DateUtils.parseVisitingTime(visitingTime),
-                stars
+                stars,
+                images,newImages
         );
         return ResponseEntity.ok().build();
     }

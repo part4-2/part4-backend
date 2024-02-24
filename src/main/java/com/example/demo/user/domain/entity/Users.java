@@ -41,12 +41,15 @@ public class Users extends BaseTimeEntity {
 
     private Integer age;
 
+    private LocalDate birthDate;
+
     @Builder
     public Users(String nickName, String imageUrl, Gender gender, LocalDate birthDate, String oauthId, Provider provider, Role role) {
         this.nickName = nickName;
         this.imageUrl = imageUrl;
         this.gender = gender;
         this.age = calculateAge(birthDate);
+        this.birthDate = birthDate;
         this.oauthId = oauthId;
         this.provider = provider;
         this.role = role;

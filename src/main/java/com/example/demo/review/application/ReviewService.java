@@ -104,7 +104,10 @@ public class ReviewService {
                              final String content,
                              final TagValues tagValues,
                              final LocalDateTime visitingTime,
-                             final Double stars){
+                             final Double stars,
+                             List<String> images,
+                             List<MultipartFile> newImages
+                             ){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId)

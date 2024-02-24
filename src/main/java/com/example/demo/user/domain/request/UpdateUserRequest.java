@@ -7,10 +7,9 @@ import java.time.LocalDate;
 
 @Data
 public class UpdateUserRequest {
-    private String email;
     private String nickName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private String gender;
-    private Integer age;
+
 }
