@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -160,8 +161,20 @@ public class ReviewService {
         return reviewRepository.getMyPlacedIds(users);
     }
 
-    public List<ReviewListDTO> getMyReviews(Users users, int page){
-        List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(users, page);
+    public List<ReviewListDTO> getMyReviews(Users users,
+                                            int page,
+                                            TagValues tagValues,
+                                            Integer month,
+                                            Integer hour){
+
+        List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(
+                users,
+                page,
+                Tag.of(tagValues),
+                month,
+                hour
+        );
+
         return dataFromRepository.stream()
                 .map(
                         data -> new ReviewListDTO(

@@ -69,24 +69,24 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return placeType == PlaceType.NONE ? null : review.tag.placeType.eq(placeType);
     }
 
-    private BooleanExpression findByMonth(Integer month){
-        if (month == null){
+    private BooleanExpression findByMonth(Integer month) {
+        if (month == null) {
             return null;
         }
 
-        if (month < 1 || month > 12){
+        if (month < 1 || month > 12) {
             throw new DateTimeCustomException.InvalidFormatOfMonthException(month);
         }
 
         return review.visitingTime.month().eq(month);
     }
 
-    private BooleanExpression findByHour(Integer hour){
-        if (hour == null){
+    private BooleanExpression findByHour(Integer hour) {
+        if (hour == null) {
             return null;
         }
 
-        if (hour < 1 || hour >= 24){
+        if (hour < 1 || hour >= 24) {
             throw new DateTimeCustomException.InvalidFormatOfHourException(hour);
         }
 
@@ -97,22 +97,23 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         BooleanExpression weatherExpr = findByWeather(weather);
         BooleanExpression companionExpr = findByCompanion(companion);
-        BooleanExpression placeTypeExpr = findByPlaceType( placeType);
+        BooleanExpression placeTypeExpr = findByPlaceType(placeType);
 
         BooleanExpression finalExpr = Expressions.asBoolean(true).isTrue();
 
-        if(weatherExpr != null) {
+        if (weatherExpr != null) {
             finalExpr = finalExpr.and(weatherExpr);
         }
-        if(companionExpr != null) {
+        if (companionExpr != null) {
             finalExpr = finalExpr.and(companionExpr);
         }
-        if(placeTypeExpr != null) {
+        if (placeTypeExpr != null) {
             finalExpr = finalExpr.and(placeTypeExpr);
         }
 
         return finalExpr;
     }
+
     @Override
     public List<ReviewListData> getListWithSearchCondition(String searchValue,
                                                            Tag tag,
@@ -120,7 +121,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                                                            Integer month,
                                                            Integer hour,
                                                            int page) {
-        if (sortCondition == null){
+        if (sortCondition == null) {
             throw new SortException.SortConditionNotFoundException();
         }
 
@@ -148,8 +149,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .limit(PAGE_SIZE)
                 .fetch();
     }
+
     @Override
-    public List<ReviewListData> getMyReviews(Users users, int page) {
+    public List<ReviewListData> getMyReviews(Users users,
+                                             int page,
+                                             Tag tag,
+                                             Integer month,
+                                             Integer hour) {
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
@@ -165,7 +171,11 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .leftJoin(reviewPhoto)
                 .on(reviewPhoto.review.id.eq(review.id))
                 .groupBy(review.id)
-                .where(review.users.id.eq(users.getId()))
+                .where(review.users.id.eq(users.getId())
+                        .and(findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()))
+                        .and(findByHour(hour))
+                        .and(findByMonth(month))
+                )
                 .orderBy(review.createdDate.desc())
                 .offset((long) (page - 1) * MY_REVIEW_PAGE_SIZE)
                 .limit(MY_REVIEW_PAGE_SIZE)
@@ -173,7 +183,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public Set<String> getMyPlacedIds(Users users){
+    public Set<String> getMyPlacedIds(Users users) {
         List<String> placedIds = queryFactory.select(review.spot.placeId)
                 .from(review)
                 .where(review.users.id.eq(users.getId()))

@@ -126,9 +126,9 @@ public class ReviewController {
             @RequestParam(required = false) String weather,
             @RequestParam(required = false) String companion,
             @RequestParam(required = false) String placeType,
-            @RequestParam SortCondition order,
             @RequestParam(required = false) Integer month,
             @RequestParam(required = false) Integer hour,
+            @RequestParam SortCondition order,
             @RequestParam int page) {
 
         List<ReviewListDTO> result = reviewService.getListWithSearchCondition(
@@ -169,8 +169,18 @@ public class ReviewController {
     @GetMapping("/api/user/me/reviews")
     @Operation(summary = "내가 작성한 리뷰 목록", description = "작성일자 기준으로 정렬되며, 6개씩 리턴합니다")
     public ResponseEntity<List<ReviewListDTO>> getMyReviewsPaging(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @RequestParam(required = false) String weather,
+                                                                  @RequestParam(required = false) String companion,
+                                                                  @RequestParam(required = false) String placeType,
+                                                                  @RequestParam(required = false) Integer month,
+                                                                  @RequestParam(required = false) Integer hour,
                                                                   @RequestParam int page){
-        List<ReviewListDTO> myReviews = reviewService.getMyReviews(userDetails.getUsers(), page);
+        List<ReviewListDTO> myReviews = reviewService.getMyReviews(
+                userDetails.getUsers(),
+                page,
+                TagValues.ofSearchConditions(weather, companion, placeType),
+                month,
+                hour);
         return ResponseEntity.ok(myReviews);
     }
 }
