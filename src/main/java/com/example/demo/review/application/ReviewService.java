@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -155,6 +156,26 @@ public class ReviewService {
                 .toList();
     }
 
+    public Set<String> getMyPlacesIds(Users users){
+        return reviewRepository.getMyPlacedIds(users);
+    }
+
+    public List<ReviewListDTO> getMyReviews(Users users, int page){
+        List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(users, page);
+        return dataFromRepository.stream()
+                .map(
+                        data -> new ReviewListDTO(
+                                data.reviewId(),
+                                data.title().getValue(),
+                                TagValues.of(data.tagValues()),
+                                data.nickName(),
+                                DateUtils.parseTimeToString(data.visitingTime()),
+                                data.stars().getValue(),
+                                data.image())
+                )
+                .toList();
+    }
+
     public Double getAverageStarRank(String placeID){
         return reviewRepository.getAverageStarByPlaceId(placeID);
     }
@@ -181,5 +202,4 @@ public class ReviewService {
     public void deleteReviewTest(Long id){
         reviewRepository.deleteById(id);
     }
-
 }

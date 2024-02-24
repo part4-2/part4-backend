@@ -8,7 +8,7 @@ import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.Tag;
 import com.example.demo.review.domain.vo.Weather;
-import com.example.demo.review.exception.ReviewException;
+import com.example.demo.user.domain.entity.Users;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.example.demo.review.domain.QReview.review;
 import static com.example.demo.review_like.domain.QReviewLike.reviewLike;
@@ -25,6 +26,7 @@ import static com.example.demo.review_photo.domain.QReviewPhoto.reviewPhoto;
 @Repository
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
+    private static final int MY_REVIEW_PAGE_SIZE = 6;
     private static final int PAGE_SIZE = 24;
 
     private final JPAQueryFactory queryFactory;
@@ -145,5 +147,38 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .offset((long) (page - 1) * PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .fetch();
+    }
+    @Override
+    public List<ReviewListData> getMyReviews(Users users, int page) {
+        return queryFactory.select(Projections.constructor(ReviewListData.class,
+                        review.id,
+                        review.title,
+                        review.tag,
+                        review.users.nickName,
+                        review.visitingTime,
+                        review.starRank,
+                        reviewPhoto.url
+                ))
+                .from(review)
+                .leftJoin(reviewLike)
+                .on(review.id.eq(reviewLike.reviewId))
+                .leftJoin(reviewPhoto)
+                .on(reviewPhoto.review.id.eq(review.id))
+                .groupBy(review.id)
+                .where(review.users.id.eq(users.getId()))
+                .orderBy(review.createdDate.desc())
+                .offset((long) (page - 1) * MY_REVIEW_PAGE_SIZE)
+                .limit(MY_REVIEW_PAGE_SIZE)
+                .fetch();
+    }
+
+    @Override
+    public Set<String> getMyPlacedIds(Users users){
+        List<String> placedIds = queryFactory.select(review.spot.placeId)
+                .from(review)
+                .where(review.users.id.eq(users.getId()))
+                .fetch();
+
+        return Set.copyOf(placedIds);
     }
 }

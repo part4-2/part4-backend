@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class ReviewController {
 
     // 방문 날짜 (리뷰에)
 
-    @PostMapping(value = "/api/user/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/user/spots/{spotId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "리뷰 쓰기", description = "리뷰를 작성합니다.")
     public ResponseEntity<Void> writeReview(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -121,14 +122,14 @@ public class ReviewController {
     @GetMapping("/api/main/reviews/specifics")
     @Operation(summary = "리뷰 검색해서 조회", description = "검색 조건등에 따라 검색")
     public ResponseEntity<List<ReviewListDTO>> getListWithSearchCondition(
-                    @RequestParam String searchValue,
-                    @RequestParam(required = false) String weather,
-                    @RequestParam(required = false) String companion,
-                    @RequestParam(required = false) String placeType,
-                    @RequestParam SortCondition order,
-                    @RequestParam(required = false) Integer month,
-                    @RequestParam(required = false) Integer hour,
-                    @RequestParam int page){
+            @RequestParam String searchValue,
+            @RequestParam(required = false) String weather,
+            @RequestParam(required = false) String companion,
+            @RequestParam(required = false) String placeType,
+            @RequestParam SortCondition order,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer hour,
+            @RequestParam int page) {
 
         List<ReviewListDTO> result = reviewService.getListWithSearchCondition(
                 searchValue,
@@ -158,5 +159,18 @@ public class ReviewController {
 
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/api/user/me/places")
+    @Operation(summary = "내가 방문한 장소 목록", description = "내가 방문했던 모든 장소를 리턴합니다")
+    public ResponseEntity<MyPlacesIds> getMyPlaceIds (@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Set<String> myPlacesIds = reviewService.getMyPlacesIds(userDetails.getUsers());
+        return ResponseEntity.ok(new MyPlacesIds(myPlacesIds));
+    }
 
+    @GetMapping("/api/user/me/reviews")
+    @Operation(summary = "내가 작성한 리뷰 목록", description = "작성일자 기준으로 정렬되며, 6개씩 리턴합니다")
+    public ResponseEntity<List<ReviewListDTO>> getMyReviewsPaging(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @RequestParam int page){
+        List<ReviewListDTO> myReviews = reviewService.getMyReviews(userDetails.getUsers(), page);
+        return ResponseEntity.ok(myReviews);
+    }
 }
