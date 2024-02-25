@@ -177,14 +177,12 @@ public class ReviewController {
                                                                   @RequestParam(required = false) String companion,
                                                                   @RequestParam(required = false) String placeType,
                                                                   @RequestParam(required = false) Integer month,
-                                                                  @RequestParam(required = false) Integer hour,
                                                                   @RequestParam int page){
         List<ReviewListDTO> myReviews = reviewService.getMyReviews(
                 userDetails.getUsers(),
                 page,
                 TagValues.ofSearchConditions(weather, companion, placeType),
-                month,
-                hour);
+                month);
         return ResponseEntity.ok(myReviews);
     }
 }

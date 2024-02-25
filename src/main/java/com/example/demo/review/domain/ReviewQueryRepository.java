@@ -23,8 +23,7 @@ public interface ReviewQueryRepository {
     List<ReviewListData> getMyReviews(Users users,
                                       int page,
                                       Tag tag,
-                                      Integer month,
-                                      Integer hour);
+                                      Integer month);
 
     Set<String> getMyPlacedIds(Users users);
 }

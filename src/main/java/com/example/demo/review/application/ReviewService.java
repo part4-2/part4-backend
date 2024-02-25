@@ -167,15 +167,13 @@ public class ReviewService {
     public List<ReviewListDTO> getMyReviews(Users users,
                                             int page,
                                             TagValues tagValues,
-                                            Integer month,
-                                            Integer hour){
+                                            Integer month){
 
         List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(
                 users,
                 page,
                 Tag.of(tagValues),
-                month,
-                hour
+                month
         );
 
         return dataFromRepository.stream()

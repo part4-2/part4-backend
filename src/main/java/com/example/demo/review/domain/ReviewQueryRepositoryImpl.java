@@ -154,8 +154,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public List<ReviewListData> getMyReviews(Users users,
                                              int page,
                                              Tag tag,
-                                             Integer month,
-                                             Integer hour) {
+                                             Integer month) {
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
@@ -173,7 +172,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .groupBy(review.id)
                 .where(review.users.id.eq(users.getId())
                         .and(findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()))
-                        .and(findByHour(hour))
                         .and(findByMonth(month))
                 )
                 .orderBy(review.createdDate.desc())
