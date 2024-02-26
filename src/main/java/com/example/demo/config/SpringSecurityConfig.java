@@ -31,7 +31,7 @@ public class SpringSecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("https://trimo.kr/"));
+                    config.setAllowedOrigins(Collections.singletonList("https://www.trimo.kr/"));
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowedHeaders(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
