@@ -25,11 +25,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/")
-    public String index() {
-        return "Hello";
-    }
-
     @Secured("ROLE_GUEST")
     @Operation(summary = "필수정보 입력" , description = "서비스 이용을 위한 필수정보를 입력합니다.")
     @PostMapping("/api/guest/update")
