@@ -32,7 +32,7 @@ public class SpringSecurityConfig {
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("https://www.trimo.kr/"));
-                    config.setAllowedOrigins(Collections.singletonList("http://trimoserver.shop/"));
+                    config.setAllowedOrigins(Collections.singletonList("https://trimoserver.com/"));
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowedHeaders(Collections.singletonList("*"));
