@@ -29,12 +29,14 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        String[] origins = {"https://www.trimo.kr:443","https://trimoserver.com:443","http://localhost:3000"};
+
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("/**"));
+                    config.setAllowedOrigins(Collections.singletonList("https://www.trimo.kr"));
+                    config.setAllowedOrigins(Collections.singletonList("https://trimoserver.com"));
+                    config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     config.setAllowedHeaders(Collections.singletonList("*"));
                     config.setExposedHeaders(List.of("*"));
