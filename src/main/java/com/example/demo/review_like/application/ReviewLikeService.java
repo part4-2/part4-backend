@@ -40,14 +40,12 @@ public class ReviewLikeService {
                 .ifPresent(reviewLikeRepository::delete);
     }
 
-    public int getCount(ReviewId reviewId){
+    public long getCount(ReviewId reviewId){
         return reviewLikeRepository.countReviewLikeByReviewId(reviewId.value());
     }
     public ReviewWithLike getOneWithLikes(final ReviewId reviewId){
         Review review = reviewService.findById(reviewId);
-        int count = this.getCount(reviewId);
-
-        return ReviewWithLike.of(review, count);
+        return ReviewWithLike.of(review);
     }
 
     public List<ReviewListDTO> getMainReviewList(SortCondition order){
@@ -66,5 +64,9 @@ public class ReviewLikeService {
                                 data.image())
                 )
                 .toList();
+    }
+
+    public boolean isLiked(Long userId, Long reviewId) {
+        return reviewLikeRepository.existsByReviewIdAndUserId(reviewId, userId);
     }
 }

@@ -3,6 +3,8 @@ package com.example.demo.review_like.presentation;
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review_like.application.ReviewLikeService;
+import com.example.demo.review_like.application.dto.LikeCountDto;
+import com.example.demo.review_like.application.dto.LikeStatusDto;
 import com.example.demo.user.domain.entity.vo.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +49,24 @@ public class ReviewLikeController {
         reviewLikeService.unlike(userId, reviewId);
 
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/api/user/reviews/{review-id}/like")
+    @Operation(summary = "사용자가 좋아요를 눌렀는지 판별", description = "사용자가 좋아요를 눌렀는지 판별합니다.")
+    public ResponseEntity<LikeStatusDto> isLiked(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                 @PathVariable(value = "review-id") Long reviewId){
+
+        boolean isLiked = reviewLikeService.isLiked(userDetails.getUsers().getId(), reviewId);
+
+        return ResponseEntity.ok(new LikeStatusDto(isLiked));
+    }
+
+    @GetMapping("/api/user/reviews/like/count/{review-id}")
+    @Operation(summary = "리뷰 좋아요 수 조회", description = "리뷰의 좋아요 수를 조회합니다")
+    public ResponseEntity<LikeCountDto> getLikeCount(@PathVariable(value = "review-id") Long reviewIdValue) {
+        final ReviewId reviewId = new ReviewId(reviewIdValue);
+
+        long count = reviewLikeService.getCount(reviewId);
+
+        return ResponseEntity.ok(new LikeCountDto(count));
     }
 }

@@ -1,0 +1,17 @@
+###
+POST http://localhost:8080/test/tokens
+Accept: text/plain
+Content-Type: application/x-www-form-urlencoded
+
+email=test@example.com
+
+> {%
+
+    client.log(response.body);
+    client.global.set("access_token",response.body) // 토큰 값을 global 변수에 set
+%}
+
+###
+GET http://localhost:8080/api/user/me/reviews?page=1&size=21 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

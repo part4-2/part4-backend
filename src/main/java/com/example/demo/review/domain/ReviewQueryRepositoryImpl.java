@@ -154,7 +154,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public List<ReviewListData> getMyReviews(Users users,
                                              int page,
                                              Tag tag,
-                                             Integer month) {
+                                             Integer month,
+                                             int size) {
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
@@ -175,8 +176,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         .and(findByMonth(month))
                 )
                 .orderBy(review.createdDate.desc())
-                .offset((long) (page - 1) * MY_REVIEW_PAGE_SIZE)
-                .limit(MY_REVIEW_PAGE_SIZE)
+                .offset((long) (page - 1) * size)
+                .limit(size)
                 .fetch();
     }
 
