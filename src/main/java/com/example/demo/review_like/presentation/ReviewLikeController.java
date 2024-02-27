@@ -60,7 +60,7 @@ public class ReviewLikeController {
         return ResponseEntity.ok(new LikeStatusDto(isLiked));
     }
 
-    @GetMapping("/api/user/reviews/like/count/{review-id}")
+    @GetMapping("/api/user/reviews/{review-id}/like/count")
     @Operation(summary = "리뷰 좋아요 수 조회", description = "리뷰의 좋아요 수를 조회합니다")
     public ResponseEntity<LikeCountDto> getLikeCount(@PathVariable(value = "review-id") Long reviewIdValue) {
         final ReviewId reviewId = new ReviewId(reviewIdValue);
