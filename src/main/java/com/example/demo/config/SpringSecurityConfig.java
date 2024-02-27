@@ -29,7 +29,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        String[] origins = {"https://www.trimo.kr","https://trimoserver.com","http://localhost:3000"};
+        String[] origins = {"https://www.trimo.kr:443","https://trimoserver.com:443","http://localhost:3000"};
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
