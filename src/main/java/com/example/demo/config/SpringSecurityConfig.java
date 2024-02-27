@@ -28,10 +28,11 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("https://www.trimo.kr/"));
+                    config.setAllowedOrigins(Collections.singletonList("https://www.trimo.kr"));
                     config.setAllowedOrigins(Collections.singletonList("https://trimoserver.com/"));
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                     config.setAllowedMethods(Collections.singletonList("*"));
@@ -54,7 +55,7 @@ public class SpringSecurityConfig {
 //                        .requestMatchers(antMatcher("/api/user/**")).hasRole("USER")
 //                        .requestMatchers(antMatcher("/api/admin/**")).hasRole("ADMIN")
                         .requestMatchers("/**","/index.html","/error","/login/oauth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/api/nickname/**").permitAll()
-                        .anyRequest().authenticated()))
+                        .anyRequest().permitAll()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider) , UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
