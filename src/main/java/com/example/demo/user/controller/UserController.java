@@ -55,6 +55,11 @@ public class UserController {
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         return userService.getUserInfo(customUserDetails);
     }
+
+    @GetMapping("/healthy/check")
+    public String healthyCheck() {
+        return "ok";
+    }
 }
 
 
