@@ -1,6 +1,7 @@
 package com.example.demo.review.application;
 
 import com.example.demo.global.utils.DateUtils;
+import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.ReviewRequest;
@@ -43,12 +44,13 @@ public class ReviewService {
     private final ReviewPhotoRepository reviewPhotoRepository;
 
 
-    public Review findById(ReviewId reviewId){
+    public Review findById(ReviewId reviewId) {
         return reviewRepository.findById(reviewId.value())
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId.value())
                 );
     }
+
     @Transactional
     public Long write(final ReviewRequest reviewRequest,
                       final String nickName,
@@ -57,7 +59,7 @@ public class ReviewService {
                       final LocalDateTime visitingTime,
                       Double starRank,
                       List<MultipartFile> images
-    ){
+    ) {
 
         final String title = reviewRequest.title();
         final String content = reviewRequest.content();
@@ -94,7 +96,7 @@ public class ReviewService {
     }
 
     private static Tag getTag(TagValues requestTag) {
-        if (requestTag == null){
+        if (requestTag == null) {
             return Tag.ofNone();
         }
 
@@ -102,20 +104,26 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReview(final String spotId,
-                             final Long reviewId,
-                             final String title,
-                             final String content,
-                             final TagValues tagValues,
-                             final LocalDateTime visitingTime,
-                             final Double stars,
-                             List<String> images,
-                             List<MultipartFile> newImages
-                             ){
+    public void updateReview(
+            final CustomUserDetails customUserDetails,
+            final String spotId,
+            final Long reviewId,
+            final String title,
+            final String content,
+            final TagValues tagValues,
+            final LocalDateTime visitingTime,
+            final Double stars,
+            List<String> images,
+            List<MultipartFile> newImages
+    ) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId)
                 );
+
+        if (!review.getUsers().equals(customUserDetails.getUsers())) {
+            throw new IllegalStateException("자신이 작성한 리뷰만 수정이 가능합니다.");
+        }
 
         Spot spot = spotService.findById(spotId);
 
@@ -156,7 +164,7 @@ public class ReviewService {
     public long getListWithSearchConditionTotal(String searchValue,
                                                 TagValues tagValues,
                                                 Integer month,
-                                                Integer hour){
+                                                Integer hour) {
         return reviewRepository.searchConditionTotal(
                 searchValue,
                 Tag.of(tagValues),
@@ -172,7 +180,7 @@ public class ReviewService {
             Integer month,
             Integer hour,
             int page
-    ){
+    ) {
 
         List<ReviewListData> dataFromRepository = reviewRepository.getListWithSearchCondition(
                 searchValue,
@@ -197,7 +205,7 @@ public class ReviewService {
                 .toList();
     }
 
-    public Set<String> getMyPlacesIds(Users users){
+    public Set<String> getMyPlacesIds(Users users) {
         return reviewRepository.getMyPlacedIds(users);
     }
 
@@ -205,7 +213,7 @@ public class ReviewService {
                                             int page,
                                             TagValues tagValues,
                                             Integer month,
-                                            int size){
+                                            int size) {
 
         List<ReviewListData> dataFromRepository = reviewRepository.getMyReviews(
                 users,
@@ -229,22 +237,22 @@ public class ReviewService {
                 .toList();
     }
 
-    public Double getAverageStarRank(String placeID){
+    public Double getAverageStarRank(String placeID) {
         return reviewRepository.getAverageStarByPlaceId(placeID);
     }
 
 
-    public List<ReviewListData> findByLikes(SortCondition order){
+    public List<ReviewListData> findByLikes(SortCondition order) {
         return reviewRepository.findByLikes(order);
     }
 
-    public void deleteReview(Long id, Long userId){
+    public void deleteReview(Long id, Long userId) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(id)
                 );
 
-        if (!review.getId().equals(userId)){
+        if (!review.getId().equals(userId)) {
             throw new ReviewException.NotValidUserToDelete(userId);
         }
 
@@ -252,7 +260,7 @@ public class ReviewService {
     }
 
 
-    public void deleteReviewTest(Long id){
+    public void deleteReviewTest(Long id) {
         reviewRepository.deleteById(id);
     }
 }

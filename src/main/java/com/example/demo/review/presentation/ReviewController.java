@@ -105,6 +105,7 @@ public class ReviewController {
                                              @RequestParam(required = false) List<MultipartFile> newImages
     ) {
         reviewService.updateReview(
+                customUserDetails,
                 spotId,
                 reviewId,
                 title,
