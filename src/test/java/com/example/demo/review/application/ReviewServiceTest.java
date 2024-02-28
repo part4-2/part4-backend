@@ -86,7 +86,8 @@ class ReviewServiceTest extends RepositoryTest {
                 newContent,
                 LocalDateTime.now(),
                 newStarRank,
-                spot
+                spot,
+                null
         );
 
         assertEquals(newTitle, review.getTitle());

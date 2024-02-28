@@ -52,7 +52,7 @@ class ReviewTest {
 
         Spot newSpot = SpotFixture.FOO_SPOT;
 
-        review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now(), StarRank.ZERO, newSpot);
+        review.update(Tag.ofNone(), newTitle, newContent, LocalDateTime.now(), StarRank.ZERO, newSpot,null);
 
         assertEquals(review.getTitle(), newTitle);
         assertEquals(review.getContent(), newContent);
