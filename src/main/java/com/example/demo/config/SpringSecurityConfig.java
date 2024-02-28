@@ -30,13 +30,11 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        String[] url = {"/*", "/**","/trimo.kr"};
-
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url));
+                    config.setAllowedOrigins(Collections.singletonList("/https://www.trimo.kr"));
                     config.setAllowedOrigins(Collections.singletonList("*"));
                     config.setAllowedOrigins(Collections.singletonList("/https://www.trimo.kr/"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
