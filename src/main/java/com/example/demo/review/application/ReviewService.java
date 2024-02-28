@@ -252,7 +252,7 @@ public class ReviewService {
                         () -> new ReviewException.ReviewNotFoundException(id)
                 );
 
-        if (!review.getId().equals(userId)) {
+        if (!review.getUsers().getId().equals(userId)) {
             throw new ReviewException.NotValidUserToDelete(userId);
         }
 
