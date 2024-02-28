@@ -56,12 +56,15 @@ public class Review extends BaseTimeEntity {
                        final Content content,
                        final LocalDateTime visitingTime,
                        final StarRank starRank,
-                       final Spot spot){
+                       final Spot spot,
+                       final List<ReviewPhoto> images
+                       ){
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.visitingTime = visitingTime;
         this.starRank = starRank;
         this.spot = spot;
+        this.reviewPhotos = images;
     }
 }

@@ -28,10 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -120,12 +119,35 @@ public class ReviewService {
 
         Spot spot = spotService.findById(spotId);
 
+        List<ReviewPhoto> reviewPhotos = review.getReviewPhotos().stream().filter(reviewPhoto -> images.contains(reviewPhoto.getUrl())).collect(Collectors.toList());
+        List<ReviewPhoto> newReviewPhotos;
+
+        log.info(newImages);
+
+        if (newImages != null) {
+            newReviewPhotos = Optional.ofNullable(newImages)
+                    .map(imgList -> {
+                        List<String> urls = s3Service.uploadFiles(newImages);
+                        return urls.stream()
+                                .map(ReviewPhoto::new)
+                                .toList();
+                    })
+                    .orElse(Collections.emptyList());
+
+            reviewPhotoRepository.saveAll(newReviewPhotos);
+
+            reviewPhotos.addAll(newReviewPhotos);
+        }
+
+
         review.update(getTag(tagValues),
                 new Title(title),
                 new Content(content),
                 visitingTime,
                 StarRank.getInstance(stars),
-                spot
+                spot,
+                reviewPhotos
+
         );
 
         reviewRepository.save(review);

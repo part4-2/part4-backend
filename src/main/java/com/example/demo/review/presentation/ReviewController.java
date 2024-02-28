@@ -92,7 +92,6 @@ public class ReviewController {
     @PutMapping("/api/user/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 꼭 필요합니다.")
     public ResponseEntity<Void> updateReview(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-//                                             @RequestParam(required = false) List<MultipartFile> images,
                                              @RequestParam String title,
                                              @RequestParam String content,
                                              @RequestParam String visitingTime,
@@ -102,8 +101,8 @@ public class ReviewController {
                                              @RequestParam(required = false) String placeType,
                                              @RequestParam Double stars,
                                              @PathVariable("review-id") Long reviewId,
-                                             @RequestParam("images") List<String> images,
-                                             @RequestParam("newImages") List<MultipartFile> newImages
+                                             @RequestParam List<String> images,
+                                             @RequestParam(required = false) List<MultipartFile> newImages
     ) {
         reviewService.updateReview(
                 spotId,
