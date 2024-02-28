@@ -20,11 +20,15 @@ public interface ReviewQueryRepository {
                                                     Integer hour,
                                                     int page);
 
+    long searchConditionTotal(String searchValue, Tag tag, Integer month, Integer hour);
+
     List<ReviewListData> getMyReviews(Users users,
                                       int page,
                                       Tag tag,
                                       Integer month,
                                       int size);
+
+    long getMyReviewsTotalCount(Users users, Tag tag, Integer month);
 
     Set<String> getMyPlacedIds(Users users);
 }

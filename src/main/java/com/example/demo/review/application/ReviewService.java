@@ -1,7 +1,11 @@
 package com.example.demo.review.application;
 
 import com.example.demo.global.utils.DateUtils;
-import com.example.demo.review.application.dto.*;
+import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.ReviewListData;
+import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.SortCondition;
+import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.ReviewRepository;
 import com.example.demo.review.domain.vo.Content;
@@ -21,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -126,6 +129,18 @@ public class ReviewService {
         );
 
         reviewRepository.save(review);
+    }
+
+    public long getListWithSearchConditionTotal(String searchValue,
+                                                TagValues tagValues,
+                                                Integer month,
+                                                Integer hour){
+        return reviewRepository.searchConditionTotal(
+                searchValue,
+                Tag.of(tagValues),
+                month,
+                hour
+        );
     }
 
     public List<ReviewListDTO> getListWithSearchCondition(

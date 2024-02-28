@@ -147,7 +147,18 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .orderBy(sortCondition.getSpecifier())
                 .offset((long) (page - 1) * PAGE_SIZE)
                 .limit(PAGE_SIZE)
-                .fetch();
+                   .fetch();
+    }
+    @Override
+    public long searchConditionTotal(String searchValue, Tag tag, Integer month, Integer hour) {
+        return queryFactory.select(review.id)
+                .from(review)
+                .where(findBySearchWord(searchValue),
+                        findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()),
+                        findByHour(hour),
+                        findByMonth(month))
+                .fetch()
+                .size();
     }
 
     @Override
@@ -156,6 +167,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                                              Tag tag,
                                              Integer month,
                                              int size) {
+
         return queryFactory.select(Projections.constructor(ReviewListData.class,
                         review.id,
                         review.title,
@@ -179,6 +191,19 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .offset((long) (page - 1) * size)
                 .limit(size)
                 .fetch();
+    }
+
+
+    @Override
+    @Deprecated(since = "02/28, 요청에 따라 추가할 수 있음")
+    public long getMyReviewsTotalCount(Users users, Tag tag, Integer month) {
+        return queryFactory.select(review.id)
+                .from(review)
+                .where(review.users.id.eq(users.getId())
+                        .and(findByTag(tag.getWeather(), tag.getCompanion(), tag.getPlaceType()))
+                        .and(findByMonth(month)))
+                .fetch()
+                .size();
     }
 
     @Override
