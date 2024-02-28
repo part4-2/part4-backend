@@ -3,7 +3,13 @@ package com.example.demo.review.presentation;
 import com.example.demo.global.utils.DateUtils;
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.ReviewService;
-import com.example.demo.review.application.dto.*;
+import com.example.demo.review.application.dto.MyPlacesIds;
+import com.example.demo.review.application.dto.ReviewListDTO;
+import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.ReviewWithLike;
+import com.example.demo.review.application.dto.ReviewWithTotalCount;
+import com.example.demo.review.application.dto.SortCondition;
+import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.ReviewId;
@@ -12,7 +18,6 @@ import com.example.demo.review_like.application.ReviewLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -129,7 +134,7 @@ public class ReviewController {
 
     @GetMapping("/api/main/reviews/specifics")
     @Operation(summary = "리뷰 검색해서 조회", description = "검색 조건등에 따라 검색")
-    public ResponseEntity<List<ReviewListDTO>> getListWithSearchCondition(
+    public ResponseEntity<ReviewWithTotalCount> getListWithSearchCondition(
             @RequestParam String searchValue,
             @RequestParam(required = false) String weather,
             @RequestParam(required = false) String companion,
@@ -148,7 +153,17 @@ public class ReviewController {
                 page
         );
 
-        return ResponseEntity.ok(result);
+        if (result.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        long totalCount = reviewService.getListWithSearchConditionTotal(searchValue,
+                TagValues.ofSearchConditions(weather, companion, placeType),
+                month,
+                hour
+        );
+
+        return ResponseEntity.ok(new ReviewWithTotalCount(result, totalCount));
     }
 
     @DeleteMapping("/api/user/reviews/{review-id}")
