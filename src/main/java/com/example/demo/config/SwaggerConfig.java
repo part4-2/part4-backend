@@ -8,8 +8,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Odagada API", description = "여행 리뷰 서비스 오다가다 API 입니다.", version = "1.0"),
-servers = {@Server(url = "https://trimoserver.com")})
+@OpenAPIDefinition(info = @Info(title = "Odagada API", description = "여행 리뷰 서비스 오다가다 API 입니다.", version = "1.0"))
 @SecurityScheme(
         name = "Bearer Authentication",
         type = SecuritySchemeType.HTTP,
