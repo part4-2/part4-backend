@@ -89,7 +89,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewWithLike);
     }
 
-    @PutMapping("/api/user/spots/reviews/{review-id}")
+    @PutMapping(value = "/api/user/spots/reviews/{review-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다. 수정 시 모든 컬럼의 정보가 꼭 필요합니다.")
     public ResponseEntity<Void> updateReview(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestParam String title,

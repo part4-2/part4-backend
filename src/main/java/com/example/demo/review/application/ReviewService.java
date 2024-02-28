@@ -130,8 +130,6 @@ public class ReviewService {
         List<ReviewPhoto> reviewPhotos = review.getReviewPhotos().stream().filter(reviewPhoto -> images.contains(reviewPhoto.getUrl())).collect(Collectors.toList());
         List<ReviewPhoto> newReviewPhotos;
 
-        log.info(newImages);
-
         if (newImages != null) {
             newReviewPhotos = Optional.ofNullable(newImages)
                     .map(imgList -> {
