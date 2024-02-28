@@ -5,6 +5,7 @@ import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 @Log4j2
@@ -75,6 +80,45 @@ public class CustomExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(value = {
+            AccessDeniedException.class
+    })
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(final AccessDeniedException exception) {
+        final String message = exception.getMessage();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(value = {
+            ConstraintViolationException.class
+    })
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(final ConstraintViolationException exception) {
+        final String message = "Constraint violation error: " + exception.getMessage();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(value = {
+            MethodArgumentTypeMismatchException.class
+    })
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException exception) {
+        final String message = "Method argument type mismatch: " + exception.getName();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(message));
+    }
+    @ExceptionHandler(value = {
+            HandlerMethodValidationException.class
+    })
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(final HandlerMethodValidationException exception){
+        final String message = exception.getMessage();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
     }
 }

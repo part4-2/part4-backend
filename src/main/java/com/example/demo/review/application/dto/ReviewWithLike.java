@@ -17,12 +17,11 @@ public record ReviewWithLike(Long reviewId,
                              String spotName,
                              String createdAt,
                              String modifiedAt,
-                             int likeCount,
                              String visitingTime,
                              Double stars,
                              List<String> images
                              ) {
-    public static ReviewWithLike of(final Review review, final int reviewCount) {
+    public static ReviewWithLike of(final Review review) {
         return new ReviewWithLike(
                 review.getId(),
                 review.getSpot().getPlaceId(),
@@ -33,7 +32,6 @@ public record ReviewWithLike(Long reviewId,
                 review.getSpot().getDisplayName(),
                 DateUtils.parseTimeToString(review.getCreatedDate()),
                 DateUtils.parseTimeToString(review.getModifiedDate()),
-                reviewCount,
                 DateUtils.parseTimeToString(review.getVisitingTime()),
                 review.getStarRank().getValue(),
                 review.getReviewPhotos().stream().map(ReviewPhoto::getUrl).toList()
