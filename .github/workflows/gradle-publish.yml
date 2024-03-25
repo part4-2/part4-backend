@@ -12,7 +12,7 @@ env:
   S3_BUCKET_NAME: odagadacicd
   PROJECT_NAME: Trimo-BE
   CODE_DEPLOY_APP_NAME: odagada_cicd
-  DEPLOYMENT_GROUP_NAME: odagada_cicd
+  DEPLOYMENT_GROUP_NAME: odagada
 
 jobs:
   build:
