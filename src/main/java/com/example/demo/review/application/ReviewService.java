@@ -45,7 +45,7 @@ public class ReviewService {
 
 
     public Review findById(ReviewId reviewId) {
-        return reviewRepository.findById(reviewId.value())
+        return reviewRepository.findByIdWithMember(reviewId.value())
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId.value())
                 );
