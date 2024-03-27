@@ -1,10 +1,12 @@
 package com.example.demo.global.presentation;
 
+import com.example.demo.global.webHook.DiscordWebHook;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,10 +16,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @RestControllerAdvice
 @Log4j2
@@ -40,9 +46,30 @@ public class CustomExceptionHandler {
             StarException.StarNotFoundException.class,
             ReviewException.SortConditionNotFoundException.class
     })
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception, WebRequest webRequest) {
         final String message = exception.getMessage();
         log.warn(message);
+
+        DiscordWebHook discordWebHook =
+                new DiscordWebHook(
+                        "\uD83D\uDEA8 에러 발생",
+                        message
+                                + "\n"
+                                + "### \uD83D\uDD56 발생 시간 \n"
+                                + LocalDateTime.now()
+                                + "\n"
+                                + "### 🔗 요청 URL\n"
+                                + webRequest.getDescription(false)
+                                + "\n"
+                                + "### 📄 Stack Trace\n"
+                                + "```\n"
+                                + Arrays.toString(exception.getStackTrace()).substring(0,1000)
+                                + "\n```",
+                        0xFF0000
+                );
+        discordWebHook.jsonConverter();
+
+
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(message));
