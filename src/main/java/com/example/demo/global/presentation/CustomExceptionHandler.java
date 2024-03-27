@@ -6,7 +6,6 @@ import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -46,30 +44,9 @@ public class CustomExceptionHandler {
             StarException.StarNotFoundException.class,
             ReviewException.SortConditionNotFoundException.class
     })
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception, WebRequest webRequest) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(final RuntimeException exception) {
         final String message = exception.getMessage();
         log.warn(message);
-
-        DiscordWebHook discordWebHook =
-                new DiscordWebHook(
-                        "\uD83D\uDEA8 에러 발생",
-                        message
-                                + "\n"
-                                + "### \uD83D\uDD56 발생 시간 \n"
-                                + LocalDateTime.now()
-                                + "\n"
-                                + "### 🔗 요청 URL\n"
-                                + webRequest.getDescription(false)
-                                + "\n"
-                                + "### 📄 Stack Trace\n"
-                                + "```\n"
-                                + Arrays.toString(exception.getStackTrace()).substring(0,1000)
-                                + "\n```",
-                        0xFF0000
-                );
-        discordWebHook.jsonConverter();
-
-
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(message));
@@ -147,5 +124,28 @@ public class CustomExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public void sendExceptionToDiscord(Exception e, WebRequest webRequest) {
+        final String message = e.getMessage();
+        DiscordWebHook discordWebHook =
+                new DiscordWebHook(
+                        "\uD83D\uDEA8 에러 발생",
+                        message
+                                + "\n"
+                                + "### \uD83D\uDD56 발생 시간 \n"
+                                + LocalDateTime.now()
+                                + "\n"
+                                + "### 🔗 요청 URL\n"
+                                + webRequest.getDescription(false)
+                                + "\n"
+                                + "### 📄 Stack Trace\n"
+                                + "```\n"
+                                + Arrays.toString(e.getStackTrace()).substring(0,1000)
+                                + "\n```",
+                        0xFF0000
+                );
+        discordWebHook.jsonConverter();
     }
 }
