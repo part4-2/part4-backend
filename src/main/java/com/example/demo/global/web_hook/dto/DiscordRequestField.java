@@ -1,5 +1,7 @@
 package com.example.demo.global.web_hook.dto;
 
+import com.example.demo.global.utils.DateUtils;
+
 import java.time.LocalDateTime;
 
 public record DiscordRequestField(String name, String value, boolean inline) {
@@ -7,7 +9,7 @@ public record DiscordRequestField(String name, String value, boolean inline) {
     public static DiscordRequestField ofTime() {
         return new DiscordRequestField(
                 "발생 시간",
-                LocalDateTime.now().toString(),
+                DateUtils.parserErrorTimeToString(),
                 false
         );
     }

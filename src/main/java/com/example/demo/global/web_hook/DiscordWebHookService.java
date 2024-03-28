@@ -28,9 +28,7 @@ public class DiscordWebHookService {
 
     public void sendDiscordAlert(Exception e, String uri){
         EmbeddedObject embeddedObject = EmbeddedObject.of(e, uri);
-        List<EmbeddedObject> embeds = new ArrayList<>();
-        embeds.add(embeddedObject);
-        DiscordRequest discordRequest = new DiscordRequest(url, username, embeds);
+        DiscordRequest discordRequest = new DiscordRequest(url, username, List.of(embeddedObject));
         String jsonString = convert(discordRequest);
         sendJsonToDiscord(jsonString);
     }
