@@ -6,6 +6,7 @@ import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +27,7 @@ import java.util.Arrays;
 @RestControllerAdvice
 @Log4j2
 public class CustomExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
         final String defaultErrorMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.warn(() -> defaultErrorMessage);
@@ -116,6 +117,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
     }
+
     @ExceptionHandler(value = {
             HandlerMethodValidationException.class
     })
@@ -126,13 +128,14 @@ public class CustomExceptionHandler {
                 .body(new ErrorResponse(message));
     }
 
+    // test api
+    // GET : http://localhost:8080/api/main/spots/
     @ExceptionHandler(Exception.class)
-    public void sendExceptionToDiscord(Exception e, WebRequest webRequest) {
-        final String message = e.getMessage();
+    public void sendExceptionToDiscord(Exception e, WebRequest webRequest) throws JsonProcessingException {
         DiscordWebHook discordWebHook =
                 new DiscordWebHook(
                         "\uD83D\uDEA8 에러 발생",
-                        message
+                        e.getMessage()
                                 + "\n"
                                 + "### \uD83D\uDD56 발생 시간 \n"
                                 + LocalDateTime.now()
@@ -146,6 +149,8 @@ public class CustomExceptionHandler {
                                 + "\n```",
                         0xFF0000
                 );
-        discordWebHook.jsonConverter();
+
+        String json = discordWebHook.jsonConverter(discordWebHook);
+        discordWebHook.sendJsonToDiscord(json);
     }
 }

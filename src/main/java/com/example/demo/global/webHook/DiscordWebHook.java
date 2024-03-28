@@ -1,60 +1,72 @@
 package com.example.demo.global.webHook;
 
-import lombok.Builder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class DiscordWebHook {
 
-    private final String url = "https://discordapp.com/api/webhooks/1222413264127000648/4aTqvcbPDhX_O1apeO8OZkndweCsnDEpwUFstWBWNt-ZjPeGxPO_WiqzXNEggkvrkZRz";
+    private final String url = "https://discordapp.com/api/webhooks/1222722687286378566/UxOJryrHYC57NBd23UdFRxVLSW2aY9_y1h6v0W6HhEEJaXCC2s3cqTw4hjJuwGeJxY0E";
     private final String username = "Bot";
-    private EmbedObject embeds;
+    private final List<EmbedObject> embeds = new ArrayList<>();
+
 
     public DiscordWebHook(String title, String description, Integer color){
-        this.embeds = new EmbedObject(title, description, color);
+        EmbedObject embedObject = new EmbedObject(title,description,color);
+        this.embeds.add(embedObject);
     }
 
     @Getter
     public static class EmbedObject {
 
-        private String title;
-        private String description;
-        private Integer color;
+        private final String title;
+        private final String description;
+        private final Integer color;
 
         public EmbedObject(String title, String description, Integer color){
             this.title = title;
             this.description = description;
             this.color = color;
+
         }
     }
 
-    public void jsonConverter(){
-        JSONObject embedJson = new JSONObject();
-        embedJson.put("title", this.embeds.getTitle());
-        embedJson.put("description", this.embeds.getDescription());
-        embedJson.put("color", this.embeds.getColor());
+    // json 형식으로 변환
+    public String jsonConverter(DiscordWebHook discordWebHook) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        List<JSONObject> embedObjects = new ArrayList<>();
-        embedObjects.add(embedJson);
+        return objectMapper.writeValueAsString(discordWebHook);
+    }
 
-        JSONObject json = new JSONObject();
-        json.put("url", this.url);
-        json.put("username", this.username);
-        json.put("embeds", embedObjects.toArray());
+    // post url to discord
+    public void sendJsonToDiscord(String json){
+        WebClient client = WebClient.create();
+        System.out.println(json);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        Mono<String> responseMono = client.post()
+                .uri(this.url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(json)
+                .retrieve()
+                .bodyToMono(String.class);
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> entity = new HttpEntity<>(json.toString(), headers);
-        restTemplate.postForObject(this.url, entity, String.class);
+        // discord 응답 값
+        responseMono.subscribe(
+                responseBody -> {
+                    System.out.println("Data sent successfully!");
+                    System.out.println("Response: " + responseBody);
+                },
+                error -> {
+                    System.out.println("Failed to send data. Error: " + error.getMessage());
+                }
+        );
+
     }
 }
