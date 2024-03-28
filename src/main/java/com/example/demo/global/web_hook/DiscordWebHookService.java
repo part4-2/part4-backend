@@ -13,6 +13,9 @@ import org.springframework.web.reactive.function.UnsupportedMediaTypeException;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Log4j2
 public class DiscordWebHookService {
@@ -25,7 +28,9 @@ public class DiscordWebHookService {
 
     public void sendDiscordAlert(Exception e, String uri){
         EmbeddedObject embeddedObject = EmbeddedObject.of(e, uri);
-        DiscordRequest discordRequest = new DiscordRequest(url, username, embeddedObject);
+        List<EmbeddedObject> embeds = new ArrayList<>();
+        embeds.add(embeddedObject);
+        DiscordRequest discordRequest = new DiscordRequest(url, username, embeds);
         String jsonString = convert(discordRequest);
         sendJsonToDiscord(jsonString);
     }
@@ -46,10 +51,22 @@ public class DiscordWebHookService {
 
         log.info("에러 발생 json info {} ", () -> json);
 
-        client.post()
+        Mono<String> responseMono = client.post()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(json)
-                .retrieve();
+                .retrieve()
+                .bodyToMono(String.class);
+
+        // discord 응답 값
+        responseMono.subscribe(
+                responseBody -> {
+                    System.out.println("Data sent successfully!");
+                    System.out.println("Response: " + responseBody);
+                },
+                error -> {
+                    System.out.println("Failed to send data. Error: " + error.getMessage());
+                }
+        );
     }
 }
