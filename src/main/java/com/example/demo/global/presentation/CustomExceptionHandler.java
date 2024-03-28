@@ -132,23 +132,17 @@ public class CustomExceptionHandler {
     // GET : http://localhost:8080/api/main/spots/
     @ExceptionHandler(Exception.class)
     public void sendExceptionToDiscord(Exception e, WebRequest webRequest) throws JsonProcessingException {
-        DiscordWebHook discordWebHook =
-                new DiscordWebHook(
+        DiscordWebHook discordWebHook = new DiscordWebHook();
+        discordWebHook.addEmbed(
+                new DiscordWebHook.EmbedObject(
                         "\uD83D\uDEA8 에러 발생",
-                        e.getMessage()
-                                + "\n"
-                                + "### \uD83D\uDD56 발생 시간 \n"
-                                + LocalDateTime.now()
-                                + "\n"
-                                + "### 🔗 요청 URL\n"
-                                + webRequest.getDescription(false)
-                                + "\n"
-                                + "### 📄 Stack Trace\n"
-                                + "```\n"
-                                + Arrays.toString(e.getStackTrace()).substring(0,1000)
-                                + "\n```",
-                        0xFF0000
-                );
+                        e.getMessage(),
+                        0xFF0000,
+                        new DiscordWebHook.EmbedObject.Field("\uD83D\uDD56 발생 시간", LocalDateTime.now().toString(), false),
+                        new DiscordWebHook.EmbedObject.Field("\uD83D\uDD17 요청 URL", webRequest.getDescription(false), false),
+                        new DiscordWebHook.EmbedObject.Field("\uD83D\uDCC4 Stack Trace", Arrays.toString(e.getStackTrace()).substring(0,1000), false)
+                        )
+        );
 
         String json = discordWebHook.jsonConverter(discordWebHook);
         discordWebHook.sendJsonToDiscord(json);

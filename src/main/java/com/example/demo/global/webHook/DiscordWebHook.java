@@ -3,6 +3,7 @@ package com.example.demo.global.webHook;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,24 +18,40 @@ public class DiscordWebHook {
     private final String username = "Bot";
     private final List<EmbedObject> embeds = new ArrayList<>();
 
-
-    public DiscordWebHook(String title, String description, Integer color){
-        EmbedObject embedObject = new EmbedObject(title,description,color);
-        this.embeds.add(embedObject);
+    public void addEmbed(EmbedObject embedObject){
+        embeds.add(embedObject);
     }
 
+    @Setter
     @Getter
     public static class EmbedObject {
 
         private final String title;
         private final String description;
         private final Integer color;
+        private final List<Field> fields = new ArrayList<>();
 
-        public EmbedObject(String title, String description, Integer color){
+        public EmbedObject(String title, String description, int color, Field currentTime, Field url, Field stackTrace){
             this.title = title;
             this.description = description;
             this.color = color;
+            this.fields.add(currentTime);
+            this.fields.add(url);
+            this.fields.add(stackTrace);
+        }
 
+        @Getter
+        public static class Field {
+
+            private final String name;
+            private final String value;
+            private final boolean inline;
+
+            public Field(String name, String value, boolean inline) {
+                this.name = name;
+                this.value = value;
+                this.inline = inline;
+            }
         }
     }
 
