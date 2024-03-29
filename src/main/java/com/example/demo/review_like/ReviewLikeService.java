@@ -1,4 +1,4 @@
-package com.example.demo.review_like.application;
+package com.example.demo.review_like;
 
 import com.example.demo.global.utils.DateUtils;
 import com.example.demo.review.application.ReviewService;

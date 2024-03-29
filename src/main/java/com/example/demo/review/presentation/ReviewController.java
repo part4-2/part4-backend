@@ -14,7 +14,7 @@ import com.example.demo.review.domain.vo.Companion;
 import com.example.demo.review.domain.vo.PlaceType;
 import com.example.demo.review.domain.vo.ReviewId;
 import com.example.demo.review.domain.vo.Weather;
-import com.example.demo.review_like.application.ReviewLikeService;
+import com.example.demo.review_like.ReviewLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
