@@ -2,9 +2,9 @@ package com.example.demo.review_like.presentation;
 
 import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.domain.vo.ReviewId;
-import com.example.demo.review_like.ReviewLikeService;
-import com.example.demo.review_like.dto.LikeCountDto;
-import com.example.demo.review_like.dto.LikeStatusDto;
+import com.example.demo.review_like.application.ReviewLikeService;
+import com.example.demo.review_like.application.dto.LikeCountDto;
+import com.example.demo.review_like.application.dto.LikeStatusDto;
 import com.example.demo.user.domain.entity.vo.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

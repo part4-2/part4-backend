@@ -1,4 +1,4 @@
-package com.example.demo.review_like;
+package com.example.demo.review_like.application;
 
 import com.example.demo.global.utils.DateUtils;
 import com.example.demo.review.application.ReviewService;
@@ -18,7 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ReviewLikeService {
+
     private final ReviewLikeRepository reviewLikeRepository;
+
     private final ReviewService reviewService;
 
     public void like(UserId userId, ReviewId reviewId) {
@@ -43,6 +45,7 @@ public class ReviewLikeService {
     public long getCount(ReviewId reviewId){
         return reviewLikeRepository.countReviewLikeByReviewId(reviewId.value());
     }
+
     public ReviewWithLike getOneWithLikes(final ReviewId reviewId){
         Review review = reviewService.findById(reviewId);
         return ReviewWithLike.of(review);
