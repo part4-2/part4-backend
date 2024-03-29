@@ -12,4 +12,17 @@ public class ReviewLikeFixture {
             new UserId(TEST_USERID),
             TEST_REVIEW_ID
     );
+
+    public static final ReviewLikeId REVIEW_LIKE_ID_BY_DK = new ReviewLikeId(new UserId(1L), 1L);
+
+    public static final ReviewLike REVIEW_LIKE_BY_DK = new ReviewLike(
+            new UserId(1L),
+            1L
+    );
+
+    public static final ReviewLike REVIEW_LIKE_BY_IH = new ReviewLike(
+            new UserId(2L),
+            2L
+    );
+
 }
