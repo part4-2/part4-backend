@@ -30,10 +30,7 @@ public class ReviewLikeService {
             return;
         }
 
-        reviewLikeRepository.save(new ReviewLike(
-                userId,
-                reviewId.value()
-        ));
+        reviewLikeRepository.save(new ReviewLike(userId, reviewId.value()));
     }
 
     public void unlike(UserId userId, ReviewId reviewId) {
@@ -56,16 +53,7 @@ public class ReviewLikeService {
         List<ReviewListData> dataFromRepository = reviewService.findByLikes(order);
 
         return dataFromRepository.stream()
-                .map(
-                        data -> new ReviewListDTO(
-                                data.reviewId(),
-                                data.title().getValue(),
-                                TagValues.of(data.tagValues()),
-                                data.nickName(),
-                                DateUtils.parseTimeToString(data.visitingTime()),
-                                data.stars().getValue(),
-                                data.image())
-                )
+                .map(ReviewListDTO::of)
                 .toList();
     }
 
