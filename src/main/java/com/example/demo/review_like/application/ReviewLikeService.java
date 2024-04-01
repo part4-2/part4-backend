@@ -18,7 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ReviewLikeService {
+
     private final ReviewLikeRepository reviewLikeRepository;
+
     private final ReviewService reviewService;
 
     public void like(UserId userId, ReviewId reviewId) {
