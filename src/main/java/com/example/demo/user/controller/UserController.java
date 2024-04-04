@@ -29,13 +29,13 @@ public class UserController {
     @Operation(summary = "필수정보 입력" , description = "서비스 이용을 위한 필수정보를 입력합니다.")
     @PostMapping("/api/guest/update")
     public UpdateUserResponse requiredUserInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails, @Valid @RequestBody RequiredUserInfoRequest requiredUserInfoRequest) {
-        return userService.requiredUserInfo(customUserDetails, requiredUserInfoRequest);
+        return userService.completeSignup(customUserDetails, requiredUserInfoRequest);
     }
 
     @Operation(summary = "회원 정보 수정", description = "회원 정보(이메일 , 닉네임 , 프로필사진 , 나이)를 수정합니다.")
     @PostMapping("/api/user/update")
     public UpdateUserResponse updateUser(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody UpdateUserRequest updateUserRequest) {
-        return userService.updateUser(customUserDetails, updateUserRequest);
+        return userService.updateUserInfo(customUserDetails, updateUserRequest);
     }
 
     @Operation(summary = "닉네임 중복 체크", description = "중복된 닉네임이 있는지 확인합니다.")

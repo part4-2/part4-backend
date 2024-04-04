@@ -34,7 +34,7 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateUserResponse requiredUserInfo(CustomUserDetails customUserDetails, RequiredUserInfoRequest requiredUserInfoRequest) {
+    public UpdateUserResponse completeSignup(CustomUserDetails customUserDetails, RequiredUserInfoRequest requiredUserInfoRequest) {
         if (checkNickName(requiredUserInfoRequest.getNickName())) {
             Users users = customUserDetails.getUsers();
             users.updateEssentials(requiredUserInfoRequest);
@@ -45,10 +45,9 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("중복된 닉네임은 사용할수 없습니다.");
         }
-
     }
 
-    public UpdateUserResponse updateUser(CustomUserDetails customUserDetails, UpdateUserRequest updateUserRequest) {
+    public UpdateUserResponse updateUserInfo(CustomUserDetails customUserDetails, UpdateUserRequest updateUserRequest) {
         if (checkNickName(updateUserRequest.getNickName())) {
             Users users = customUserDetails.getUsers();
             users.updateUserInfo(updateUserRequest);
@@ -58,7 +57,6 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("중복된 닉네임은 사용할수 없습니다.");
         }
-
     }
 
     public boolean checkNickName(String nickName) {
