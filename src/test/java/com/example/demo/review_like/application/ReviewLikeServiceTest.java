@@ -111,6 +111,4 @@ class ReviewLikeServiceTest extends ServiceTest {
         }
 
     }
-
-
 }

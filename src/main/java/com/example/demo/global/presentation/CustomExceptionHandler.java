@@ -1,11 +1,14 @@
 package com.example.demo.global.presentation;
 
+import com.example.demo.global.web_hook.DiscordWebHookService;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -21,8 +25,12 @@ import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 @Log4j2
+@RequiredArgsConstructor
 public class CustomExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+
+    private final DiscordWebHookService discordWebHookService;
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
         final String defaultErrorMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.warn(() -> defaultErrorMessage);
@@ -112,6 +120,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
     }
+
     @ExceptionHandler(value = {
             HandlerMethodValidationException.class
     })
@@ -120,5 +129,14 @@ public class CustomExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
+    }
+
+    // test api
+    // GET : http://localhost:8080/api/main/spots/
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> sendExceptionToDiscord(Exception e, WebRequest webRequest) {
+        discordWebHookService.sendDiscordAlert(e, webRequest.getDescription(false));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(e.getMessage()));
     }
 }
