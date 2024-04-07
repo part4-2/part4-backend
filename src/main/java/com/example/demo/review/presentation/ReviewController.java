@@ -86,7 +86,7 @@ public class ReviewController {
     @GetMapping("/api/main/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 조회", description = "리뷰 id에 해당하는 리뷰 정보를 불러옵니다.")
     public ResponseEntity<ReviewWithLike> getReview(@PathVariable("review-id") Long reviewId) {
-        ReviewWithLike reviewWithLike = likeService.getOneWithLikes(new ReviewId(reviewId));
+        ReviewWithLike reviewWithLike = reviewService.getOneWithLikes(new ReviewId(reviewId));
         return ResponseEntity.ok(reviewWithLike);
     }
 
@@ -124,7 +124,7 @@ public class ReviewController {
     public ResponseEntity<List<ReviewListDTO>> get20ReviewsByLikes(
             @RequestParam SortCondition order
     ) {
-        List<ReviewListDTO> result = likeService.getMainReviewList(order);
+        List<ReviewListDTO> result = reviewService.getMainReviewList(order);
 
         if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();

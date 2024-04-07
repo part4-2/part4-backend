@@ -5,6 +5,7 @@ import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.ReviewWithLike;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
@@ -51,6 +52,20 @@ public class ReviewService {
                 );
     }
 
+    public ReviewWithLike getOneWithLikes(final ReviewId reviewId){
+        Review review = this.findById(reviewId);
+        return ReviewWithLike.of(review);
+    }
+
+    public List<ReviewListDTO> getMainReviewList(SortCondition order){
+
+        List<ReviewListData> dataFromRepository = this.findByLikes(order);
+
+        return dataFromRepository.stream()
+                .map(ReviewListDTO::of)
+                .toList();
+    }
+
     @Transactional
     public Long write(final ReviewRequest reviewRequest,
                       final String nickName,
@@ -93,14 +108,6 @@ public class ReviewService {
 
         Review savedReview = reviewRepository.save(review);
         return savedReview.getId();
-    }
-
-    private static Tag getTag(TagValues requestTag) {
-        if (requestTag == null) {
-            return Tag.ofNone();
-        }
-
-        return Tag.of(requestTag);
     }
 
     @Transactional
@@ -235,5 +242,13 @@ public class ReviewService {
 
     public void deleteReviewTest(Long id) {
         reviewRepository.deleteById(id);
+    }
+
+    private static Tag getTag(TagValues requestTag) {
+        if (requestTag == null) {
+            return Tag.ofNone();
+        }
+
+        return Tag.of(requestTag);
     }
 }
