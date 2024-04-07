@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -85,7 +86,7 @@ public class ReviewController {
     @GetMapping("/api/main/spots/reviews/{review-id}")
     @Operation(summary = "리뷰 조회", description = "리뷰 id에 해당하는 리뷰 정보를 불러옵니다.")
     public ResponseEntity<ReviewWithLike> getReview(@PathVariable("review-id") Long reviewId) {
-        ReviewWithLike reviewWithLike = likeService.getOneWithLikes(new ReviewId(reviewId));
+        ReviewWithLike reviewWithLike = reviewService.getOneWithLikes(new ReviewId(reviewId));
         return ResponseEntity.ok(reviewWithLike);
     }
 
@@ -123,7 +124,7 @@ public class ReviewController {
     public ResponseEntity<List<ReviewListDTO>> get20ReviewsByLikes(
             @RequestParam SortCondition order
     ) {
-        List<ReviewListDTO> result = likeService.getMainReviewList(order);
+        List<ReviewListDTO> result = reviewService.getMainReviewList(order);
 
         if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -176,12 +177,25 @@ public class ReviewController {
     }
 
     @DeleteMapping("/api/main/test/reviews/{review-id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "테스트용 삭제", description = "아무나 삭제 가능합니다(테스트용)")
     public ResponseEntity<Void> deleteReviewForTest(@PathVariable("review-id") Long reviewId) {
+        reviewService.deleteReviewTest(reviewId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/admin/test/reviews/{review-id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "관리자용 삭제", description = "관리자용 삭제 api")
+    public ResponseEntity<Void> deleteReviewByAdmin(@PathVariable("review-id") Long reviewId,
+                                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+        log.info("[admin 닉네임 : {}] 관리자용 삭제 api 호출", () -> userDetails.getUsers().getNickName());
+
         reviewService.deleteReviewTest(reviewId);
 
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/api/user/me/places")
     @Operation(summary = "내가 방문한 장소 목록", description = "내가 방문했던 모든 장소를 리턴합니다")
     public ResponseEntity<MyPlacesIds> getMyPlaceIds (@AuthenticationPrincipal CustomUserDetails userDetails) {

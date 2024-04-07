@@ -13,7 +13,12 @@ public class DateUtils {
     }
 
     private static final String REGEX = "yyyyMMddHHmm";
+
+    private static final String ERROR_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REGEX);
+
+    private static final DateTimeFormatter errorTimeFormatter = DateTimeFormatter.ofPattern(ERROR_TIME_FORMAT);
 
     public static LocalDateTime parseVisitingTime(String visitingTimeString) {
         if (StringUtils.isNullOrEmpty(visitingTimeString)) {
@@ -28,5 +33,9 @@ public class DateUtils {
 
     public static String parseTimeToString(LocalDateTime dateTime){
         return dateTime.format(formatter);
+    }
+
+    public static String parserErrorTimeToString(){
+        return LocalDateTime.now().format(errorTimeFormatter);
     }
 }

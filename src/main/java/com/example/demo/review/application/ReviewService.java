@@ -5,6 +5,7 @@ import com.example.demo.jwt.CustomUserDetails;
 import com.example.demo.review.application.dto.ReviewListDTO;
 import com.example.demo.review.application.dto.ReviewListData;
 import com.example.demo.review.application.dto.ReviewRequest;
+import com.example.demo.review.application.dto.ReviewWithLike;
 import com.example.demo.review.application.dto.SortCondition;
 import com.example.demo.review.application.dto.TagValues;
 import com.example.demo.review.domain.Review;
@@ -45,10 +46,24 @@ public class ReviewService {
 
 
     public Review findById(ReviewId reviewId) {
-        return reviewRepository.findById(reviewId.value())
+        return reviewRepository.findByIdWithMember(reviewId.value())
                 .orElseThrow(
                         () -> new ReviewException.ReviewNotFoundException(reviewId.value())
                 );
+    }
+
+    public ReviewWithLike getOneWithLikes(final ReviewId reviewId){
+        Review review = this.findById(reviewId);
+        return ReviewWithLike.of(review);
+    }
+
+    public List<ReviewListDTO> getMainReviewList(SortCondition order){
+
+        List<ReviewListData> dataFromRepository = this.findByLikes(order);
+
+        return dataFromRepository.stream()
+                .map(ReviewListDTO::of)
+                .toList();
     }
 
     @Transactional
@@ -95,14 +110,6 @@ public class ReviewService {
         return savedReview.getId();
     }
 
-    private static Tag getTag(TagValues requestTag) {
-        if (requestTag == null) {
-            return Tag.ofNone();
-        }
-
-        return Tag.of(requestTag);
-    }
-
     @Transactional
     public void updateReview(
             final CustomUserDetails customUserDetails,
@@ -131,7 +138,7 @@ public class ReviewService {
         List<ReviewPhoto> newReviewPhotos;
 
         if (newImages != null) {
-            newReviewPhotos = Optional.ofNullable(newImages)
+            newReviewPhotos = Optional.of(newImages)
                     .map(imgList -> {
                         List<String> urls = s3Service.uploadFiles(newImages);
                         return urls.stream()
@@ -153,7 +160,6 @@ public class ReviewService {
                 StarRank.getInstance(stars),
                 spot,
                 reviewPhotos
-
         );
 
         reviewRepository.save(review);
@@ -163,12 +169,7 @@ public class ReviewService {
                                                 TagValues tagValues,
                                                 Integer month,
                                                 Integer hour) {
-        return reviewRepository.searchConditionTotal(
-                searchValue,
-                Tag.of(tagValues),
-                month,
-                hour
-        );
+        return reviewRepository.searchConditionTotal(searchValue, Tag.of(tagValues), month, hour);
     }
 
     public List<ReviewListDTO> getListWithSearchCondition(
@@ -179,7 +180,6 @@ public class ReviewService {
             Integer hour,
             int page
     ) {
-
         List<ReviewListData> dataFromRepository = reviewRepository.getListWithSearchCondition(
                 searchValue,
                 Tag.of(tagValues),
@@ -190,16 +190,7 @@ public class ReviewService {
         );
 
         return dataFromRepository.stream()
-                .map(
-                        data -> new ReviewListDTO(
-                                data.reviewId(),
-                                data.title().getValue(),
-                                TagValues.of(data.tagValues()),
-                                data.nickName(),
-                                DateUtils.parseTimeToString(data.visitingTime()),
-                                data.stars().getValue(),
-                                data.image())
-                )
+                .map(ReviewListDTO::of)
                 .toList();
     }
 
@@ -222,16 +213,7 @@ public class ReviewService {
         );
 
         return dataFromRepository.stream()
-                .map(
-                        data -> new ReviewListDTO(
-                                data.reviewId(),
-                                data.title().getValue(),
-                                TagValues.of(data.tagValues()),
-                                data.nickName(),
-                                DateUtils.parseTimeToString(data.visitingTime()),
-                                data.stars().getValue(),
-                                data.image())
-                )
+                .map(ReviewListDTO::of)
                 .toList();
     }
 
@@ -260,5 +242,13 @@ public class ReviewService {
 
     public void deleteReviewTest(Long id) {
         reviewRepository.deleteById(id);
+    }
+
+    private static Tag getTag(TagValues requestTag) {
+        if (requestTag == null) {
+            return Tag.ofNone();
+        }
+
+        return Tag.of(requestTag);
     }
 }
