@@ -74,6 +74,7 @@ public class SpringSecurityConfig {
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
+        configuration.setExposedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
