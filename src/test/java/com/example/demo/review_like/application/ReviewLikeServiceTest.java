@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.example.demo.common.test_instance.ReviewLikeFixture.REVIEW_LIKE_ID_BY_DK;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class ReviewLikeServiceTest extends ServiceTest {
@@ -110,5 +111,18 @@ class ReviewLikeServiceTest extends ServiceTest {
             assertThat(reviewLikeService.isLiked(reviewLikeIdByDk.getUserId(), reviewLikeIdByDk.getReviewId())).isTrue();
         }
 
+    }
+
+    @Test
+    @DisplayName("리뷰 좋아요 수 테스트")
+    void reviewLikeCountTest() {
+        // given
+        ReviewLike likeBySI = ReviewLikeFixture.REVIEW_LIKE_BY_SI;
+        ReviewLike likeByDk = ReviewLikeFixture.REVIEW_LIKE_BY_DK;
+        reviewLikeRepository.save(likeBySI);
+        reviewLikeRepository.save(likeByDk);
+
+        // when & then
+        assertEquals(reviewLikeService.getCount(new ReviewId(1L)), 2L);
     }
 }
