@@ -2,6 +2,7 @@ package com.example.demo.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,5 +15,10 @@ public class TesController {
     @PostMapping("/test/tokens")
     public String getToken(@RequestParam String email){
         return testService.login(email);
+    }
+
+    @GetMapping("/test")
+    public String foo(){
+        return "foo";
     }
 }
