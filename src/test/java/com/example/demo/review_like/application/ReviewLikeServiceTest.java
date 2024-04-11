@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 class ReviewLikeServiceTest extends ServiceTest {
+
     @Autowired
     private ReviewLikeService reviewLikeService;
 

@@ -1,12 +1,10 @@
 package com.example.demo.global.presentation;
 
-import com.example.demo.global.web_hook.DiscordWebHookService;
 import com.example.demo.review.exception.ReviewException;
 import com.example.demo.review.exception.StarException;
 import com.example.demo.review.exception.WeatherException;
 import com.example.demo.spot.exception.SpotException;
 import com.example.demo.user.exception.UserException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +26,7 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 public class CustomExceptionHandler {
 
-    private final DiscordWebHookService discordWebHookService;
+//    private final DiscordWebHookService discordWebHookService;
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
@@ -133,10 +131,10 @@ public class CustomExceptionHandler {
 
     // test api
     // GET : http://localhost:8080/api/main/spots/
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> sendExceptionToDiscord(Exception e, WebRequest webRequest) {
-        discordWebHookService.sendDiscordAlert(e, webRequest.getDescription(false));
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(e.getMessage()));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> sendExceptionToDiscord(Exception e, WebRequest webRequest) {
+//        discordWebHookService.sendDiscordAlert(e, webRequest.getDescription(false));
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(new ErrorResponse(e.getMessage()));
+//    }
 }
