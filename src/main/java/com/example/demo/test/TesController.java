@@ -17,7 +17,7 @@ public class TesController {
         return testService.login(email);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/test/foo")
     public String foo(){
         return "foo";
     }
