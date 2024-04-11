@@ -58,6 +58,7 @@ public class SpringSecurityConfig {
 
     }
 
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
