@@ -2,6 +2,7 @@ package com.example.demo.review.application;
 
 import com.example.demo.common.service.ServiceTest;
 import com.example.demo.common.test_instance.ReviewFixture;
+import com.example.demo.common.test_instance.SpotFixture;
 import com.example.demo.review.domain.Review;
 import com.example.demo.review.domain.vo.ReviewId;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ class ReviewServiceTest extends ServiceTest {
 
     @Test
     void findById() {
+        entityProvider.saveSpot(SpotFixture.SPOT);
         final Review expected = entityProvider.saveReview(ReviewFixture.REVIEW_ON_SPOT_1_BY_DK);
         final Review actual = reviewService.findById(new ReviewId(expected.getId()));
         assertEquals(expected, actual);
